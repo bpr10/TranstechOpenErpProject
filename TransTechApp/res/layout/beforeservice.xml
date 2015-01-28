@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" 
+        android:background="#A4A4A4">
+        
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/before_service2"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/before_service1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="14dp"
+        android:src="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/camara2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/before_service2"
+        android:layout_alignRight="@+id/camara1"
+        android:layout_marginBottom="23dp"
+        android:text="Carama" />
+
+    <Button
+        android:id="@+id/camara1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/before_service1"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="46dp"
+        android:layout_toRightOf="@+id/before_service1"
+        android:text="Carmara" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/before_service2"
+        android:layout_marginTop="16dp"
+        android:layout_toLeftOf="@+id/camara1"
+        android:src="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/camara3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/camara2"
+        android:layout_alignTop="@+id/imageView1"
+        android:layout_marginTop="26dp"
+        android:text="Camara" />
+
+    <ImageView
+        android:id="@+id/before_service1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignLeft="@+id/before_service2"
+        android:layout_below="@+id/relativeLayout1"
+        android:src="@drawable/ic_launcher" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/imageView1" >
+
+        <ImageView
+            android:id="@+id/first_dot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/dot_active" />
+
+        <ImageView
+            android:id="@+id/forth_dot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/third_dot"
+            android:src="@drawable/dot_inactive" />
+
+        <ImageView
+            android:id="@+id/third_dot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@+id/secound_dot"
+            android:src="@drawable/dot_inactive" />
+
+        <ImageView
+            android:id="@+id/secound_dot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/first_dot"
+            android:src="@drawable/dot_inactive" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <CheckBox
+        android:id="@+id/keyp_Pad_displaced"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text=" key Pad Displaced" />
+
+    <CheckBox
+        android:id="@+id/spot_lights_off"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/keyp_Pad_displaced"
+        android:text="Spot lights off" />
+
+    <CheckBox
+        android:id="@+id/decals"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/spot_lights_off"
+        android:text="Decals" />
+
+    <CheckBox
+        android:id="@+id/atm_tower_branding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/decals"
+        android:text="ATM Tower branding" />
+
+    <CheckBox
+        android:id="@+id/canopy_branding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/atm_tower_branding"
+        android:text="Canopy branding" />
+
+    <CheckBox
+        android:id="@+id/surround_lock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/canopy_branding"
+        android:text="Surround Lock is damage/ Faulty" />
+
+    <CheckBox
+        android:id="@+id/spot_light_is_off"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/surround_lock"
+        android:text="Spot Light is off" />
+
+    <CheckBox
+        android:id="@+id/main_board_lights"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/spot_light_is_off"
+        android:text="Main board Lights are off" />
+
+    <CheckBox
+        android:id="@+id/security_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/main_board_lights"
+        android:text="Security Camera is out of focus" />
+
+</RelativeLayout>
