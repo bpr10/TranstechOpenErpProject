@@ -9,25 +9,31 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
 
+public class LoginActivity extends ActionBarActivity {
+	private EditText username, password;
+	private Button signIn;
+	private String userName, userPassword;
+	private Integer id;
+	private OpenERP mOpenERP;
+	private String uId;
+	private ProgressDialog pDialog;
+	private String tag = getClass().getSimpleName();
 
-public class LoginActivity extends Activity {
-	EditText username, password;
-	Button signIn;
-	String userName, userPassword;
-	Integer id;
-	OpenERP mOpenERP;
-	String uId;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -35,81 +41,92 @@ public class LoginActivity extends Activity {
 		username = (EditText) findViewById(R.id.user_name);
 		password = (EditText) findViewById(R.id.password);
 		signIn = (Button) findViewById(R.id.sign_in);
-			signIn.setOnClickListener(new OnClickListener() {
+		signIn.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
 				userName = username.getText().toString();
 				userPassword = password.getText().toString();
-				
+
 				if (userName.isEmpty()) {
 					Toast.makeText(getApplicationContext(),
-							"usename can't be empty", 1000).show();
+							"usename can't be empty", Toast.LENGTH_LONG).show();
 				} else if (userPassword.isEmpty()) {
 					Toast.makeText(getApplicationContext(),
-							"password can't be empty", 1000).show();
+							"password can't be empty", Toast.LENGTH_LONG)
+							.show();
 				} else {
-					
-					
-					new AsyncTask<String, Void, String>() {
+					pDialog = new ProgressDialog(LoginActivity.this);
 
-						private String tag = "AsyncTask Class";
+					pDialog.setCancelable(false);
+					pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+					pDialog.setTitle("Please Wait");
+					pDialog.show();
+					new AsyncTaskCallback(new AsyncTaskCallbackInterface() {
 
-						@SuppressWarnings("static-access")
 						@Override
-						protected String doInBackground(String... params) {
-												
+						public String backGroundCallback() {
 							try {
-								mOpenERP = new OpenERP("http://162.243.21.15:8069");
-								JSONObject response = mOpenERP.authenticate(userName, userPassword,
-										"Test");
-								String loginres=response.toString();
-								
-								Log.d("responce",loginres);
-								 uId=response.getString("uid");
-								
-								
+
+								// Connecting to openERP
+
+								mOpenERP = new OpenERP(
+										"http://162.243.21.15:8069");
+								JSONObject response = mOpenERP.authenticate(
+										userName, userPassword, "Test");
+								String loginres = response.toString();
+
+								Log.d("Got Login Response ", loginres);
+
+								// Storing UID in SharedPrefrences
+								uId = response.getString("uid");
+								if (!uId.equals("false")) {
+									SharedPreferences mPreferences = ApplicationClass
+											.getInstance().getSharedPrefs();
+									Editor editor = mPreferences.edit();
+									editor.putString(ApplicationClass.Uid, uId);
+									editor.commit();
+								}
+								return uId;
 							} catch (ClientProtocolException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
+								return null;
 							} catch (JSONException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
+								return null;
 							} catch (IOException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
+								return null;
 							} catch (OEVersionException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
+								return null;
 							}
-							
-							
-							return null;
 
 						}
 
-						protected void onPostExecute(String result) {
-							
-							if(uId!=null)
-							{
-								Intent i=new Intent(LoginActivity.this,MainActivity.class);
-								startActivity(i);
-								Toast.makeText(getApplicationContext(), "sucess",1000).show();
-							}else
-							{
-								Toast.makeText(getApplicationContext(), "enter valid credentials",1000).show();
+						@Override
+						public void foregroundCallback(String result) {
+							Log.d(tag, result);
+							if (pDialog.isShowing()) {
+								pDialog.dismiss();
 							}
-
-						};
-					}.execute();
+							if (!uId.equals("false")) {
+								Intent i = new Intent(LoginActivity.this,
+										MainActivity.class);
+								startActivity(i);
+								Toast.makeText(getApplicationContext(),
+										"sucess", Toast.LENGTH_LONG).show();
+							} else {
+								Toast.makeText(getApplicationContext(),
+										"enter valid credentials",
+										Toast.LENGTH_LONG).show();
+							}
+						}
+					}).execute();
 				}
 			}
 		});
 	}
-	
-	}
-	
 
-
-
+}
