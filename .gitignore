@@ -9,12 +9,16 @@
 *.class
 
 # Generated files
-bin/
-gen/
+TransTechApp/bin/
+TransTechApp/gen/
+openerp-mobile-crm/bin/
+openerp-mobile-crm/gen/
 
 # Gradle files
-.gradle/
-build/
+TransTechApp/.gradle/
+TransTechApp/build/
+openerp-mobile-crm/.gradle/
+openerp-mobile-crm/build/
 
 # Local configuration file (sdk path, etc)
 local.properties
