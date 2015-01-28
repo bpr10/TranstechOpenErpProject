@@ -427,6 +427,6 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 "<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
           @attr name com.openerp:tint
         */
-        public static final int DrawerIconView_tint = 0;
+        public static int DrawerIconView_tint = 0;
     };
 }
