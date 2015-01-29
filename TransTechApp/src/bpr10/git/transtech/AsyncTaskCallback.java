@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 
 public class AsyncTaskCallback extends AsyncTask<Void, Integer, String> {
 	public AsyncTaskCallbackInterface mAsyncTaskCallbackInterface;
-
+	
 	public AsyncTaskCallback(
 			AsyncTaskCallbackInterface mAsyncTaskCallbackInterface) {
 		this.mAsyncTaskCallbackInterface = mAsyncTaskCallbackInterface;

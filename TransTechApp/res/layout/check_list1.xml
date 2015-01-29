@@ -5,7 +5,7 @@
     android:orientation="vertical" >
 
     <CheckBox
-        android:id="@+id/no_comments"
+        android:id="@+id/check_list1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"

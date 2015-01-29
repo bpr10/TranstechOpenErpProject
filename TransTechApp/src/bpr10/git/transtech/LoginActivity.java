@@ -9,8 +9,10 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.R.integer;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -30,7 +32,7 @@ public class LoginActivity extends ActionBarActivity {
 	private String userName, userPassword;
 	private Integer id;
 	private OpenERP mOpenERP;
-	private String uId;
+	private String uId = "";
 	private ProgressDialog pDialog;
 	private String tag = getClass().getSimpleName();
 
@@ -71,8 +73,8 @@ public class LoginActivity extends ActionBarActivity {
 
 								// Connecting to openERP
 
-								mOpenERP = new OpenERP(
-										"http://162.243.21.15:8069");
+								mOpenERP = ApplicationClass.getInstance()
+										.getOpenERPCon();
 								JSONObject response = mOpenERP.authenticate(
 										userName, userPassword, "Test");
 								String loginres = response.toString();
@@ -82,11 +84,9 @@ public class LoginActivity extends ActionBarActivity {
 								// Storing UID in SharedPrefrences
 								uId = response.getString("uid");
 								if (!uId.equals("false")) {
-									SharedPreferences mPreferences = ApplicationClass
-											.getInstance().getSharedPrefs();
-									Editor editor = mPreferences.edit();
-									editor.putString(ApplicationClass.Uid, uId);
-									editor.commit();
+									PreferencesHelper pref = new PreferencesHelper(getApplicationContext());
+									pref.SavePreferences(PreferencesHelper.Uid, uId);  
+									Log.d(tag, pref.GetPreferences(PreferencesHelper.Uid));
 								}
 								return uId;
 							} catch (ClientProtocolException e) {

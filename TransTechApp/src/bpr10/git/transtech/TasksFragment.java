@@ -1,44 +1,208 @@
 package bpr10.git.transtech;
 
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
+import openerp.OEDomain;
+import openerp.OEVersionException;
+import openerp.OpenERP;
 
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.openerp.orm.OEFieldsHelper;
+
+import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class TasksFragment extends Fragment {
 
 	ListView taskList;
+	List<TaskList> taskData;
+	TextView taskId, customer, atm, date;
+	OpenERP mOpenERP;
+	private String tag;
+	private TaskAdapter adapter;
+
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 
 		View rootView = inflater.inflate(R.layout.tasks, container, false);
-		taskList=(ListView) rootView.findViewById(R.id.task_list);
-//		taskList.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				Fragment fragment=new TaskDetails();
-//				FragmentManager fragmentmanager=getActivity().getSupportFragmentManager();
-//				FragmentTransaction fragmentransation=fragmentmanager.beginTransaction();
-//				fragmentransation.replace(R.id.content_frame, fragment);
-//				fragmentransation.addToBackStack(null);
-//				fragmentransation.commit();
-//				
-//				
-//			}
-//		});
-//				
+		taskList = (ListView) rootView.findViewById(R.id.task_list);
+		taskData = new ArrayList<TaskList>();
+		new AsyncTaskCallback(new AsyncTaskCallbackInterface() {
+
+			@Override
+			public String backGroundCallback() {
+				try {
+
+					// Connecting to openERP
+
+					OEDomain domain = new OEDomain();
+					PreferencesHelper pref = new PreferencesHelper(
+							TasksFragment.this.getActivity());
+					Log.d(tag, pref.GetPreferences(PreferencesHelper.Uid));
+					domain.add("surveyor", "=", Integer.parseInt(pref
+							.GetPreferences(PreferencesHelper.Uid)));
+					OEFieldsHelper fields = new OEFieldsHelper(new String[] {
+							"name", "customer", "atm", "country", "task_month",
+							"visit_time" });
+					mOpenERP = ApplicationClass.getInstance().getOpenERPCon();
+					JSONObject serachResposne = mOpenERP.search_read(
+							"atm.surverys.management", fields.get(),
+							domain.get());
+
+					Log.d("ser", serachResposne.getJSONArray("records")
+							.toString());
+					return serachResposne.getJSONArray("records").toString();
+				} catch (ClientProtocolException e) {
+					e.printStackTrace();
+					return null;
+				} catch (JSONException e) {
+					e.printStackTrace();
+					return null;
+				} catch (IOException e) {
+					e.printStackTrace();
+					return null;
+				} catch (OEVersionException e) {
+					e.printStackTrace();
+					return null;
+				}
+
+			}
+
+			@Override
+			public void foregroundCallback(String result) {
+				try {
+					JSONArray results = new JSONArray(result);
+					adapter = new TaskAdapter(results);
+					taskList.setAdapter(adapter);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}).execute();
+
+		 taskList.setOnItemClickListener(new OnItemClickListener() {
+		
+		 @Override
+		 public void onItemClick(AdapterView<?> parent, View view,
+		 int position, long id) {
+		 Intent i=new Intent(getActivity(),ServiceingForm.class);
+		 startActivity(i);
+		 }
+		 });
 
 		return rootView;
 	}
 
+	class TaskAdapter extends BaseAdapter {
+		private JSONArray taskData;
+		private DateUtility dateUtility;
+
+		public TaskAdapter(JSONArray taskData) {
+			this.taskData = taskData;
+			dateUtility = new DateUtility();
+		}
+
+		@Override
+		public int getCount() {
+			return taskData.length();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			try {
+				return taskData.getJSONObject(position);
+			} catch (JSONException e) {
+
+				e.printStackTrace();
+				return null;
+			}
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			// TODO Auto-generated method stub
+			if (convertView == null) {
+				convertView = LayoutInflater.from(getActivity()).inflate(
+						R.layout.tast_list, null);
+				taskId = (TextView) convertView.findViewById(R.id.task_id);
+				customer = (TextView) convertView.findViewById(R.id.customer);
+				atm = (TextView) convertView.findViewById(R.id.atm);
+				date = (TextView) convertView.findViewById(R.id.taskdate);
+				try {
+					taskId.setText(taskData.getJSONObject(position)
+							.getInt("id") + "");
+					customer.setText(taskData.getJSONObject(position)
+							.getJSONArray("customer").getString(1)
+							+ "");
+					atm.setText(taskData.getJSONObject(position)
+							.getJSONArray("atm").getString(1)
+							+ "");
+					try {
+						date.setText(dateUtility.getFriendlyDateString(dateUtility
+								.convertSerevrDatetoLocalDate(taskData
+										.getJSONObject(position)
+										.getString("visit_time"))));
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+					 Bundle bundle = new Bundle();
+				        bundle.putInt("TaskId", taskData.getJSONObject(position)
+								.getInt("id"));
+				        bundle.putString("atm", taskData.getJSONObject(position)
+								.getJSONArray("atm").getString(1)
+								+ "");
+				      
+					// taskData.getJSONObject(position).getJSONArray("visit_time").getString(1)+""
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+
+			}
+			return convertView;
+		}
+
+	}
+
+	class TaskList {
+		String taskId, customer, atm, date;
+
+		TaskList(String taskId, String customer, String atm, String date) {
+			this.taskId = taskId;
+			this.customer = customer;
+			this.atm = atm;
+			this.date = date;
+		}
+	}
 }
