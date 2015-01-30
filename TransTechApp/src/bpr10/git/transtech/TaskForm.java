@@ -54,12 +54,9 @@ public class TaskForm extends ActionBarActivity {
 		secondDot.setImageResource(R.drawable.dot_inactive);
 		thirdDot.setImageResource(R.drawable.dot_inactive);
 		forthDot.setImageResource(R.drawable.dot_inactive);
-<<<<<<< HEAD
 		taskId = getIntent().getIntExtra(TaskDetails.taskIDKey, 5);
 		Log.d(tag, " taskId " + taskId);
-=======
 
->>>>>>> 798de2dcee94f495c2b86b18aa6c6745d9a05ef9
 		mFragmentPageAdapter = new FragmentPageAdapter(
 				getSupportFragmentManager());
 

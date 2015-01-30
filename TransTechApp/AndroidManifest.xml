@@ -9,18 +9,11 @@
         android:targetSdkVersion="21" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-<<<<<<< HEAD
 
-=======
->>>>>>> 798de2dcee94f495c2b86b18aa6c6745d9a05ef9
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
      <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<uses-feature android:name="android.hardware.camera" />
 	
-<<<<<<< HEAD
-
-=======
->>>>>>> 798de2dcee94f495c2b86b18aa6c6745d9a05ef9
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
