@@ -21,6 +21,7 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -34,11 +35,10 @@ import com.openerp.orm.OEFieldsHelper;
 public class TasksFragment extends Fragment {
 
 	ListView taskList;
-	List<TaskList> taskData;
 	TextView taskId, customer, atm, date;
 	OpenERP mOpenERP;
 	private String tag;
-	private TaskAdapter adapter;
+	private TaskAdapter mTaskAdapter;
 	private ProgressDialog pDialog;
 
 	@Override
@@ -47,7 +47,6 @@ public class TasksFragment extends Fragment {
 
 		View rootView = inflater.inflate(R.layout.tasks, container, false);
 		taskList = (ListView) rootView.findViewById(R.id.task_list);
-		taskData = new ArrayList<TaskList>();
 		pDialog = new ProgressDialog(TasksFragment.this.getActivity());
 
 		pDialog.setCancelable(false);
@@ -102,8 +101,8 @@ public class TasksFragment extends Fragment {
 						pDialog.dismiss();
 					}
 					JSONArray results = new JSONArray(result);
-					adapter = new TaskAdapter(results);
-					taskList.setAdapter(adapter);
+					mTaskAdapter = new TaskAdapter(results);
+					taskList.setAdapter(mTaskAdapter);
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -116,7 +115,10 @@ public class TasksFragment extends Fragment {
 		 @Override
 		 public void onItemClick(AdapterView<?> parent, View view,
 		 int position, long id) {
-		 Intent i=new Intent(getActivity(),ServiceingForm.class);
+			 Log.d(tag,mTaskAdapter.getItem(position).toString());
+		 Intent i=new Intent(getActivity(),TaskDetails.class);
+		 i.putExtra("taskDetais",
+				 mTaskAdapter.getItem(position).toString());
 		 startActivity(i);
 		 }
 		 });
@@ -153,7 +155,6 @@ public class TasksFragment extends Fragment {
 		public long getItemId(int position) {
 			return position;
 		}
-
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
@@ -174,39 +175,29 @@ public class TasksFragment extends Fragment {
 							.getJSONArray("atm").getString(1)
 							+ "");
 					try {
-						date.setText(dateUtility.getFriendlyDateString(dateUtility
-								.convertSerevrDatetoLocalDate(taskData
-										.getJSONObject(position)
-										.getString("visit_time"))));
+						date.setText(dateUtility
+								.getFriendlyDateString(dateUtility
+										.convertSerevrDatetoLocalDate(taskData
+												.getJSONObject(position)
+												.getString("visit_time"))));
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
-					 Bundle bundle = new Bundle();
-				        bundle.putInt("TaskId", taskData.getJSONObject(position)
-								.getInt("id"));
-				        bundle.putString("atm", taskData.getJSONObject(position)
-								.getJSONArray("atm").getString(1)
-								+ "");
-				      
+					Bundle bundle = new Bundle();
+					bundle.putInt("TaskId", taskData.getJSONObject(position)
+							.getInt("id"));
+					bundle.putString("atm", taskData.getJSONObject(position)
+							.getJSONArray("atm").getString(1)
+							+ "");
+
 					// taskData.getJSONObject(position).getJSONArray("visit_time").getString(1)+""
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
 
 			}
+
 			return convertView;
-		}
-
-	}
-
-	class TaskList {
-		String taskId, customer, atm, date;
-
-		TaskList(String taskId, String customer, String atm, String date) {
-			this.taskId = taskId;
-			this.customer = customer;
-			this.atm = atm;
-			this.date = date;
 		}
 	}
 }
