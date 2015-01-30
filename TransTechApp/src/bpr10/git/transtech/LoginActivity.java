@@ -9,13 +9,8 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.R.integer;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -84,9 +79,12 @@ public class LoginActivity extends ActionBarActivity {
 								// Storing UID in SharedPrefrences
 								uId = response.getString("uid");
 								if (!uId.equals("false")) {
-									PreferencesHelper pref = new PreferencesHelper(getApplicationContext());
-									pref.SavePreferences(PreferencesHelper.Uid, uId);  
-									Log.d(tag, pref.GetPreferences(PreferencesHelper.Uid));
+									PreferencesHelper pref = new PreferencesHelper(
+											getApplicationContext());
+									pref.SavePreferences(PreferencesHelper.Uid,
+											uId);
+									Log.d(tag,
+											pref.GetPreferences(PreferencesHelper.Uid));
 								}
 								return uId;
 							} catch (ClientProtocolException e) {

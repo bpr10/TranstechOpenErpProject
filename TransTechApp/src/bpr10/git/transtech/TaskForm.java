@@ -1,27 +1,45 @@
 package bpr10.git.transtech;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.widget.ImageView;
 
-public class ServiceingForm extends FragmentActivity {
+public class TaskForm extends ActionBarActivity {
 	ViewPager mViewPager;
 	ImageView firstDot, secondDot, thirdDot, forthDot;
 	private FragmentPageAdapter mFragmentPageAdapter;
 	Bundle bundle;
+	private String tag = getClass().getSimpleName();
 	static int taskId;
 	public static JSONObject taskPayload;
+	String mCurrentPhotoPath;
+	public static final int ID_DIVIDER = 100000000;
+	private static TaskForm instance;
+
+	public TaskForm() {
+		instance = TaskForm.this;
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +53,7 @@ public class ServiceingForm extends FragmentActivity {
 		secondDot.setImageResource(R.drawable.dot_inactive);
 		thirdDot.setImageResource(R.drawable.dot_inactive);
 		forthDot.setImageResource(R.drawable.dot_inactive);
-//		taskId = bundle.getInt("TaskId");
+		taskId = bundle.getInt("TaskId");
 		mFragmentPageAdapter = new FragmentPageAdapter(
 				getSupportFragmentManager());
 
@@ -103,10 +121,10 @@ public class ServiceingForm extends FragmentActivity {
 			e.printStackTrace();
 		}
 	}
-	
-	void creteTask(int taskId)
-	{
-		SharedPreferences obj = getSharedPreferences("SharedPrefs", Context.MODE_PRIVATE);
+
+	void creteTask(int taskId) {
+		SharedPreferences obj = getSharedPreferences("SharedPrefs",
+				Context.MODE_PRIVATE);
 		Editor editor = obj.edit();
 		editor.putString(String.valueOf(taskId), new JSONObject().toString());
 		editor.commit();
@@ -149,4 +167,56 @@ public class ServiceingForm extends FragmentActivity {
 
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode,
+			Intent intent) {
+		Log.d(tag, "onActivityResult requestCode: " + requestCode
+				+ " resultCode : " + resultCode);
+		super.onActivityResult(requestCode, resultCode, intent);
+	}
+
+	public void saveImageTOoLocalStorage(Context context, int imageID,
+			Bitmap image) throws IOException {
+		String imageDirName = "images_" + taskId;
+		String imageFileName = "IMG_" + imageID;
+		ContextWrapper cw = new ContextWrapper(context);
+		File directory = cw.getDir(imageDirName, Context.MODE_PRIVATE);
+		// File directory = new File(cw.getFilesDir(), imageDirName);
+
+		File imageFile = new File(directory, imageFileName);
+
+		FileOutputStream fos = null;
+
+		fos = new FileOutputStream(imageFile);
+
+		image.compress(Bitmap.CompressFormat.PNG, 30, fos);
+		Log.e("Stored in " + imageDirName, "btmap image : " + imageID);
+		fos.close();
+		Log.i(tag, "Image Uri : " + Uri.fromFile(imageFile));
+	}
+
+	public File getImageFromLocalStorage(Context context, int ImageId)
+			throws FileNotFoundException {
+		ContextWrapper cw = new ContextWrapper(context);
+		File imageFile = new File(cw.getApplicationInfo().dataDir + "/app_"
+				+ "images_" + taskId + "/IMG_" + taskId, ImageId + "");
+		if (imageFile.exists()) {
+			return imageFile;
+		} else {
+			throw new FileNotFoundException();
+		}
+
+	}
+
+	void deleteTaskDirectory() {
+		Context cw = new ContextWrapper(getApplicationContext());
+		File directory = cw.getDir("images_" + taskId, Context.MODE_PRIVATE);
+		directory.deleteOnExit();
+	}
+
+	@Override
+	protected void onDestroy() {
+		deleteTaskDirectory();
+		super.onDestroy();
+	}
 }

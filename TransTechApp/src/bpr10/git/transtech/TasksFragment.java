@@ -14,6 +14,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.openerp.orm.OEFieldsHelper;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,7 +31,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
 
-import com.openerp.orm.OEFieldsHelper;
 
 public class TasksFragment extends Fragment {
 
@@ -116,7 +117,7 @@ public class TasksFragment extends Fragment {
 		 @Override
 		 public void onItemClick(AdapterView<?> parent, View view,
 		 int position, long id) {
-		 Intent i=new Intent(getActivity(),ServiceingForm.class);
+		 Intent i=new Intent(getActivity(),TaskForm.class);
 		 startActivity(i);
 		 }
 		 });

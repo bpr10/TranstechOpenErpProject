@@ -15,7 +15,7 @@ public  class CustomCheckBoxClickListener implements OnCheckedChangeListener{
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		try {
-			ServiceingForm.taskPayload.put(key, isChecked);
+			TaskForm.taskPayload.put(key, isChecked);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

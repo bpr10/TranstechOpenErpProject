@@ -17,15 +17,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -33,12 +30,13 @@ import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
 
 import com.openerp.orm.OEFieldsHelper;
 
+
 public class TaskHistory extends Fragment {
 
-	ListView taskList;
-	List<TaskList> taskData;
-	TextView taskId, customer, atm, date;
-	OpenERP mOpenERP;
+	private ListView taskList;
+	private List<TaskList> taskData;
+	private TextView taskId, customer, atm, date;
+	private OpenERP mOpenERP;
 	private String tag;
 	private TaskAdapter adapter;
 	private ProgressDialog pDialog;

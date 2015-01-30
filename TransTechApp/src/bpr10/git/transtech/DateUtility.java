@@ -93,7 +93,7 @@ public class DateUtility {
 					return "Tomorrow";
 
 				default:
-					Log.d(tag, "Default vaile " + diff);
+					Log.d(tag, "Default value " + diff);
 					if (diff < 0) {
 						return "in " + Math.abs(diff) + "days";
 					} else {

@@ -11,8 +11,8 @@
 # Generated files
 TransTechApp/bin/
 TransTechApp/gen/
-openerp-mobile-crm/bin/
-openerp-mobile-crm/gen/
+openerp-mobile-crm_lead/bin/
+openerp-mobile-crm_lead/gen/
 
 # Gradle files
 TransTechApp/.gradle/
