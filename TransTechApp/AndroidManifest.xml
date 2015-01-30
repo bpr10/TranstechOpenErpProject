@@ -9,15 +9,14 @@
         android:targetSdkVersion="21" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-<<<<<<< HEAD
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
      <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<uses-feature android:name="android.hardware.camera" />
 	
-=======
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
->>>>>>> c8a15e000e0a3cb1d6ef42871d168da44afdb78d
     <application
         android:name=".ApplicationClass"
         android:allowBackup="true"

@@ -34,7 +34,7 @@ public class TaskForm extends ActionBarActivity {
 	static int taskId;
 	public static JSONObject taskPayload;
 	String mCurrentPhotoPath;
-	public static final int ID_DIVIDER = 100000000;
+	public static final int ID_DIVIDER = 1000;
 	private static TaskForm instance;
 
 	public TaskForm() {
@@ -45,6 +45,7 @@ public class TaskForm extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.servicingfrom);
+		deleteTaskDirectory();
 		firstDot = (ImageView) findViewById(R.id.first_dot);
 		secondDot = (ImageView) findViewById(R.id.second_dot);
 		thirdDot = (ImageView) findViewById(R.id.third_dot);
@@ -53,7 +54,8 @@ public class TaskForm extends ActionBarActivity {
 		secondDot.setImageResource(R.drawable.dot_inactive);
 		thirdDot.setImageResource(R.drawable.dot_inactive);
 		forthDot.setImageResource(R.drawable.dot_inactive);
-		taskId = bundle.getInt("TaskId");
+		taskId = getIntent().getIntExtra(TaskDetails.taskIDKey, 5);
+		Log.d(tag, " taskId " + taskId);
 		mFragmentPageAdapter = new FragmentPageAdapter(
 				getSupportFragmentManager());
 
@@ -175,7 +177,7 @@ public class TaskForm extends ActionBarActivity {
 		super.onActivityResult(requestCode, resultCode, intent);
 	}
 
-	public void saveImageTOoLocalStorage(Context context, int imageID,
+	public void saveImageTOoLocalStorage(Context context, String imageID,
 			Bitmap image) throws IOException {
 		String imageDirName = "images_" + taskId;
 		String imageFileName = "IMG_" + imageID;
@@ -183,26 +185,41 @@ public class TaskForm extends ActionBarActivity {
 		File directory = cw.getDir(imageDirName, Context.MODE_PRIVATE);
 		// File directory = new File(cw.getFilesDir(), imageDirName);
 
-		File imageFile = new File(directory, imageFileName);
+		File imageFile = new File(directory, imageFileName + ".jpeg");
+		if (imageFile.exists()) {
+			imageFile.delete();
+			if (imageFile.createNewFile()) {
+				Log.d(tag, "Emptyfile created");
+			}
+		} else {
+			Log.d(tag, "File does not exist");
 
+		}
 		FileOutputStream fos = null;
 
 		fos = new FileOutputStream(imageFile);
-
-		image.compress(Bitmap.CompressFormat.PNG, 30, fos);
-		Log.e("Stored in " + imageDirName, "btmap image : " + imageID);
+		if (image.compress(Bitmap.CompressFormat.JPEG, 30, fos)) {
+			Log.e(tag, "Stored in " + imageDirName + " bitmap image : "
+					+ imageID);
+			Log.i(tag, "Image Uri : " + Uri.fromFile(imageFile));
+		} else {
+			imageFile.delete();
+			Log.i(tag, "Could not create image file. Compress format error");
+		}
 		fos.close();
-		Log.i(tag, "Image Uri : " + Uri.fromFile(imageFile));
+
 	}
 
 	public File getImageFromLocalStorage(Context context, int ImageId)
 			throws FileNotFoundException {
 		ContextWrapper cw = new ContextWrapper(context);
 		File imageFile = new File(cw.getApplicationInfo().dataDir + "/app_"
-				+ "images_" + taskId + "/IMG_" + taskId, ImageId + "");
+				+ "images_" + taskId, "IMG_" + ImageId + ".jpeg");
 		if (imageFile.exists()) {
+			Log.i(tag, "file found " + Uri.fromFile(imageFile));
 			return imageFile;
 		} else {
+			Log.i(tag, "file does not exist " + Uri.fromFile(imageFile));
 			throw new FileNotFoundException();
 		}
 
@@ -211,12 +228,23 @@ public class TaskForm extends ActionBarActivity {
 	void deleteTaskDirectory() {
 		Context cw = new ContextWrapper(getApplicationContext());
 		File directory = cw.getDir("images_" + taskId, Context.MODE_PRIVATE);
-		directory.deleteOnExit();
+		deleteRecursive(directory);
 	}
 
 	@Override
 	protected void onDestroy() {
 		deleteTaskDirectory();
 		super.onDestroy();
+	}
+
+	void deleteRecursive(File dir) {
+		if (dir.isDirectory()) {
+			String[] children = dir.list();
+			for (int i = 0; i < children.length; i++) {
+				new File(dir, children[i]).delete();
+				Log.d("deleting file", children[i]);
+			}
+		}
+		dir.delete();
 	}
 }

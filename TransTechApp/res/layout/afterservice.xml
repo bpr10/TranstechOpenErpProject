@@ -23,16 +23,16 @@
         android:src="@drawable/ic_launcher" />
 
     <Button
-        android:id="@+id/camara2"
+        android:id="@+id/after_service_camera_button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/after_service2"
-        android:layout_alignRight="@+id/camara1"
+        android:layout_alignRight="@+id/after_service_camera_button1"
         android:layout_marginBottom="23dp"
         android:text="Carama" />
 
     <Button
-        android:id="@+id/camara1"
+        android:id="@+id/after_service_camera_button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/after_service1"
@@ -47,14 +47,14 @@
         android:layout_height="100dp"
         android:layout_below="@+id/after_service2"
         android:layout_marginTop="16dp"
-        android:layout_toLeftOf="@+id/camara1"
+        android:layout_toLeftOf="@+id/after_service_camera_button1"
         android:src="@drawable/ic_launcher" />
 
     <Button
-        android:id="@+id/camara3"
+        android:id="@+id/after_service_camera_button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/camara2"
+        android:layout_alignRight="@+id/after_service_camera_button2"
         android:layout_alignTop="@+id/after_service3"
         android:layout_marginTop="26dp"
         android:text="Camara" />

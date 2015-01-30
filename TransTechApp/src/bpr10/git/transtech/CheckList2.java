@@ -33,9 +33,6 @@ public class CheckList2 extends Fragment{
 		spotLightIsOff.setOnCheckedChangeListener(new CustomCheckBoxClickListener("check_list22"));
 		mainBoardLightsAreOff.setOnCheckedChangeListener(new CustomCheckBoxClickListener("check_list23"));
 		securityCameraIsOutOfFocus.setOnCheckedChangeListener(new CustomCheckBoxClickListener("check_list24"));
-		
-		
-		
 		return rootView;
 	}
 
