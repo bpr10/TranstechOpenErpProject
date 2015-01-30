@@ -13,7 +13,7 @@ public class CreateAlerts extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-		View rootView = inflater.inflate(R.layout.alerts, container, false);
+		View rootView = inflater.inflate(R.layout.create_alert, container, false);
 
 		return rootView;
 	}

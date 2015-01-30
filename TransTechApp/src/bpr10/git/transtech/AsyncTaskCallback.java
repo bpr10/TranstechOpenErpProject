@@ -21,13 +21,9 @@ public class AsyncTaskCallback extends AsyncTask<Void, Integer, String> {
 		mAsyncTaskCallbackInterface.foregroundCallback(result);
 		super.onPostExecute(result);
 	}
-
 	public interface AsyncTaskCallbackInterface {
-
 		public void foregroundCallback(String result);
-
 		public String backGroundCallback();
-
 	}
 
 }

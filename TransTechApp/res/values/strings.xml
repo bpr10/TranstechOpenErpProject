@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">TransTech</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">LogOut</string>
     <string name="hello_world">Hello world!</string>
 
     <!-- Nav Drawer Menu Items -->

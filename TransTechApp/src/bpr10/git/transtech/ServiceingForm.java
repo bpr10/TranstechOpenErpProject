@@ -35,7 +35,7 @@ public class ServiceingForm extends FragmentActivity {
 		secondDot.setImageResource(R.drawable.dot_inactive);
 		thirdDot.setImageResource(R.drawable.dot_inactive);
 		forthDot.setImageResource(R.drawable.dot_inactive);
-		taskId = bundle.getInt("TaskId");
+//		taskId = bundle.getInt("TaskId");
 		mFragmentPageAdapter = new FragmentPageAdapter(
 				getSupportFragmentManager());
 

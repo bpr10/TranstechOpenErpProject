@@ -27,6 +27,8 @@
         </activity>
         <activity android:name="bpr10.git.transtech.MainActivity" >
         </activity>
+        <activity android:name="bpr10.git.transtech.ServiceingForm" >
+        </activity>
     </application>
 
 </manifest>

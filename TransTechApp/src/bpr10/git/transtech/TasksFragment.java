@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import openerp.OEDomain;
 import openerp.OEVersionException;
@@ -15,17 +14,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.openerp.orm.OEFieldsHelper;
-
-import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
-
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +27,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
+
+import com.openerp.orm.OEFieldsHelper;
 
 public class TasksFragment extends Fragment {
 
@@ -45,6 +39,7 @@ public class TasksFragment extends Fragment {
 	OpenERP mOpenERP;
 	private String tag;
 	private TaskAdapter adapter;
+	private ProgressDialog pDialog;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,6 +48,12 @@ public class TasksFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.tasks, container, false);
 		taskList = (ListView) rootView.findViewById(R.id.task_list);
 		taskData = new ArrayList<TaskList>();
+		pDialog = new ProgressDialog(TasksFragment.this.getActivity());
+
+		pDialog.setCancelable(false);
+		pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		pDialog.setTitle("Please Wait");
+		pDialog.show();
 		new AsyncTaskCallback(new AsyncTaskCallbackInterface() {
 
 			@Override
@@ -97,6 +98,9 @@ public class TasksFragment extends Fragment {
 			@Override
 			public void foregroundCallback(String result) {
 				try {
+					if (pDialog.isShowing()) {
+						pDialog.dismiss();
+					}
 					JSONArray results = new JSONArray(result);
 					adapter = new TaskAdapter(results);
 					taskList.setAdapter(adapter);
