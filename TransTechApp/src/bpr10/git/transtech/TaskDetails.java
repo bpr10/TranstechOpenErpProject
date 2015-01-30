@@ -1,6 +1,7 @@
 package bpr10.git.transtech;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 import openerp.OEDomain;
 import openerp.OEVersionException;
@@ -30,7 +31,7 @@ import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
 import com.openerp.orm.OEFieldsHelper;
 
 public class TaskDetails extends Activity implements LocationListener {
-	TextView customer, ATMDtails, location, distance, dueDate;
+	TextView customer, ATMDtails, locationText, distance, dueDate;
 	Button survoeyNow;
 	LocationManager locationManager;
 	String provider;
@@ -39,19 +40,22 @@ public class TaskDetails extends Activity implements LocationListener {
 	private String tag = getClass().getSimpleName();
 	JSONObject taskObj = new JSONObject();
 	JSONObject atmResposne;
+	public static final String taskIDKey = "taskId";
+	private DateUtility dateUtility;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.task_details);
+		dateUtility=new DateUtility();
 		customer = (TextView) findViewById(R.id.customer);
 		ATMDtails = (TextView) findViewById(R.id.details_atm);
-		location = (TextView) findViewById(R.id.location);
+		locationText = (TextView) findViewById(R.id.location);
 		distance = (TextView) findViewById(R.id.distance);
 		dueDate = (TextView) findViewById(R.id.due_date);
 		survoeyNow = (Button) findViewById(R.id.survoeynow_but);
-				try {
+		try {
 			taskObj = new JSONObject(getIntent().getStringExtra("taskDetais"));
 			Log.d(tag, taskObj.toString());
 		} catch (JSONException e1) {
@@ -67,11 +71,12 @@ public class TaskDetails extends Activity implements LocationListener {
 					// Connecting to openERP
 
 					OEDomain domain = new OEDomain();
-               domain.add("id", "=",taskObj.getJSONArray("atm").get(0));
+					domain.add("id", "=", taskObj.getJSONArray("atm").get(0));
 					Log.d("domainvalues", domain.getArray().toString());
 					OEFieldsHelper fields = new OEFieldsHelper(new String[] {
-							"longitude", "latitude","customer","name","country","date" });
-					Log.d("fields",fields.get().toString());
+							"longitude", "latitude", "customer", "name",
+							"country", "date" });
+					Log.d("fields", fields.get().toString());
 					mOpenERP = ApplicationClass.getInstance().getOpenERPCon();
 					atmResposne = mOpenERP.search_read("atm.info",
 							fields.get(), domain.get());
@@ -96,40 +101,54 @@ public class TaskDetails extends Activity implements LocationListener {
 
 			@Override
 			public void foregroundCallback(String result) {
-				
-                 Location l = new Location("atmlocation");
-                 try {
-                	 String lat=atmResposne.getJSONArray("records").getJSONObject(0).getString("latitude");
-                	 String lang=atmResposne.getJSONArray("records").getJSONObject(0).getString("longitude");
-                	 String country=atmResposne.getJSONArray("records").getJSONObject(0).getJSONArray("country").getString(1);
-                	 String atmDetails=atmResposne.getJSONArray("records").getJSONObject(0).getString("name");
-                	 String customerText =atmResposne.getJSONArray("records").getJSONObject(0).getJSONArray("customer").getString(1);
-                	 
-                	 if(!lat.equals("false"))
-                	 {
-                	 double latitude=Double.parseDouble(lat);
-                	 l.setLatitude(latitude);
-                	 }
-                	 if(!lang.equals("false"))
-                	 {
-                	 double longitude=Double.parseDouble(lang);
-                	  l.setLongitude(longitude);
-                	 }
-                	
-                	 Location location = locationManager.getLastKnownLocation(provider);
-                	 double distanceVal=Math.round((location.distanceTo(l) / 1000) * 100.0) / 100.0;
-                	 distance.setText(distance+"");
-                	 System.out.println(distanceVal);
-                	customer.setText(customerText);
-                	 ATMDtails.setText(atmDetails);
-                	 
-                          
- 			} catch (JSONException e) {
+
+				Location l = new Location("atmlocation");
+				try {
+					String lat = atmResposne.getJSONArray("records")
+							.getJSONObject(0).getString("latitude");
+					String lang = atmResposne.getJSONArray("records")
+							.getJSONObject(0).getString("longitude");
+//					String country = atmResposne.getJSONArray("records")
+//							.getJSONObject(0).getJSONArray("country")
+//							.getString(1);
+//					String atmDetails = atmResposne.getJSONArray("records")
+//							.getJSONObject(0).getString("name");
+//					String customerText = atmResposne.getJSONArray("records")
+//							.getJSONObject(0).getJSONArray("customer")
+//							.getString(1);
+
+					if (!lat.equals("false")) {
+						double latitude = Double.parseDouble(lat);
+						l.setLatitude(latitude);
+					}
+					if (!lang.equals("false")) {
+						double longitude = Double.parseDouble(lang);
+						l.setLongitude(longitude);
+					}
+
+					Location location = locationManager
+							.getLastKnownLocation(provider);
+					double distanceVal = Math.round((location.distanceTo(l) / 1000) * 100.0) / 100.0;
+					distance.setText(distanceVal + "");
+					System.out.println(distanceVal);
+				customer.setText(taskObj.getJSONArray("customer").getString(1));
+               	 ATMDtails.setText(taskObj.getJSONArray("atm").toString());
+               	locationText.setText(taskObj.getJSONArray("country").getString(1));
+               	
+               	try {
+					dueDate.setText(dateUtility
+							.getFriendlyDateString(dateUtility
+									.convertSerevrDatetoLocalDate(taskObj.getString("visit_time")+"")));
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+
+				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-                
-		}
+
+			}
 		}).execute();
 		Criteria criteria = new Criteria();
 		provider = locationManager.getBestProvider(criteria, false);
@@ -146,14 +165,13 @@ public class TaskDetails extends Activity implements LocationListener {
 			Toast.makeText(getBaseContext(), "No Provider Found",
 					Toast.LENGTH_SHORT).show();
 		}
-				survoeyNow.setOnClickListener(new OnClickListener() {
+		survoeyNow.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent i = new Intent(TaskDetails.this, ServiceingForm.class);
+				Intent i = new Intent(TaskDetails.this, TaskForm.class);
 				try {
-					i.putExtra("task_id",taskObj.getString("id") );
+					i.putExtra(taskIDKey, taskObj.getInt("id"));
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

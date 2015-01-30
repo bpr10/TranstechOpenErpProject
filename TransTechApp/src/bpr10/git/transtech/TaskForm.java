@@ -53,7 +53,7 @@ public class TaskForm extends ActionBarActivity {
 		secondDot.setImageResource(R.drawable.dot_inactive);
 		thirdDot.setImageResource(R.drawable.dot_inactive);
 		forthDot.setImageResource(R.drawable.dot_inactive);
-		taskId = bundle.getInt("TaskId");
+
 		mFragmentPageAdapter = new FragmentPageAdapter(
 				getSupportFragmentManager());
 
