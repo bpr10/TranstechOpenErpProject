@@ -68,6 +68,7 @@ public class TaskHistory extends Fragment {
 					Log.d(tag, pref.GetPreferences(PreferencesHelper.Uid));
 					domain.add("surveyor", "=", Integer.parseInt(pref
 							.GetPreferences(PreferencesHelper.Uid)));
+					domain.add("status", "=", "done");
 					OEFieldsHelper fields = new OEFieldsHelper(new String[] {
 							"name", "customer", "atm", "country", "task_month",
 							"visit_time" });
@@ -76,7 +77,7 @@ public class TaskHistory extends Fragment {
 							"atm.surverys.management", fields.get(),
 							domain.get());
 
-					Log.d("ser", serachResposne.getJSONArray("records")
+					Log.d("history", serachResposne.getJSONArray("records")
 							.toString());
 					return serachResposne.getJSONArray("records").toString();
 				} catch (ClientProtocolException e) {
