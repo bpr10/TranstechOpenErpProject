@@ -168,6 +168,21 @@ public class TasksFragment extends Fragment {
 				customer = (TextView) convertView.findViewById(R.id.customer);
 				atm = (TextView) convertView.findViewById(R.id.atm);
 				date = (TextView) convertView.findViewById(R.id.taskdate);
+				if (position % 2 == 0) {
+					convertView.findViewById(
+							R.id.tasklist_layout)
+							.setBackgroundColor(
+									getResources().getColor(R.color.task_list_backgorung_white));
+				} else {
+					convertView
+							.findViewById(
+									R.id.tasklist_layout)
+									.setBackgroundColor(
+											getResources().getColor(R.color.task_list_backgorung_gray));
+				}
+
+				
+				
 				try {
 					taskId.setText(taskData.getJSONObject(position)
 							.getInt("id") + "");
@@ -186,12 +201,12 @@ public class TasksFragment extends Fragment {
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
-					Bundle bundle = new Bundle();
-					bundle.putInt("TaskId", taskData.getJSONObject(position)
-							.getInt("id"));
-					bundle.putString("atm", taskData.getJSONObject(position)
-							.getJSONArray("atm").getString(1)
-							+ "");
+//					Bundle bundle = new Bundle();
+//					bundle.putInt("TaskId", taskData.getJSONObject(position)
+//							.getInt("id"));
+//					bundle.putString("atm", taskData.getJSONObject(position)
+//							.getJSONArray("atm").getString(1)
+//							+ "");
 
 					// taskData.getJSONObject(position).getJSONArray("visit_time").getString(1)+""
 				} catch (JSONException e) {

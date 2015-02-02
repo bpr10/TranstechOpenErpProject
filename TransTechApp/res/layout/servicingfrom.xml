@@ -15,7 +15,7 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/pager"
             android:layout_width="match_parent"
-            android:layout_height="382dp" >
+            android:layout_height="420dp" >
         </android.support.v4.view.ViewPager>
     </FrameLayout>
 
@@ -28,26 +28,27 @@
         >
          <ImageView
             android:id="@+id/first_dot"
-            android:layout_width="wrap_content"
+            android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
+            android:layout_marginLeft="100dp"
             android:src="@drawable/dot_inactive" />
 
         <ImageView
             android:id="@+id/second_dot"
-            android:layout_width="wrap_content"
+            android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:src="@drawable/dot_active" />
 
         <ImageView
             android:id="@+id/third_dot"
-            android:layout_width="wrap_content"
+            android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:src="@drawable/dot_inactive" />
         <ImageView
             android:id="@+id/forth_dot"
-            android:layout_width="wrap_content"
+            android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:src="@drawable/dot_inactive" />

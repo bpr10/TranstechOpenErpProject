@@ -11,7 +11,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="33dp"
-        android:text="Customer"
+        android:text="@string/customer"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="Atm Details"
+        android:text="@string/atm_detaisl"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Spinner
@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/Customer"
+        android:layout_below="@+id/customer_spinner"
         android:text="State"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -44,8 +44,8 @@
         android:id="@+id/state_spinner"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_alignLeft="@+id/Customer"
-        android:layout_below="@+id/Customer" />
+        android:layout_alignLeft="@+id/customer_spinner"
+        android:layout_below="@+id/customer_spinner" />
 
     <TextView
         android:id="@+id/textView4"
@@ -102,7 +102,7 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/priority_spinner"
         android:layout_marginTop="20dp"
-        android:text="Summary and Description"
+        android:text="@string/summeryanddesc"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -158,7 +158,7 @@
         android:layout_below="@+id/description_text"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="26dp"
-        android:text="Submit" />
+        android:text="@string/submit" />
 
     <TextView
         android:id="@+id/textView10"
@@ -167,7 +167,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/summery_text"
         android:layout_marginTop="20dp"
-        android:text="Description"
+        android:text="@string/description"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

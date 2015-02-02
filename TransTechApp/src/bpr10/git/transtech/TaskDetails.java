@@ -1,6 +1,7 @@
 package bpr10.git.transtech;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 import openerp.OEDomain;
 import openerp.OEVersionException;
@@ -30,7 +31,7 @@ import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
 import com.openerp.orm.OEFieldsHelper;
 
 public class TaskDetails extends Activity implements LocationListener {
-	TextView customer, ATMDtails, location, distance, dueDate;
+	TextView customer, ATMDtails, locationText, distance, dueDate;
 	Button survoeyNow;
 	LocationManager locationManager;
 	String provider;
@@ -39,6 +40,8 @@ public class TaskDetails extends Activity implements LocationListener {
 	private String tag = getClass().getSimpleName();
 	JSONObject taskObj = new JSONObject();
 	JSONObject atmResposne;
+	Location location;
+	private DateUtility dateUtility;
 	public static final String taskIDKey = "taskId";
 
 	@Override
@@ -48,7 +51,7 @@ public class TaskDetails extends Activity implements LocationListener {
 		setContentView(R.layout.task_details);
 		customer = (TextView) findViewById(R.id.customer);
 		ATMDtails = (TextView) findViewById(R.id.details_atm);
-		location = (TextView) findViewById(R.id.location);
+		locationText = (TextView) findViewById(R.id.location);
 		distance = (TextView) findViewById(R.id.distance);
 		dueDate = (TextView) findViewById(R.id.due_date);
 		survoeyNow = (Button) findViewById(R.id.survoeynow_but);
@@ -105,14 +108,9 @@ public class TaskDetails extends Activity implements LocationListener {
 							.getJSONObject(0).getString("latitude");
 					String lang = atmResposne.getJSONArray("records")
 							.getJSONObject(0).getString("longitude");
-					String country = atmResposne.getJSONArray("records")
-							.getJSONObject(0).getJSONArray("country")
-							.getString(1);
-					String atmDetails = atmResposne.getJSONArray("records")
-							.getJSONObject(0).getString("name");
-					String customerText = atmResposne.getJSONArray("records")
-							.getJSONObject(0).getJSONArray("customer")
-							.getString(1);
+					String country = taskObj.getJSONArray("country").getString(1);
+					String atmDetails = taskObj.getJSONArray("atm").getString(1);
+					String customerText = taskObj.getJSONArray("customer").getString(1);
 
 					if (!lat.equals("false")) {
 						double latitude = Double.parseDouble(lat);
@@ -122,14 +120,28 @@ public class TaskDetails extends Activity implements LocationListener {
 						double longitude = Double.parseDouble(lang);
 						l.setLongitude(longitude);
 					}
-
-					Location location = locationManager
-							.getLastKnownLocation(provider);
-					double distanceVal = Math.round((location.distanceTo(l) / 1000) * 100.0) / 100.0;
-					distance.setText(distance + "");
-					System.out.println(distanceVal);
+					if(location!=null)
+					{
+						 double distanceVal = Math.round((location.distanceTo(l) / 1000) * 100.0) / 100.0;
+						 distance.setText(distanceVal + "");
+					}else
+					{
+			           distance.setVisibility(View.INVISIBLE);	
+					}
+					dateUtility = new DateUtility();
 					customer.setText(customerText);
 					ATMDtails.setText(atmDetails);
+					locationText.setText(country);
+					try {
+						dueDate.setText(dateUtility
+								.getFriendlyDateString(dateUtility
+										.convertSerevrDatetoLocalDate(taskObj.getString("visit_time"))));
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+											
+											
 
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -141,7 +153,7 @@ public class TaskDetails extends Activity implements LocationListener {
 		Criteria criteria = new Criteria();
 		provider = locationManager.getBestProvider(criteria, false);
 		if (provider != null && !provider.equals("")) {
-			Location location = locationManager.getLastKnownLocation(provider);
+			location = locationManager.getLastKnownLocation(provider);
 			locationManager.requestLocationUpdates(provider, 20000, 1, this);
 			if (location != null)
 				onLocationChanged(location);

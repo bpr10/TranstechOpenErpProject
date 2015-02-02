@@ -12,7 +12,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="19dp"
-        android:text="No Comments" />
+        
+        android:text="@string/no_comments" />
  
  
     <CheckBox
@@ -21,7 +22,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/no_comments"
-        android:text="Transactional Stickers faded" />
+        
+        android:text="@string/transactional_stickers_faded" />
  
  
     <CheckBox
@@ -30,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/transactional_stickers_faded"
-        android:text="Collect Cash" />
+        android:text="@string/collect_cash" />
  
  
     <CheckBox
@@ -39,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/collect_cash"
-        android:text=" Collect Receipt" />
+        android:text="@string/collect_receipt" />
  
  
     <CheckBox
@@ -48,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/collect_receipt"
-        android:text="Insert card" />
+        android:text="@string/insert_card" />
  
  
     <CheckBox
@@ -57,17 +59,16 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/insert_card"
         android:layout_below="@+id/insert_card"
-        android:text="Insertcash" />
- 
+        android:text="@string/insert_cash" />
  
     <CheckBox
         android:id="@+id/network_sticker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/insert_cash"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/insert_cash"
-        android:text=" Network sticker" />
- 
+        android:text="@string/network_sticker" />
  
     <CheckBox
         android:id="@+id/instruction_sticker"
@@ -75,7 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/network_sticker"
-        android:text="Instruction sticker" />
+        android:text="@string/instruction_sticker" />
  
  
     <CheckBox
@@ -84,7 +85,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/instruction_sticker"
-        android:text="Vault branding" />
+        android:text="@string/vault_branding" />
  
  
     <CheckBox
@@ -93,7 +94,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/vault_branding"
-        android:text="ATM ID" />
+        android:text="@string/atm_id" />
  
  
 </RelativeLayout>

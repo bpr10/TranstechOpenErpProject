@@ -2,42 +2,73 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <EditText
-        android:id="@+id/user_name"
-        android:layout_width="250dp"
-        android:layout_height="40dp"
-        
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="110dp"
-    
-        android:hint="enter your email"
-        android:inputType="textEmailAddress" 
-        android:background="@drawable/profile_text_bg">
+  
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/logo" />
 
-        <requestFocus />
-    </EditText>
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/imageView1"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/profile_text_bg" >
 
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="250dp"
-        android:layout_height="40dp"
-        android:layout_alignLeft="@+id/user_name"
-        android:layout_below="@+id/user_name"
-        android:layout_marginTop="30dp"
-        
-        android:hint="enter your password"
-        android:inputType="textPassword"
-        android:background="@drawable/profile_text_bg"
-         />
+        <EditText
+            android:id="@+id/user_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="20dp"
+            android:ems="10"
+            android:hint="@string/username"
+            android:inputType="textEmailAddress" />
+    </RelativeLayout>
 
     <Button
         android:id="@+id/sign_in"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/password"
+        android:layout_below="@+id/relativeLayout2"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:background="#DB1717"
-        android:text="SignIn" />
+        android:background="@drawable/login_backgroung"
+        android:padding="20dp"
+        android:text="@string/login"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/relativeLayout1"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/profile_text_bg" >
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="20dp"
+            android:ems="10"
+            android:hint="@string/password"
+            android:inputType="textPassword" />
+    </RelativeLayout>
 
 </RelativeLayout>
