@@ -2,8 +2,6 @@ package bpr10.git.transtech;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
 
 import openerp.OEDomain;
 import openerp.OEVersionException;
@@ -14,14 +12,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -39,7 +35,6 @@ public class TasksFragment extends Fragment {
 	OpenERP mOpenERP;
 	private String tag;
 	private TaskAdapter mTaskAdapter;
-	private ProgressDialog pDialog;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,13 +42,8 @@ public class TasksFragment extends Fragment {
 
 		View rootView = inflater.inflate(R.layout.tasks, container, false);
 		taskList = (ListView) rootView.findViewById(R.id.task_list);
-		pDialog = new ProgressDialog(TasksFragment.this.getActivity());
 
-		pDialog.setCancelable(false);
-		pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		pDialog.setTitle("Please Wait");
-		pDialog.show();
-		new AsyncTaskCallback(new AsyncTaskCallbackInterface() {
+		new AsyncTaskCallback(getActivity(), new AsyncTaskCallbackInterface() {
 
 			@Override
 			public String backGroundCallback() {
@@ -67,12 +57,18 @@ public class TasksFragment extends Fragment {
 					Log.d(tag, pref.GetPreferences(PreferencesHelper.Uid));
 					domain.add("surveyor", "=", Integer.parseInt(pref
 							.GetPreferences(PreferencesHelper.Uid)));
-					domain.add("status", "=", "pending");
-//					domain.add("status", "=", "assigned");
-//					domain.add("status", "=", "progress");
+					domain.add("status", "not in",
+							new JSONArray().put("waitnig_approve").put("done"));
+					// domain.add("status", "=", "pending");
+					// domain.add("status", "=", "progress");
+					// domain.add("status", "=", "assigned");
+
 					OEFieldsHelper fields = new OEFieldsHelper(new String[] {
 							"name", "customer", "atm", "country", "task_month",
 							"visit_time" });
+					Log.d(tag, "domain " + domain);
+					Log.d(tag, "domain JOSNOBJ" + domain.get());
+					Log.d(tag, "fields " + fields);
 					mOpenERP = ApplicationClass.getInstance().getOpenERPCon();
 					JSONObject serachResposne = mOpenERP.search_read(
 							"atm.surverys.management", fields.get(),
@@ -100,9 +96,7 @@ public class TasksFragment extends Fragment {
 			@Override
 			public void foregroundCallback(String result) {
 				try {
-					if (pDialog.isShowing()) {
-						pDialog.dismiss();
-					}
+
 					JSONArray results = new JSONArray(result);
 					mTaskAdapter = new TaskAdapter(results);
 					taskList.setAdapter(mTaskAdapter);
@@ -113,18 +107,18 @@ public class TasksFragment extends Fragment {
 			}
 		}).execute();
 
-		 taskList.setOnItemClickListener(new OnItemClickListener() {
-		
-		 @Override
-		 public void onItemClick(AdapterView<?> parent, View view,
-		 int position, long id) {
-			 Log.d(tag,mTaskAdapter.getItem(position).toString());
-		 Intent i=new Intent(getActivity(),TaskDetails.class);
-		 i.putExtra("taskDetais",
-				 mTaskAdapter.getItem(position).toString());
-		 startActivity(i);
-		 }
-		 });
+		taskList.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Log.d(tag, mTaskAdapter.getItem(position).toString());
+				Intent i = new Intent(getActivity(), TaskDetails.class);
+				i.putExtra("taskDetais", mTaskAdapter.getItem(position)
+						.toString());
+				startActivity(i);
+			}
+		});
 
 		return rootView;
 	}
@@ -158,6 +152,7 @@ public class TasksFragment extends Fragment {
 		public long getItemId(int position) {
 			return position;
 		}
+
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
@@ -169,20 +164,18 @@ public class TasksFragment extends Fragment {
 				atm = (TextView) convertView.findViewById(R.id.atm);
 				date = (TextView) convertView.findViewById(R.id.taskdate);
 				if (position % 2 == 0) {
-					convertView.findViewById(
-							R.id.tasklist_layout)
-							.setBackgroundColor(
-									getResources().getColor(R.color.task_list_backgorung_white));
-				} else {
 					convertView
-							.findViewById(
-									R.id.tasklist_layout)
-									.setBackgroundColor(
-											getResources().getColor(R.color.task_list_backgorung_gray));
+							.findViewById(R.id.tasklist_layout)
+							.setBackgroundColor(
+									getResources().getColor(
+											R.color.task_list_backgorung_white));
+				} else {
+					convertView.findViewById(R.id.tasklist_layout)
+							.setBackgroundColor(
+									getResources().getColor(
+											R.color.task_list_backgorung_gray));
 				}
 
-				
-				
 				try {
 					taskId.setText(taskData.getJSONObject(position)
 							.getInt("id") + "");
@@ -201,12 +194,12 @@ public class TasksFragment extends Fragment {
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
-//					Bundle bundle = new Bundle();
-//					bundle.putInt("TaskId", taskData.getJSONObject(position)
-//							.getInt("id"));
-//					bundle.putString("atm", taskData.getJSONObject(position)
-//							.getJSONArray("atm").getString(1)
-//							+ "");
+					// Bundle bundle = new Bundle();
+					// bundle.putInt("TaskId", taskData.getJSONObject(position)
+					// .getInt("id"));
+					// bundle.putString("atm", taskData.getJSONObject(position)
+					// .getJSONArray("atm").getString(1)
+					// + "");
 
 					// taskData.getJSONObject(position).getJSONArray("visit_time").getString(1)+""
 				} catch (JSONException e) {

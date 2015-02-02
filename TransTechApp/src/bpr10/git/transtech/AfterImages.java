@@ -4,10 +4,17 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import openerp.OEVersionException;
+import openerp.OpenERP;
+
+import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -20,8 +27,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
 
 import com.squareup.picasso.Picasso;
 
@@ -33,6 +45,8 @@ public class AfterImages extends Fragment {
 	private TaskForm mtaskForm;
 	private Context mContext;
 	static final int REQUEST_IMAGE_CAPTURE = 11;
+	private Button submitButton;
+	private Spinner remarkCategorySpinner;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -50,16 +64,60 @@ public class AfterImages extends Fragment {
 				.findViewById(R.id.after_service_camera_button2);
 		camera3 = (Button) rootView
 				.findViewById(R.id.after_service_camera_button3);
+		submitButton = (Button) rootView.findViewById(R.id.submit_button);
+		remarkCategorySpinner = (Spinner) rootView
+				.findViewById(R.id.remark_category);
+		populateCatrgories();
+		remarkCategorySpinner
+				.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+					@Override
+					public void onItemSelected(AdapterView<?> parent,
+							View view, int position, long id) {
+						try {
+							TaskForm.taskPayload.put(
+									"remarks_survey",
+									TaskForm.remarksResponse
+											.getJSONArray("records")
+											.getJSONObject(position)
+											.getString("description"));
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+					}
+
+					@Override
+					public void onNothingSelected(AdapterView<?> parent) {
+
+					}
+				});
 		return rootView;
+	}
+
+	void populateCatrgories() {
+		ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
+				getActivity(), android.R.layout.simple_spinner_item);
+		try {
+			for (int i = 0; i < TaskForm.remarksResponse
+					.getJSONArray("records").length(); i++)
+				adapter.add(TaskForm.remarksResponse.getJSONArray("records")
+						.getJSONObject(i).getString("name"));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (NullPointerException e) {
+			mtaskForm.getRemarkCatrgories();
+		}
+		remarkCategorySpinner.setAdapter(adapter);
 	}
 
 	@Override
 	public void onResume() {
 		try {
+
 			try {
 				File image1 = mtaskForm.getImageFromLocalStorage(mContext,
 						camera1.getId() % TaskForm.ID_DIVIDER);
-				TaskForm.taskPayload.putOpt("bfr_img_side",
+				TaskForm.taskPayload.putOpt("after_img_front",
 						mtaskForm.encodeImage(image1));
 				Picasso.with(getActivity().getApplicationContext())
 						.load(image1).skipMemoryCache().into(afterImage1);
@@ -71,7 +129,7 @@ public class AfterImages extends Fragment {
 			try {
 				File image2 = mtaskForm.getImageFromLocalStorage(mContext,
 						camera2.getId() % TaskForm.ID_DIVIDER);
-				TaskForm.taskPayload.putOpt("bfr_img_side",
+				TaskForm.taskPayload.putOpt("after_img_back",
 						mtaskForm.encodeImage(image2));
 				Picasso.with(getActivity().getApplicationContext())
 						.load(image2).skipMemoryCache().into(afterImage2);
@@ -83,7 +141,7 @@ public class AfterImages extends Fragment {
 			try {
 				File image3 = mtaskForm.getImageFromLocalStorage(mContext,
 						camera3.getId() % TaskForm.ID_DIVIDER);
-				TaskForm.taskPayload.putOpt("bfr_img_side",
+				TaskForm.taskPayload.putOpt("after_img_side",
 						mtaskForm.encodeImage(image3));
 				Picasso.with(getActivity().getApplicationContext())
 						.load(image3).skipMemoryCache().into(afterImage3);
@@ -99,6 +157,93 @@ public class AfterImages extends Fragment {
 		camera1.setOnClickListener(cameraClickListener);
 		camera2.setOnClickListener(cameraClickListener);
 		camera3.setOnClickListener(cameraClickListener);
+		submitButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Log.d(tag, "Button CLicked");
+
+				new AsyncTaskCallback(getActivity(),
+						new AsyncTaskCallbackInterface() {
+							@Override
+							public String backGroundCallback() {
+								OpenERP mOpenERP;
+								try {
+									mOpenERP = ApplicationClass.getInstance()
+											.getOpenERPCon();
+									Log.d(tag, "TaskForm.taskPayload "
+											+ TaskForm.taskPayload.toString());
+									JSONObject response = mOpenERP
+											.createNew("survey.info",
+													TaskForm.taskPayload);
+									try {
+										if (response.get("result") != null) {
+											boolean updateResponse = mOpenERP
+													.updateValues(
+															"atm.surverys.management",
+															new JSONObject()
+																	.put("status",
+																			"waitnig_approve"),
+															TaskForm.taskId);
+											Log.d(tag, "updateResponse "
+													+ updateResponse);
+											return response.toString();
+										}
+										Log.d(tag, response.toString());
+
+									} catch (Exception e) {
+
+									}
+
+								} catch (ClientProtocolException e) {
+									e.printStackTrace();
+								} catch (JSONException e) {
+									e.printStackTrace();
+								} catch (IOException e) {
+									e.printStackTrace();
+								} catch (OEVersionException e) {
+									e.printStackTrace();
+								}
+								return null;
+							}
+
+							@Override
+							public void foregroundCallback(String result) {
+								Log.d(tag, result);
+								AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+										getActivity());
+								alertDialogBuilder.setTitle("Success");
+								alertDialogBuilder.setCancelable(false);
+								alertDialogBuilder
+										.setMessage("Survey Request Recorded")
+										.setCancelable(false)
+										.setPositiveButton(
+												"Okay",
+												new DialogInterface.OnClickListener() {
+													public void onClick(
+															DialogInterface dialog,
+															int id) {
+
+														Intent i = new Intent(
+																getActivity(),
+																MainActivity.class);
+														i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+														i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+														startActivity(i);
+														getActivity().finish();
+													}
+												});
+
+								AlertDialog alertDialog = alertDialogBuilder
+										.create();
+								alertDialog.show();
+							}
+
+						}).execute();
+
+			}
+		});
 		super.onResume();
 	}
 
@@ -159,4 +304,5 @@ public class AfterImages extends Fragment {
 	public void setCapturedImageURI(Uri mCapturedImageURI) {
 		this.mCapturedImageURI = mCapturedImageURI;
 	}
+
 }

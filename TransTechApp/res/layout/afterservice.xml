@@ -5,82 +5,70 @@
     android:orientation="vertical" >
 
     <Button
+        android:id="@+id/after_service_camera_button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/after_service2"
+        android:layout_alignRight="@+id/after_service_camera_button1"
+        android:layout_marginBottom="23dp"
+        android:text="Click Image" />
+
+    <Button
+        android:id="@+id/after_service_camera_button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/after_service1"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="46dp"
+        android:layout_toRightOf="@+id/after_service1"
+        android:text="Click Image" />
+
+    <Button
         android:id="@+id/after_service_camera_button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/after_service_camera_button2"
         android:layout_alignTop="@+id/after_service3"
-        android:layout_marginTop="30dp"
-        android:background="#22438D"
-        android:text="Camera" />
+        android:layout_marginTop="26dp"
+        android:text="Click Image" />
 
     <ImageView
         android:id="@+id/after_service1"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_alignLeft="@+id/after_service2"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="40dp"
-        android:background="#22438D"
+        android:layout_toLeftOf="@+id/submit_button"
         android:src="@drawable/ic_launcher" />
 
     <ImageView
         android:id="@+id/after_service2"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_alignParentLeft="true"
+        android:layout_alignLeft="@+id/after_service1"
         android:layout_below="@+id/after_service1"
-        android:layout_marginLeft="42dp"
-        android:layout_marginTop="20dp"
-        android:background="#22438D"
         android:src="@drawable/ic_launcher" />
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/after_service3"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:text="Remarks Category"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <Spinner
-        android:id="@+id/remarks_category_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/after_service_camera_button3"
-        android:layout_alignTop="@+id/textView1" />
 
     <ImageView
         android:id="@+id/after_service3"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_alignLeft="@+id/after_service2"
         android:layout_below="@+id/after_service2"
-        android:layout_marginTop="20dp"
-        android:background="#22438D"
+        android:layout_toLeftOf="@+id/after_service_camera_button1"
         android:src="@drawable/ic_launcher" />
 
-    <Button
-        android:id="@+id/after_service_camera_button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/after_service_camera_button1"
-        android:layout_alignTop="@+id/after_service2"
-        android:layout_marginTop="30dp"
-        android:background="#22438D"
-        android:text="Camera" />
+    <Spinner
+        android:id="@+id/remark_category"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/after_service3" />
 
     <Button
-        android:id="@+id/after_service_camera_button1"
+        android:id="@+id/submit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/after_service1"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="30dp"
-        android:layout_toRightOf="@+id/textView1"
-        android:background="#22438D"
-        android:text="Camera" />
+        android:layout_below="@+id/remark_category"
+        android:layout_centerHorizontal="true"
+        android:text="Submit" />
 
 </RelativeLayout>

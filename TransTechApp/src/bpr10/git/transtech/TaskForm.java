@@ -6,6 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import openerp.OEVersionException;
+import openerp.OpenERP;
+
+import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,6 +31,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
+import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
+
+import com.openerp.orm.OEFieldsHelper;
 
 public class TaskForm extends ActionBarActivity {
 	ViewPager mViewPager;
@@ -36,8 +43,9 @@ public class TaskForm extends ActionBarActivity {
 	private String tag = getClass().getSimpleName();
 	static int taskId;
 	public static JSONObject taskPayload;
-	String mCurrentPhotoPath;
+	private JSONObject taskObj;
 	public static final int ID_DIVIDER = 1000;
+	public static JSONObject remarksResponse;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +60,6 @@ public class TaskForm extends ActionBarActivity {
 		secondDot.setImageResource(R.drawable.dot_inactive);
 		thirdDot.setImageResource(R.drawable.dot_inactive);
 		forthDot.setImageResource(R.drawable.dot_inactive);
-		taskId = getIntent().getIntExtra(TaskDetails.taskIDKey, 5);
-		Log.d(tag, " taskId " + taskId);
-
 		mFragmentPageAdapter = new FragmentPageAdapter(
 				getSupportFragmentManager());
 
@@ -97,16 +102,18 @@ public class TaskForm extends ActionBarActivity {
 
 			@Override
 			public void onPageScrollStateChanged(int arg0) {
-
 			}
 
 			@Override
 			public void onPageScrolled(int arg0, float arg1, int arg2) {
-
 			}
-
 		});
 		try {
+			taskObj = new JSONObject(getIntent().getStringExtra(
+					TaskDetails.taskDetais));
+			Log.d(tag, "taskObj " + taskObj.toString());
+			taskId = taskObj.getInt("id");
+			Log.d(tag, " taskId " + taskId);
 			if (checkForTaskId(taskId).equals("0")) {
 				// create task in shared prefs
 				creteTask(taskId);
@@ -116,9 +123,19 @@ public class TaskForm extends ActionBarActivity {
 				taskPayload = new JSONObject(checkForTaskId(taskId));
 
 			}
+			taskPayload.put("surv_task", taskId);
+			taskPayload.put("atm_surv", taskObj.getJSONArray("atm").get(0));
+			taskPayload.put("month", taskObj.getString("task_month"));
+			taskPayload.put("customer_surv", taskObj.getJSONArray("customer")
+					.get(0));
+			taskPayload.put("surv_task", taskId);
+			taskPayload.put("surveyor_surv", ApplicationClass.surveyor_Id);
+			Log.d(tag, "taskPayload " + taskPayload.toString());
+
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+		getRemarkCatrgories();
 	}
 
 	void creteTask(int taskId) {
@@ -194,7 +211,7 @@ public class TaskForm extends ActionBarActivity {
 		FileOutputStream fos = null;
 
 		fos = new FileOutputStream(imageFile);
-		if (image.compress(Bitmap.CompressFormat.JPEG, 30, fos)) {
+		if (image.compress(Bitmap.CompressFormat.JPEG, 70, fos)) {
 			Log.e(tag, "Stored in " + imageDirName + " bitmap image : "
 					+ imageID);
 			Log.i(tag, "Image Uri : " + Uri.fromFile(imageFile));
@@ -254,5 +271,45 @@ public class TaskForm extends ActionBarActivity {
 		Log.d(tag, "file :" + imageFile.getName() + " encodedImage :"
 				+ encodedImage);
 		return encodedImage;
+	}
+
+	JSONObject getTaskObject() {
+		Log.d(tag, taskObj.toString());
+		return taskObj;
+	}
+
+	void getRemarkCatrgories() {
+		new AsyncTaskCallback(this, new AsyncTaskCallbackInterface() {
+
+			@Override
+			public String backGroundCallback() {
+				OpenERP mOpenERP;
+				try {
+					mOpenERP = ApplicationClass.getInstance().getOpenERPCon();
+					OEFieldsHelper fields = new OEFieldsHelper(new String[] {
+							"description", "name" });
+
+					remarksResponse = mOpenERP.search_read("remarks.category",
+							fields.get());
+					Log.i(tag, remarksResponse.toString());
+					return remarksResponse.toString();
+				} catch (ClientProtocolException e) {
+					e.printStackTrace();
+				} catch (JSONException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (OEVersionException e) {
+					e.printStackTrace();
+				}
+				return null;
+			}
+
+			@Override
+			public void foregroundCallback(String result) {
+
+			}
+
+		}).execute();
 	}
 }
