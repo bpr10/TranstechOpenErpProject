@@ -9,7 +9,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -25,10 +24,8 @@ public class LoginActivity extends ActionBarActivity {
 	private EditText username, password;
 	private Button signIn;
 	private String userName, userPassword;
-	private Integer id;
 	private OpenERP mOpenERP;
 	private String uId = "";
-	private ProgressDialog pDialog;
 	private String tag = getClass().getSimpleName();
 
 	@Override
@@ -54,77 +51,79 @@ public class LoginActivity extends ActionBarActivity {
 							"password can't be empty", Toast.LENGTH_LONG)
 							.show();
 				} else {
-					pDialog = new ProgressDialog(LoginActivity.this);
 
-					pDialog.setCancelable(false);
-					pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-					pDialog.setTitle("Please Wait");
-					pDialog.show();
-					new AsyncTaskCallback(new AsyncTaskCallbackInterface() {
+					new AsyncTaskCallback(LoginActivity.this,
+							new AsyncTaskCallbackInterface() {
 
-						@Override
-						public String backGroundCallback() {
-							try {
+								@Override
+								public String backGroundCallback() {
+									try {
 
-								// Connecting to openERP
+										// Connecting to openERP
 
-								mOpenERP = ApplicationClass.getInstance()
-										.getOpenERPCon();
-								JSONObject response = mOpenERP.authenticate(
-										userName, userPassword, "Transtech");
-								String loginres = response.toString();
+										mOpenERP = ApplicationClass
+												.getInstance().getOpenERPCon();
+										JSONObject response = mOpenERP
+												.authenticate(userName,
+														userPassword,
+														"Transtech");
+										String loginres = response.toString();
 
-								Log.d("Got Login Response ", loginres);
+										Log.d("Got Login Response ", loginres);
 
-								// Storing UID in SharedPrefrences
+										// Storing UID in SharedPrefrences
 
-								uId = response.getString("uid");
-								if (!uId.equals("false")) {
-									PreferencesHelper pref = new PreferencesHelper(
-											getApplicationContext());
-									pref.SavePreferences(PreferencesHelper.Uid,
-											uId);
-									Log.d(tag,
-											pref.GetPreferences(PreferencesHelper.Uid));
+										uId = response.getString("uid");
+										if (!uId.equals("false")) {
+											PreferencesHelper pref = new PreferencesHelper(
+													getApplicationContext());
+											pref.SavePreferences(
+													PreferencesHelper.Uid, uId);
+											Log.d(tag,
+													pref.GetPreferences(PreferencesHelper.Uid));
+										}
+										return uId;
+									} catch (ClientProtocolException e) {
+										e.printStackTrace();
+										return null;
+									} catch (JSONException e) {
+										e.printStackTrace();
+										return null;
+									} catch (IOException e) {
+										e.printStackTrace();
+										return null;
+									} catch (OEVersionException e) {
+										e.printStackTrace();
+										return null;
+									}
+
 								}
-								return uId;
-							} catch (ClientProtocolException e) {
-								e.printStackTrace();
-								return null;
-							} catch (JSONException e) {
-								e.printStackTrace();
-								return null;
-							} catch (IOException e) {
-								e.printStackTrace();
-								return null;
-							} catch (OEVersionException e) {
-								e.printStackTrace();
-								return null;
-							}
 
-						}
+								@Override
+								public void foregroundCallback(String result) {
+									if (result != null) {
+										Log.d(tag, result);
 
-						@Override
-						public void foregroundCallback(String result) {
-							if (result != null) {
-								Log.d(tag, result);
-								if (pDialog.isShowing()) {
-									pDialog.dismiss();
+										if (!uId.equals("false")) {
+											ApplicationClass.surveyor_Id = Integer
+													.parseInt(uId);
+											Intent i = new Intent(
+													LoginActivity.this,
+													MainActivity.class);
+											startActivity(i);
+											Toast.makeText(
+													getApplicationContext(),
+													"sucess", Toast.LENGTH_LONG)
+													.show();
+										} else {
+											Toast.makeText(
+													getApplicationContext(),
+													"enter valid credentials",
+													Toast.LENGTH_LONG).show();
+										}
+									}
 								}
-								if (!uId.equals("false")) {
-									Intent i = new Intent(LoginActivity.this,
-											MainActivity.class);
-									startActivity(i);
-									Toast.makeText(getApplicationContext(),
-											"sucess", Toast.LENGTH_LONG).show();
-								} else {
-									Toast.makeText(getApplicationContext(),
-											"enter valid credentials",
-											Toast.LENGTH_LONG).show();
-								}
-							}
-						}
-					}).execute();
+							}).execute();
 				}
 			}
 		});

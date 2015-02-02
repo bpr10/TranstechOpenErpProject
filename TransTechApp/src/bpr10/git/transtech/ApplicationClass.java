@@ -14,6 +14,7 @@ public class ApplicationClass extends Application {
 	
 	private static ApplicationClass applicationInstance;
 	private OpenERP mOpenERP;
+	public static int surveyor_Id ; 
 	@Override
 	public void onCreate() {
 		super.onCreate();

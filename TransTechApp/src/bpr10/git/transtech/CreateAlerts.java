@@ -48,15 +48,7 @@ public class CreateAlerts extends Fragment {
 		banks = new ArrayAdapter<String>(getActivity(),
 				android.R.layout.simple_dropdown_item_1line);
 
-		customerSpinner.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-
-			}
-		});
-
+		
 		return rootView;
 	}
 
@@ -96,7 +88,7 @@ public class CreateAlerts extends Fragment {
 	}
 
 	void getBanks() {
-		new AsyncTaskCallback(new AsyncTaskCallbackInterface() {
+		new AsyncTaskCallback(getActivity(),new AsyncTaskCallbackInterface() {
 
 			@Override
 			public String backGroundCallback() {

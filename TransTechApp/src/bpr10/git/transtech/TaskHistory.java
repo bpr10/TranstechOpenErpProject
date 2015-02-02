@@ -2,8 +2,6 @@ package bpr10.git.transtech;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
 
 import openerp.OEDomain;
 import openerp.OEVersionException;
@@ -31,7 +29,6 @@ import com.openerp.orm.OEFieldsHelper;
 public class TaskHistory extends Fragment {
 
 	private ListView taskList;
-	private List<TaskList> taskData;
 	private TextView taskId, customer, atm, date;
 	private OpenERP mOpenERP;
 	private String tag;
@@ -44,14 +41,8 @@ public class TaskHistory extends Fragment {
 
 		View rootView = inflater.inflate(R.layout.history, container, false);
 		taskList = (ListView) rootView.findViewById(R.id.history_list);
-		taskData = new ArrayList<TaskList>();
-		pDialog = new ProgressDialog(TaskHistory.this.getActivity());
 
-		pDialog.setCancelable(false);
-		pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		pDialog.setTitle("Please Wait");
-		pDialog.show();
-		new AsyncTaskCallback(new AsyncTaskCallbackInterface() {
+		new AsyncTaskCallback(getActivity(), new AsyncTaskCallbackInterface() {
 
 			@Override
 			public String backGroundCallback() {

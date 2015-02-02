@@ -21,7 +21,7 @@
         android:layout_alignBottom="@+id/before_service2"
         android:layout_alignRight="@+id/before_service_camera_button1"
         android:layout_marginBottom="23dp"
-        android:text="Carama" />
+        android:text="Click Image" />
 
     <Button
         android:id="@+id/before_service_camera_button1"
@@ -31,7 +31,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="46dp"
         android:layout_toRightOf="@+id/before_service1"
-        android:text="Carmara" />
+        android:text="Click Image" />
 
     <ImageView
         android:id="@+id/before_service3"
@@ -49,7 +49,7 @@
         android:layout_alignRight="@+id/before_service_camera_button2"
         android:layout_alignTop="@+id/before_service3"
         android:layout_marginTop="26dp"
-        android:text="Camara" />
+        android:text="Click Image" />
 
     <ImageView
         android:id="@+id/before_service1"

@@ -42,7 +42,7 @@
         android:layout_below="@+id/relativeLayout2"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:background="@drawable/login_backgroung"
+        android:background="@drawable/login_background"
         android:padding="20dp"
         android:text="@string/login"
         android:textColor="#FFFFFF"

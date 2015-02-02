@@ -12,7 +12,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Criteria;
@@ -36,13 +35,13 @@ public class TaskDetails extends Activity implements LocationListener {
 	LocationManager locationManager;
 	String provider;
 	OpenERP mOpenERP;
-	private ProgressDialog pDialog;
 	private String tag = getClass().getSimpleName();
 	JSONObject taskObj = new JSONObject();
 	JSONObject atmResposne;
 	Location location;
 	private DateUtility dateUtility;
 	public static final String taskIDKey = "taskId";
+	public static String taskDetais = "taskDetails";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,94 +61,95 @@ public class TaskDetails extends Activity implements LocationListener {
 			e1.printStackTrace();
 		}
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		new AsyncTaskCallback(new AsyncTaskCallbackInterface() {
+		new AsyncTaskCallback(TaskDetails.this,
+				new AsyncTaskCallbackInterface() {
 
-			@Override
-			public String backGroundCallback() {
-				try {
+					@Override
+					public String backGroundCallback() {
+						try {
 
-					// Connecting to openERP
+							// Connecting to openERP
 
-					OEDomain domain = new OEDomain();
-					domain.add("id", "=", taskObj.getJSONArray("atm").get(0));
-					Log.d("domainvalues", domain.getArray().toString());
-					OEFieldsHelper fields = new OEFieldsHelper(new String[] {
-							"longitude", "latitude", "customer", "name",
-							"country", "date" });
-					Log.d("fields", fields.get().toString());
-					mOpenERP = ApplicationClass.getInstance().getOpenERPCon();
-					atmResposne = mOpenERP.search_read("atm.info",
-							fields.get(), domain.get());
+							OEDomain domain = new OEDomain();
+							domain.add("id", "=", taskObj.getJSONArray("atm")
+									.get(0));
+							Log.d("domainvalues", domain.getArray().toString());
+							OEFieldsHelper fields = new OEFieldsHelper(
+									new String[] { "longitude", "latitude",
+											"customer", "name", "country",
+											"date" });
+							Log.d("fields", fields.get().toString());
+							mOpenERP = ApplicationClass.getInstance()
+									.getOpenERPCon();
+							atmResposne = mOpenERP.search_read("atm.info",
+									fields.get(), domain.get());
 
-					Log.d("Atm details", atmResposne.toString());
-					return atmResposne.toString();
-				} catch (ClientProtocolException e) {
-					e.printStackTrace();
-					return null;
-				} catch (JSONException e) {
-					e.printStackTrace();
-					return null;
-				} catch (IOException e) {
-					e.printStackTrace();
-					return null;
-				} catch (OEVersionException e) {
-					e.printStackTrace();
-					return null;
-				}
+							Log.d("Atm details", atmResposne.toString());
+							return atmResposne.toString();
+						} catch (ClientProtocolException e) {
+							e.printStackTrace();
+							return null;
+						} catch (JSONException e) {
+							e.printStackTrace();
+							return null;
+						} catch (IOException e) {
+							e.printStackTrace();
+							return null;
+						} catch (OEVersionException e) {
+							e.printStackTrace();
+							return null;
+						}
 
-			}
-
-			@Override
-			public void foregroundCallback(String result) {
-
-				Location l = new Location("atmlocation");
-				try {
-					String lat = atmResposne.getJSONArray("records")
-							.getJSONObject(0).getString("latitude");
-					String lang = atmResposne.getJSONArray("records")
-							.getJSONObject(0).getString("longitude");
-					String country = taskObj.getJSONArray("country").getString(1);
-					String atmDetails = taskObj.getJSONArray("atm").getString(1);
-					String customerText = taskObj.getJSONArray("customer").getString(1);
-
-					if (!lat.equals("false")) {
-						double latitude = Double.parseDouble(lat);
-						l.setLatitude(latitude);
 					}
-					if (!lang.equals("false")) {
-						double longitude = Double.parseDouble(lang);
-						l.setLongitude(longitude);
-					}
-					if(location!=null)
-					{
-						 double distanceVal = Math.round((location.distanceTo(l) / 1000) * 100.0) / 100.0;
-						 distance.setText(distanceVal + "");
-					}else
-					{
-			           distance.setVisibility(View.INVISIBLE);	
-					}
-					dateUtility = new DateUtility();
-					customer.setText(customerText);
-					ATMDtails.setText(atmDetails);
-					locationText.setText(country);
-					try {
-						dueDate.setText(dateUtility
-								.getFriendlyDateString(dateUtility
-										.convertSerevrDatetoLocalDate(taskObj.getString("visit_time"))));
-					} catch (ParseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-											
-											
 
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+					@Override
+					public void foregroundCallback(String result) {
 
-			}
-		}).execute();
+						Location l = new Location("atmlocation");
+						try {
+							String lat = atmResposne.getJSONArray("records")
+									.getJSONObject(0).getString("latitude");
+							String lang = atmResposne.getJSONArray("records")
+									.getJSONObject(0).getString("longitude");
+							String country = taskObj.getJSONArray("country")
+									.getString(1);
+							String atmDetails = taskObj.getJSONArray("atm")
+									.getString(1);
+							String customerText = taskObj.getJSONArray(
+									"customer").getString(1);
+
+							if (!lat.equals("false")) {
+								double latitude = Double.parseDouble(lat);
+								l.setLatitude(latitude);
+							}
+							if (!lang.equals("false")) {
+								double longitude = Double.parseDouble(lang);
+								l.setLongitude(longitude);
+							}
+							if (location != null) {
+								double distanceVal = Math.round((location
+										.distanceTo(l) / 1000) * 100.0) / 100.0;
+								distance.setText(distanceVal + "");
+							} else {
+								distance.setVisibility(View.INVISIBLE);
+							}
+							dateUtility = new DateUtility();
+							customer.setText(customerText);
+							ATMDtails.setText(atmDetails);
+							locationText.setText(country);
+							try {
+								dueDate.setText(dateUtility.getFriendlyDateString(dateUtility
+										.convertSerevrDatetoLocalDate(taskObj
+												.getString("visit_time"))));
+							} catch (ParseException e) {
+								e.printStackTrace();
+							}
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+
+					}
+				}).execute();
 		Criteria criteria = new Criteria();
 		provider = locationManager.getBestProvider(criteria, false);
 		if (provider != null && !provider.equals("")) {
@@ -171,9 +171,8 @@ public class TaskDetails extends Activity implements LocationListener {
 			public void onClick(View v) {
 				Intent i = new Intent(TaskDetails.this, TaskForm.class);
 				try {
-					i.putExtra(taskIDKey, taskObj.getInt("id"));
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
+					i.putExtra(taskDetais, taskObj.toString());
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				startActivity(i);
@@ -184,24 +183,20 @@ public class TaskDetails extends Activity implements LocationListener {
 
 	@Override
 	public void onLocationChanged(Location location) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onProviderDisabled(String provider) {
-		// TODO Auto-generated method stub
 
 	}
 
