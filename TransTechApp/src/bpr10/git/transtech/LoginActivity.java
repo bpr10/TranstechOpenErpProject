@@ -71,12 +71,13 @@ public class LoginActivity extends ActionBarActivity {
 								mOpenERP = ApplicationClass.getInstance()
 										.getOpenERPCon();
 								JSONObject response = mOpenERP.authenticate(
-										userName, userPassword, "Test");
+										userName, userPassword, "Transtech");
 								String loginres = response.toString();
 
 								Log.d("Got Login Response ", loginres);
 
 								// Storing UID in SharedPrefrences
+
 								uId = response.getString("uid");
 								if (!uId.equals("false")) {
 									PreferencesHelper pref = new PreferencesHelper(
@@ -105,20 +106,22 @@ public class LoginActivity extends ActionBarActivity {
 
 						@Override
 						public void foregroundCallback(String result) {
-							Log.d(tag, result);
-							if (pDialog.isShowing()) {
-								pDialog.dismiss();
-							}
-							if (!uId.equals("false")) {
-								Intent i = new Intent(LoginActivity.this,
-										MainActivity.class);
-								startActivity(i);
-								Toast.makeText(getApplicationContext(),
-										"sucess", Toast.LENGTH_LONG).show();
-							} else {
-								Toast.makeText(getApplicationContext(),
-										"enter valid credentials",
-										Toast.LENGTH_LONG).show();
+							if (result != null) {
+								Log.d(tag, result);
+								if (pDialog.isShowing()) {
+									pDialog.dismiss();
+								}
+								if (!uId.equals("false")) {
+									Intent i = new Intent(LoginActivity.this,
+											MainActivity.class);
+									startActivity(i);
+									Toast.makeText(getApplicationContext(),
+											"sucess", Toast.LENGTH_LONG).show();
+								} else {
+									Toast.makeText(getApplicationContext(),
+											"enter valid credentials",
+											Toast.LENGTH_LONG).show();
+								}
 							}
 						}
 					}).execute();

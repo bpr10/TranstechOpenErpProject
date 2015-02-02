@@ -1,5 +1,6 @@
 package bpr10.git.transtech;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -14,6 +15,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,6 +24,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -35,11 +38,6 @@ public class TaskForm extends ActionBarActivity {
 	public static JSONObject taskPayload;
 	String mCurrentPhotoPath;
 	public static final int ID_DIVIDER = 1000;
-	private static TaskForm instance;
-
-	public TaskForm() {
-		instance = TaskForm.this;
-	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -99,13 +97,11 @@ public class TaskForm extends ActionBarActivity {
 
 			@Override
 			public void onPageScrollStateChanged(int arg0) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void onPageScrolled(int arg0, float arg1, int arg2) {
-				// TODO Auto-generated method stub
 
 			}
 
@@ -184,7 +180,6 @@ public class TaskForm extends ActionBarActivity {
 		String imageFileName = "IMG_" + imageID;
 		ContextWrapper cw = new ContextWrapper(context);
 		File directory = cw.getDir(imageDirName, Context.MODE_PRIVATE);
-		// File directory = new File(cw.getFilesDir(), imageDirName);
 
 		File imageFile = new File(directory, imageFileName + ".jpeg");
 		if (imageFile.exists()) {
@@ -235,6 +230,7 @@ public class TaskForm extends ActionBarActivity {
 	@Override
 	protected void onDestroy() {
 		deleteTaskDirectory();
+		Log.d(tag, taskPayload.toString());
 		super.onDestroy();
 	}
 
@@ -247,5 +243,16 @@ public class TaskForm extends ActionBarActivity {
 			}
 		}
 		dir.delete();
+	}
+
+	String encodeImage(File imageFile) {
+		Bitmap bm = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		bm.compress(Bitmap.CompressFormat.JPEG, 60, stream);
+		byte[] byteArray = stream.toByteArray();
+		String encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
+		Log.d(tag, "file :" + imageFile.getName() + " encodedImage :"
+				+ encodedImage);
+		return encodedImage;
 	}
 }

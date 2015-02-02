@@ -1,7 +1,10 @@
 package bpr10.git.transtech;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import org.json.JSONException;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,6 +23,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -61,30 +65,42 @@ public class BeforeImages extends Fragment {
 	public void onResume() {
 		try {
 			try {
+				File image1 = mtaskForm.getImageFromLocalStorage(mContext,
+						camera1.getId() % TaskForm.ID_DIVIDER);
+				TaskForm.taskPayload.putOpt("bfr_img_front",
+						mtaskForm.encodeImage(image1));
 				Picasso.with(getActivity().getApplicationContext())
-						.load(mtaskForm.getImageFromLocalStorage(mContext,
-								camera1.getId() % TaskForm.ID_DIVIDER))
-						.skipMemoryCache().into(firstImage);
+						.load(image1).skipMemoryCache().into(firstImage);
+			} catch (JSONException e) {
+				e.printStackTrace();
 			} catch (FileNotFoundException e) {
 				Log.d(tag, "1st image not taken ");
 			}
 			try {
+				File image2 = mtaskForm.getImageFromLocalStorage(mContext,
+						camera2.getId() % TaskForm.ID_DIVIDER);
+				TaskForm.taskPayload.putOpt("bfr_img_back",
+						mtaskForm.encodeImage(image2));
 				Picasso.with(getActivity().getApplicationContext())
-						.load(mtaskForm.getImageFromLocalStorage(mContext,
-								camera2.getId() % TaskForm.ID_DIVIDER))
-						.skipMemoryCache().into(secondImage);
+						.load(image2).skipMemoryCache().into(secondImage);
 				;
 			} catch (FileNotFoundException e) {
 				Log.d(tag, "2nd image not taken ");
+			} catch (JSONException e) {
+				e.printStackTrace();
 			}
 			try {
+				File image3 = mtaskForm.getImageFromLocalStorage(mContext,
+						camera3.getId() % TaskForm.ID_DIVIDER);
+				TaskForm.taskPayload.putOpt("bfr_img_side",
+						mtaskForm.encodeImage(image3));
 				Picasso.with(getActivity().getApplicationContext())
-						.load(mtaskForm.getImageFromLocalStorage(mContext,
-								camera3.getId() % TaskForm.ID_DIVIDER))
-						.skipMemoryCache().into(thirdImage);
+						.load(image3).skipMemoryCache().into(thirdImage);
 				;
 			} catch (FileNotFoundException e) {
 				Log.d(tag, "3rd image not taken ");
+			} catch (JSONException e) {
+				e.printStackTrace();
 			}
 
 		} catch (NullPointerException e) {
@@ -110,6 +126,9 @@ public class BeforeImages extends Fragment {
 		PackageManager packageManager = context.getPackageManager();
 		if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA) == false) {
 			Log.e(tag, "This device does not have a camera.");
+			Toast.makeText(getActivity(),
+					"This device does not have a camera.", Toast.LENGTH_LONG)
+					.show();
 			return;
 		}
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -127,8 +146,6 @@ public class BeforeImages extends Fragment {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.d(tag, "onActivityResult requestCode: " + requestCode
 				+ " resultCode : " + resultCode);
-		Log.d(tag, "String.valueOf(requestCode).subSequence(0, 2) "
-				+ String.valueOf(requestCode).subSequence(0, 2));
 		int req = Integer.parseInt(String.valueOf(requestCode).substring(0, 2));
 		Log.d(tag, req + "");
 		if (req == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {

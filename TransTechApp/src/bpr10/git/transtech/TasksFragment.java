@@ -67,6 +67,9 @@ public class TasksFragment extends Fragment {
 					Log.d(tag, pref.GetPreferences(PreferencesHelper.Uid));
 					domain.add("surveyor", "=", Integer.parseInt(pref
 							.GetPreferences(PreferencesHelper.Uid)));
+					domain.add("status", "=", "pending");
+//					domain.add("status", "=", "assigned");
+//					domain.add("status", "=", "progress");
 					OEFieldsHelper fields = new OEFieldsHelper(new String[] {
 							"name", "customer", "atm", "country", "task_month",
 							"visit_time" });

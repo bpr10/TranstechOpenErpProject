@@ -1,7 +1,5 @@
 package bpr10.git.transtech;
 
-
-
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -29,7 +27,6 @@ import android.widget.TextView;
 import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
 
 import com.openerp.orm.OEFieldsHelper;
-
 
 public class TaskHistory extends Fragment {
 
@@ -151,10 +148,13 @@ public class TaskHistory extends Fragment {
 			if (convertView == null) {
 				convertView = LayoutInflater.from(getActivity()).inflate(
 						R.layout.history_list_item, null);
-				taskId = (TextView) convertView.findViewById(R.id.history_task_id);
-				customer = (TextView) convertView.findViewById(R.id.history_customer);
+				taskId = (TextView) convertView
+						.findViewById(R.id.history_task_id);
+				customer = (TextView) convertView
+						.findViewById(R.id.history_customer);
 				atm = (TextView) convertView.findViewById(R.id.history_atm);
-				date = (TextView) convertView.findViewById(R.id.history_taskdate);
+				date = (TextView) convertView
+						.findViewById(R.id.history_taskdate);
 				try {
 					taskId.setText(taskData.getJSONObject(position)
 							.getInt("id") + "");
@@ -165,20 +165,21 @@ public class TaskHistory extends Fragment {
 							.getJSONArray("atm").getString(1)
 							+ "");
 					try {
-						date.setText(dateUtility.getFriendlyDateString(dateUtility
-								.convertSerevrDatetoLocalDate(taskData
-										.getJSONObject(position)
-										.getString("visit_time"))));
+						date.setText(dateUtility
+								.getFriendlyDateString(dateUtility
+										.convertSerevrDatetoLocalDate(taskData
+												.getJSONObject(position)
+												.getString("visit_time"))));
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
-					 Bundle bundle = new Bundle();
-				        bundle.putInt("TaskId", taskData.getJSONObject(position)
-								.getInt("id"));
-				        bundle.putString("atm", taskData.getJSONObject(position)
-								.getJSONArray("atm").getString(1)
-								+ "");
-				      
+					Bundle bundle = new Bundle();
+					bundle.putInt("TaskId", taskData.getJSONObject(position)
+							.getInt("id"));
+					bundle.putString("atm", taskData.getJSONObject(position)
+							.getJSONArray("atm").getString(1)
+							+ "");
+
 					// taskData.getJSONObject(position).getJSONArray("visit_time").getString(1)+""
 				} catch (JSONException e) {
 					e.printStackTrace();

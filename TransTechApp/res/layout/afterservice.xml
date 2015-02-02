@@ -4,14 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" 
-        android:background="#A4A4A4">
-        
-    </RelativeLayout>
-
     <ImageView
         android:id="@+id/after_service2"
         android:layout_width="100dp"

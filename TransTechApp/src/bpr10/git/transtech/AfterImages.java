@@ -1,16 +1,16 @@
 package bpr10.git.transtech;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import com.squareup.picasso.Picasso;
+import org.json.JSONException;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -18,14 +18,16 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
+
 public class AfterImages extends Fragment {
-	ImageView afterImage1, afterImage2, afterImage3;
-	Button camera1, camera2, camera3;
+	private ImageView afterImage1, afterImage2, afterImage3;
+	private Button camera1, camera2, camera3;
 	private Uri mCapturedImageURI;
 	private String tag = getClass().getSimpleName();
 	private TaskForm mtaskForm;
@@ -55,30 +57,40 @@ public class AfterImages extends Fragment {
 	public void onResume() {
 		try {
 			try {
+				File image1 = mtaskForm.getImageFromLocalStorage(mContext,
+						camera1.getId() % TaskForm.ID_DIVIDER);
+				TaskForm.taskPayload.putOpt("bfr_img_side",
+						mtaskForm.encodeImage(image1));
 				Picasso.with(getActivity().getApplicationContext())
-						.load(mtaskForm.getImageFromLocalStorage(mContext,
-								camera1.getId() % TaskForm.ID_DIVIDER)).skipMemoryCache()
-						.into(afterImage1);
+						.load(image1).skipMemoryCache().into(afterImage1);
 			} catch (FileNotFoundException e) {
 				Log.d(tag, "1st image not taken ");
+			} catch (JSONException e) {
+				e.printStackTrace();
 			}
 			try {
+				File image2 = mtaskForm.getImageFromLocalStorage(mContext,
+						camera2.getId() % TaskForm.ID_DIVIDER);
+				TaskForm.taskPayload.putOpt("bfr_img_side",
+						mtaskForm.encodeImage(image2));
 				Picasso.with(getActivity().getApplicationContext())
-						.load(mtaskForm.getImageFromLocalStorage(mContext,
-								camera2.getId() % TaskForm.ID_DIVIDER)).skipMemoryCache()
-						.into(afterImage2);
-				;
+						.load(image2).skipMemoryCache().into(afterImage2);
 			} catch (FileNotFoundException e) {
 				Log.d(tag, "2nd image not taken ");
+			} catch (JSONException e) {
+				e.printStackTrace();
 			}
 			try {
+				File image3 = mtaskForm.getImageFromLocalStorage(mContext,
+						camera3.getId() % TaskForm.ID_DIVIDER);
+				TaskForm.taskPayload.putOpt("bfr_img_side",
+						mtaskForm.encodeImage(image3));
 				Picasso.with(getActivity().getApplicationContext())
-						.load(mtaskForm.getImageFromLocalStorage(mContext,
-								camera3.getId() % TaskForm.ID_DIVIDER)).skipMemoryCache()
-						.into(afterImage3);
-				;
+						.load(image3).skipMemoryCache().into(afterImage3);
 			} catch (FileNotFoundException e) {
 				Log.d(tag, "3rd image not taken ");
+			} catch (JSONException e) {
+				e.printStackTrace();
 			}
 
 		} catch (NullPointerException e) {
@@ -113,9 +125,6 @@ public class AfterImages extends Fragment {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.d(tag, "onActivityResult requestCode: " + requestCode
 				+ " resultCode : " + resultCode);
-
-		Log.d(tag, "String.valueOf(requestCode).subSequence(0, 2) "
-				+ String.valueOf(requestCode).subSequence(0, 2));
 		int req = Integer.parseInt(String.valueOf(requestCode).substring(0, 2));
 		Log.d(tag, req + "");
 		if (req == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
