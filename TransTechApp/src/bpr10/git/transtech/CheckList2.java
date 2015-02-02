@@ -9,10 +9,10 @@ import android.widget.CheckBox;
 
 public class CheckList2 extends Fragment{
 
+	
 	CheckBox keyPadDisplaced,spotLightsOff,decals,ATMTowerBranding,canopyBranding,surroundLockIsDamage,
 	spotLightIsOff,mainBoardLightsAreOff,securityCameraIsOutOfFocus;
-	public View onCreatView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		View rootView = inflater.inflate(R.layout.checklist2, container, false);
 		keyPadDisplaced=(CheckBox) rootView.findViewById(R.id.keyp_Pad_displaced);

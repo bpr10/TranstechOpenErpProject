@@ -16,5 +16,31 @@
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">LOGIN</string>
+    <string name="customer">Customer</string>
+    <string name="atm_detaisl">Atm Details</string>
+    <string name="submit">Submit</string>
+    <string name="description">Description</string>
+    <string name="summeryanddesc">Summary and Description</string>
+    <string name="no_comments">No Comments</string>
+    <string name="transactional_stickers_faded">Transactional Stickers faded</string>
+    <string name="collect_cash">Collect Cash</string>
+    <string name="collect_receipt"> Collect Receipt</string>
+    <string name="insert_card">Insert card</string>
+    <string name="insert_cash">Insertcash</string>
+    <string name="network_sticker"> Network sticker</string>
+    <string name="instruction_sticker">Instruction sticker</string>
+    <string name="vault_branding">Vault branding</string>
+    <string name="atm_id">ATM ID</string>
+    <string name="key_pad_displaced"> key Pad Displaced</string>
+    <string name="spot_lights_off">Spot lights off</string>
+    <string name="decals">Decals</string>
+    <string name="atm_tower_branding">ATM Tower branding</string>
+    <string name="canopy_branding">Canopy branding</string>
+    <string name="surround_lock_is_damageFaulty">Surround Lock is damage/ Faulty</string>
+    <string name="spot_light_is_off">Spot Light is off</string>
+    <string name="main_board_lights_are_off">Main board Lights are off</string>
+    <string name="security_camera_is_out_of_focus">Security Camera is out of focus</string>
 </resources>

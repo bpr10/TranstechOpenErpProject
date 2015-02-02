@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text=" key Pad Displaced" />
+        android:text="@string/key_pad_displaced" />
  
  
     <CheckBox
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/keyp_Pad_displaced"
-        android:text="Spot lights off" />
+        android:text="@string/spot_lights_off" />
  
  
     <CheckBox
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/spot_lights_off"
-        android:text="Decals" />
+        android:text="@string/decals" />
  
  
     <CheckBox
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/decals"
-        android:text="ATM Tower branding" />
+        android:text="@string/atm_tower_branding" />
  
  
     <CheckBox
@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/atm_tower_branding"
-        android:text="Canopy branding" />
+        android:text="@string/canopy_branding" />
  
  
     <CheckBox
@@ -56,7 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/canopy_branding"
-        android:text="Surround Lock is damage/ Faulty" />
+        android:text="@string/surround_lock_is_damageFaulty" />
  
  
     <CheckBox
@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/surround_lock"
-        android:text="Spot Light is off" />
+        android:text="@string/spot_light_is_off" />
  
  
     <CheckBox
@@ -74,7 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/spot_light_is_off"
-        android:text="Main board Lights are off" />
+        android:text="@string/main_board_lights_are_off" />
  
  
     <CheckBox
@@ -83,7 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/main_board_lights"
-        android:text="Security Camera is out of focus" />
+        android:text="@string/security_camera_is_out_of_focus" />
  
  
 </RelativeLayout>
