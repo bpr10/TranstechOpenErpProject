@@ -11,8 +11,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="19dp"
-        
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:textColor="#3C3C3C"
         android:text="@string/no_comments" />
  
  
@@ -22,7 +23,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/no_comments"
-        
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:textColor="#3C3C3C"
         android:text="@string/transactional_stickers_faded" />
  
  
@@ -31,6 +34,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+         android:layout_marginTop="5dp"
+         android:textColor="#3C3C3C"
+         android:layout_marginLeft="10dp"
         android:layout_below="@+id/transactional_stickers_faded"
         android:text="@string/collect_cash" />
  
@@ -40,7 +46,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
+        android:textColor="#3C3C3C"
         android:layout_below="@+id/collect_cash"
+         android:layout_marginTop="5dp"
         android:text="@string/collect_receipt" />
  
  
@@ -48,7 +57,10 @@
         android:id="@+id/insert_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
         android:layout_alignParentLeft="true"
+        android:textColor="#3C3C3C"
+         android:layout_marginTop="5dp"
         android:layout_below="@+id/collect_receipt"
         android:text="@string/insert_card" />
  
@@ -59,6 +71,9 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/insert_card"
         android:layout_below="@+id/insert_card"
+         android:layout_marginTop="5dp"
+         android:layout_marginLeft="10dp"
+         android:textColor="#3C3C3C"
         android:text="@string/insert_cash" />
  
     <CheckBox
@@ -68,6 +83,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/insert_cash"
+         android:layout_marginTop="5dp"
+         android:layout_marginLeft="10dp"
+         android:textColor="#3C3C3C"
         android:text="@string/network_sticker" />
  
     <CheckBox
@@ -75,6 +93,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+         android:layout_marginTop="5dp"
+         android:layout_marginLeft="10dp"
+         android:textColor="#3C3C3C"
         android:layout_below="@+id/network_sticker"
         android:text="@string/instruction_sticker" />
  
@@ -84,6 +105,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+         android:layout_marginTop="5dp"
+         android:layout_marginLeft="10dp"
+         android:textColor="#3C3C3C"
         android:layout_below="@+id/instruction_sticker"
         android:text="@string/vault_branding" />
  
@@ -93,7 +117,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+         android:layout_marginTop="5dp"
+         android:layout_marginLeft="10dp"
         android:layout_below="@+id/vault_branding"
+        android:textColor="#3C3C3C"
         android:text="@string/atm_id" />
  
  

@@ -5,12 +5,36 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/history_task_id"
+        android:id="@+id/history_atm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_below="@+id/history_customer"
+        android:layout_marginLeft="10dp"
+        android:text="atm"
+        android:textColor="#5A5A5A"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/history_taskdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+       android:layout_marginRight="10dp"
+       android:textColor="#878787"
+        android:layout_below="@+id/history_task_id"
+        android:text="Date"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/history_task_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:text="taskid"
+        android:textColor="#878787"
+        android:layout_marginRight="10dp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -18,27 +42,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/history_task_id"
-        android:text="customer"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/history_atm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/history_customer"
-        android:text="atm"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/history_taskdate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_marginRight="14dp"
-        android:text="Date"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textColor="#3C3C3C"
+        android:layout_marginLeft="10dp"
+        android:text="customer"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

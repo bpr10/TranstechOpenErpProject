@@ -11,6 +11,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:textColor="#3C3C3C"
+        android:layout_marginTop="5dp"
+         android:layout_marginLeft="10dp"
         android:text="@string/key_pad_displaced" />
  
  
@@ -19,6 +22,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:textColor="#3C3C3C"
+        android:layout_marginTop="5dp"
+         android:layout_marginLeft="10dp"
         android:layout_below="@+id/keyp_Pad_displaced"
         android:text="@string/spot_lights_off" />
  
@@ -28,6 +34,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:textColor="#3C3C3C"
+        android:layout_marginTop="5dp"
+         android:layout_marginLeft="10dp"
         android:layout_below="@+id/spot_lights_off"
         android:text="@string/decals" />
  
@@ -37,6 +46,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:textColor="#3C3C3C"
+        android:layout_marginTop="5dp"
+         android:layout_marginLeft="10dp"
         android:layout_below="@+id/decals"
         android:text="@string/atm_tower_branding" />
  
@@ -46,6 +58,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:textColor="#3C3C3C"
+        android:layout_marginTop="5dp"
+         android:layout_marginLeft="10dp"
         android:layout_below="@+id/atm_tower_branding"
         android:text="@string/canopy_branding" />
  
@@ -55,6 +70,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:textColor="#3C3C3C"
+        android:layout_marginTop="5dp"
+         android:layout_marginLeft="10dp"
         android:layout_below="@+id/canopy_branding"
         android:text="@string/surround_lock_is_damageFaulty" />
  
@@ -64,6 +82,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:textColor="#3C3C3C"
+        android:layout_marginTop="5dp"
+         android:layout_marginLeft="10dp"
         android:layout_below="@+id/surround_lock"
         android:text="@string/spot_light_is_off" />
  
@@ -73,6 +94,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:textColor="#3C3C3C"
+        android:layout_marginTop="5dp"
+         android:layout_marginLeft="10dp"
         android:layout_below="@+id/spot_light_is_off"
         android:text="@string/main_board_lights_are_off" />
  
@@ -82,6 +106,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:textColor="#3C3C3C"
+        android:layout_marginTop="5dp"
+         android:layout_marginLeft="10dp"
         android:layout_below="@+id/main_board_lights"
         android:text="@string/security_camera_is_out_of_focus" />
  

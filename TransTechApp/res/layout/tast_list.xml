@@ -10,18 +10,11 @@
         android:id="@+id/task_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:layout_marginRight="10dp"
         android:text="taskid"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/customer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/task_id"
-        android:text="customer"
+        android:textColor="#787878"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -30,17 +23,32 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/customer"
+        android:layout_marginLeft="10dp"
         android:text="atm"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#5A5A5A" />
+
+    <TextView
+        android:id="@+id/customer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/task_id"
+        android:layout_marginLeft="10dp"
+        android:text="customer"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#3C3C3C" />
 
     <TextView
         android:id="@+id/taskdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/atm"
+        android:layout_alignBottom="@+id/atm"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="14dp"
+        android:layout_marginRight="10dp"
         android:text="Date"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#787878" />
 
 </RelativeLayout>

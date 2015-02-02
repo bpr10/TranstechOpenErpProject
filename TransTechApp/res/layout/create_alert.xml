@@ -42,7 +42,7 @@
 
     <Spinner
         android:id="@+id/state_spinner"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_alignLeft="@+id/customer_spinner"
         android:layout_below="@+id/customer_spinner" />
@@ -58,7 +58,7 @@
 
     <Spinner
         android:id="@+id/atm_spinner"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_alignLeft="@+id/state_spinner"
         android:layout_alignTop="@+id/textView4" />
@@ -74,7 +74,7 @@
 
     <Spinner
         android:id="@+id/category_spinner"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_alignLeft="@+id/atm_spinner"
         android:layout_alignTop="@+id/textView5" />
