@@ -6,6 +6,7 @@ import java.io.IOException;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.hardware.camera2.CameraManager;
 import android.net.Uri;
@@ -95,6 +96,7 @@ public class BeforeImages extends Fragment {
 		if (photoFile != null) {
 			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
 					Uri.fromFile(photoFile));
+			takePictureIntent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 			int requestCode = Integer.parseInt(String
 					.valueOf(REQUEST_IMAGE_CAPTURE) + String.valueOf(fileName));
 			Log.d(tag, "requestCode " + requestCode);
