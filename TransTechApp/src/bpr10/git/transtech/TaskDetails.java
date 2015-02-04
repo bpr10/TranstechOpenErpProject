@@ -11,7 +11,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Criteria;
@@ -19,6 +18,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,16 +29,18 @@ import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
 
 import com.openerp.orm.OEFieldsHelper;
 
-public class TaskDetails extends Activity implements LocationListener {
+public class TaskDetails extends ActionBarActivity implements LocationListener {
 	TextView customer, ATMDtails, locationText, distance, dueDate;
-	Button survoeyNow;
+	Button surveyNow;
 	LocationManager locationManager;
 	String provider;
 	OpenERP mOpenERP;
 	private String tag = getClass().getSimpleName();
 	JSONObject taskObj = new JSONObject();
 	JSONObject atmResposne;
-	Location location;
+	public static Location location;
+	String atm1,atm2;
+
 	private DateUtility dateUtility;
 	public static final String taskIDKey = "taskId";
 	public static String taskDetais = "taskDetails";
@@ -53,7 +55,8 @@ public class TaskDetails extends Activity implements LocationListener {
 		locationText = (TextView) findViewById(R.id.location);
 		distance = (TextView) findViewById(R.id.distance);
 		dueDate = (TextView) findViewById(R.id.due_date);
-		survoeyNow = (Button) findViewById(R.id.survoeynow_but);
+		surveyNow = (Button) findViewById(R.id.survoeynow_but);
+		
 		try {
 			taskObj = new JSONObject(getIntent().getStringExtra("taskDetais"));
 			Log.d(tag, taskObj.toString());
@@ -113,8 +116,12 @@ public class TaskDetails extends Activity implements LocationListener {
 									.getJSONObject(0).getString("longitude");
 							String country = taskObj.getJSONArray("country")
 									.getString(1);
-							String atmDetails = taskObj.getJSONArray("atm")
-									.getString(1);
+							String[] atmarr=taskObj
+									.getJSONArray("atm").getString(1).split(",");
+							 atm1=atmarr[0];
+							 atm2=atmarr[1];
+							
+							
 							String customerText = taskObj.getJSONArray(
 									"customer").getString(1);
 
@@ -135,7 +142,7 @@ public class TaskDetails extends Activity implements LocationListener {
 							}
 							dateUtility = new DateUtility();
 							customer.setText(customerText);
-							ATMDtails.setText(atmDetails);
+							ATMDtails.setText(atm1+atm2);
 							locationText.setText(country);
 							try {
 								dueDate.setText(dateUtility.getFriendlyDateString(dateUtility
@@ -165,7 +172,7 @@ public class TaskDetails extends Activity implements LocationListener {
 			Toast.makeText(getBaseContext(), "No Provider Found",
 					Toast.LENGTH_SHORT).show();
 		}
-		survoeyNow.setOnClickListener(new OnClickListener() {
+		surveyNow.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {

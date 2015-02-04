@@ -12,7 +12,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.content.Intent;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -24,17 +29,23 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
 
 import com.openerp.orm.OEFieldsHelper;
 
-public class TasksFragment extends Fragment {
+public class TasksFragment extends Fragment implements LocationListener {
 
 	ListView taskList;
 	TextView taskId, customer, atm, date;
 	OpenERP mOpenERP;
+	String atmlat,atmlong;
 	private String tag;
 	private TaskAdapter mTaskAdapter;
+	JSONObject searchResposne;
+	LocationManager locationManager;
+	String provider;
+	Location location;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,7 +53,7 @@ public class TasksFragment extends Fragment {
 
 		View rootView = inflater.inflate(R.layout.tasks, container, false);
 		taskList = (ListView) rootView.findViewById(R.id.task_list);
-
+		locationManager=(LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 		new AsyncTaskCallback(getActivity(), new AsyncTaskCallbackInterface() {
 
 			@Override
@@ -70,13 +81,27 @@ public class TasksFragment extends Fragment {
 					Log.d(tag, "domain JOSNOBJ" + domain.get());
 					Log.d(tag, "fields " + fields);
 					mOpenERP = ApplicationClass.getInstance().getOpenERPCon();
-					JSONObject serachResposne = mOpenERP.search_read(
+				    searchResposne = mOpenERP.search_read(
 							"atm.surverys.management", fields.get(),
 							domain.get());
-
-					Log.d("ser", serachResposne.getJSONArray("records")
-							.toString());
-					return serachResposne.getJSONArray("records").toString();
+				    JSONArray tasksArray = searchResposne.getJSONArray("records");
+				    for (int i = 0 ; i<tasksArray.length();i++)
+				    {
+				    	String atmDetails = tasksArray.getJSONObject(i).getJSONArray("atm").getString(1);
+				    	double lat = Double.parseDouble(atmDetails.split(",")[2]);
+				    	double lon = Double.parseDouble(atmDetails.split(",")[3]);
+				    	Location atmLocation = new Location("atmLocation");
+				    	atmLocation.setLatitude(lat);
+				    	atmLocation.setLongitude(lon);
+				    	if(location!=null)
+				    	{
+				    	double distance = Math.round((atmLocation
+								.distanceTo(location) / 1000) * 100.0) / 100.0;
+				    	tasksArray.getJSONObject(i).put("distance", distance);
+				    	}
+				    	
+				    }
+					return tasksArray.toString();
 				} catch (ClientProtocolException e) {
 					e.printStackTrace();
 					return null;
@@ -97,8 +122,10 @@ public class TasksFragment extends Fragment {
 			public void foregroundCallback(String result) {
 				try {
 
-					JSONArray results = new JSONArray(result);
-					mTaskAdapter = new TaskAdapter(results);
+					JSONArray tasksArray = new JSONArray(result);
+					Log.d("distance", tasksArray.toString());
+					mTaskAdapter = new TaskAdapter(tasksArray);
+					
 					taskList.setAdapter(mTaskAdapter);
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -106,7 +133,21 @@ public class TasksFragment extends Fragment {
 				}
 			}
 		}).execute();
+		Criteria criteria = new Criteria();
+		provider = locationManager.getBestProvider(criteria, false);
+		if (provider != null && !provider.equals("")) {
+			location = locationManager.getLastKnownLocation(provider);
+			locationManager.requestLocationUpdates(provider, 20000, 1, this);
+			if (location != null)
+				onLocationChanged(location);
+			else
+				Toast.makeText(getActivity(), "Location can't be retrieved",
+						Toast.LENGTH_SHORT).show();
 
+		} else {
+			Toast.makeText(getActivity(), "No Provider Found",
+					Toast.LENGTH_SHORT).show();
+		}
 		taskList.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -182,9 +223,12 @@ public class TasksFragment extends Fragment {
 					customer.setText(taskData.getJSONObject(position)
 							.getJSONArray("customer").getString(1)
 							+ "");
-					atm.setText(taskData.getJSONObject(position)
-							.getJSONArray("atm").getString(1)
-							+ "");
+					String[] atmarr=taskData.getJSONObject(position)
+							.getJSONArray("atm").getString(1).split(",");
+					String atm1=atmarr[0];
+					String atm2=atmarr[1];
+					
+					atm.setText(atm1+atm2);
 					try {
 						date.setText(dateUtility
 								.getFriendlyDateString(dateUtility
@@ -194,14 +238,7 @@ public class TasksFragment extends Fragment {
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
-					// Bundle bundle = new Bundle();
-					// bundle.putInt("TaskId", taskData.getJSONObject(position)
-					// .getInt("id"));
-					// bundle.putString("atm", taskData.getJSONObject(position)
-					// .getJSONArray("atm").getString(1)
-					// + "");
-
-					// taskData.getJSONObject(position).getJSONArray("visit_time").getString(1)+""
+					
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -210,5 +247,29 @@ public class TasksFragment extends Fragment {
 
 			return convertView;
 		}
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -149,8 +149,12 @@ public class TaskHistory extends Fragment {
 					customer.setText(taskData.getJSONObject(position)
 							.getJSONArray("customer").getString(1)
 							+ "");
-					atm.setText(taskData.getJSONObject(position)
-							.getJSONArray("atm").getString(1)
+					String atmarr[]=(taskData.getJSONObject(position)
+							.getJSONArray("atm").getString(1).split(","));
+					String a1=atmarr[1];
+					String a2=atmarr[2];
+					
+					atm.setText(a1+a2
 							+ "");
 					try {
 						date.setText(dateUtility
