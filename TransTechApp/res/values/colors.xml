@@ -2,6 +2,6 @@
 <resources >
     <color name="task_list_backgorung_gray">#DFE5E9</color>
 	<color name="task_list_backgorung_white">#F9F9F9</color> 
-	<color name="actionbar_backgroun_color">#037DA6</color> 
-	<color name="button_background_color">#22428D</color>
+	<color name="actionbar_backgroun_color">#39B57B</color> 
+	<color name="button_background_color">#39B57B</color>
 </resources>

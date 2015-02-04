@@ -49,6 +49,17 @@ public class CheckList1 extends Fragment {
 				instructionSticker.setVisibility(View.INVISIBLE);
 				vaultBranding.setVisibility(View.INVISIBLE);
 				atmId.setVisibility(View.INVISIBLE);
+				}else 
+				{
+					transactionalStickersFaded.setVisibility(View.VISIBLE);
+					collectCash.setVisibility(View.VISIBLE);
+					collectReceipt.setVisibility(View.VISIBLE);
+					insertcard.setVisibility(View.VISIBLE);
+					insertCash.setVisibility(View.VISIBLE);
+					networkSticker.setVisibility(View.VISIBLE);
+					instructionSticker.setVisibility(View.VISIBLE);
+					vaultBranding.setVisibility(View.VISIBLE);
+					atmId.setVisibility(View.VISIBLE);
 				}
 				try {
 					TaskForm.taskPayload.put("check_list_1", isChecked);
