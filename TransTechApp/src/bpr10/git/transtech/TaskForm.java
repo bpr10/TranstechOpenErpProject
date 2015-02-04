@@ -217,11 +217,14 @@ public class TaskForm extends ActionBarActivity {
 			Uri imageUri) throws IOException {
 		String imageDirName = "images_" + taskId;
 		String imageFileName = "IMG_" + imageID;
-
+		final int THUMBNAIL_HEIGHT = 48;
 		Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(
 				context.getContentResolver(), imageUri);
-		Bitmap thumbnailImage = Bitmap.createScaledBitmap(imageBitmap, 192,
-				256, false);
+		Float width = Float.valueOf(imageBitmap.getWidth());
+		Float height = Float.valueOf(imageBitmap.getHeight());
+		Float ratio = width / height;
+		Bitmap thumbnailImage = Bitmap.createScaledBitmap(imageBitmap,
+				(int) (THUMBNAIL_HEIGHT * ratio), THUMBNAIL_HEIGHT, false);
 		ContextWrapper cw = new ContextWrapper(context);
 		File directory = cw.getDir(imageDirName, Context.MODE_PRIVATE);
 
