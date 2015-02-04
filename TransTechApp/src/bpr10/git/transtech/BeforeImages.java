@@ -1,16 +1,12 @@
 package bpr10.git.transtech;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-
-import org.json.JSONException;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.hardware.camera2.CameraManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,8 +21,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
-
 public class BeforeImages extends Fragment {
 
 	protected ImageView firstImage, secondImage, thirdImage;
@@ -35,15 +29,16 @@ public class BeforeImages extends Fragment {
 	protected CameraManager cameraManager;
 	static final int REQUEST_IMAGE_CAPTURE = 11;
 	private String tag = getClass().getSimpleName();
-	private Uri mCapturedImageURI;
 	private TaskForm mtaskForm;
 	private Context mContext;
+	private String currentImage;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
 		View rootView = inflater.inflate(R.layout.beforeservice, container,
 				false);
+		Log.d(tag, "Oncreate");
 		mContext = getActivity();
 		mtaskForm = new TaskForm();
 		firstImage = (ImageView) rootView.findViewById(R.id.before_service1);
@@ -63,67 +58,23 @@ public class BeforeImages extends Fragment {
 	}
 
 	public void onResume() {
-		try {
-			try {
-				File image1 = mtaskForm.getImageFromLocalStorage(mContext,
-						camera1.getId() % TaskForm.ID_DIVIDER);
-				TaskForm.taskPayload.putOpt("bfr_img_front",
-						mtaskForm.encodeImage(image1));
-				Picasso.with(getActivity().getApplicationContext())
-						.load(image1).skipMemoryCache().into(firstImage);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			} catch (FileNotFoundException e) {
-				Log.d(tag, "1st image not taken ");
-			}
-			try {
-				File image2 = mtaskForm.getImageFromLocalStorage(mContext,
-						camera2.getId() % TaskForm.ID_DIVIDER);
-				TaskForm.taskPayload.putOpt("bfr_img_back",
-						mtaskForm.encodeImage(image2));
-				Picasso.with(getActivity().getApplicationContext())
-						.load(image2).skipMemoryCache().into(secondImage);
-				;
-			} catch (FileNotFoundException e) {
-				Log.d(tag, "2nd image not taken ");
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			try {
-				File image3 = mtaskForm.getImageFromLocalStorage(mContext,
-						camera3.getId() % TaskForm.ID_DIVIDER);
-				TaskForm.taskPayload.putOpt("bfr_img_side",
-						mtaskForm.encodeImage(image3));
-				Picasso.with(getActivity().getApplicationContext())
-						.load(image3).skipMemoryCache().into(thirdImage);
-				;
-			} catch (FileNotFoundException e) {
-				Log.d(tag, "3rd image not taken ");
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
 
-		} catch (NullPointerException e) {
-			Log.e(tag, e.toString() + "");
-		}
-		camera1.setOnClickListener(cameraClickListener);
-		camera2.setOnClickListener(cameraClickListener);
-		camera3.setOnClickListener(cameraClickListener);
+		mtaskForm.checkforImage(getActivity(), camera1, "bfr_img_front",
+				firstImage);
+		mtaskForm.checkforImage(getActivity(), camera2, "bfr_img_back",
+				secondImage);
+		mtaskForm.checkforImage(getActivity(), camera3, "bfr_img_side",
+				thirdImage);
+
+		camera1.setOnClickListener(new CameraClickListener("bfr_img_front"));
+		camera2.setOnClickListener(new CameraClickListener("bfr_img_back"));
+		camera3.setOnClickListener(new CameraClickListener("bfr_img_side"));
 		super.onResume();
 	}
 
-	OnClickListener cameraClickListener = new OnClickListener() {
-
-		@Override
-		public void onClick(View v) {
-			dispatchTakePictureIntent(v.getId() % TaskForm.ID_DIVIDER);
-		}
-	};
-
-	private void dispatchTakePictureIntent(int filename) {
-		// Checking if there is a camera.
-		Context context = getActivity();
-		PackageManager packageManager = context.getPackageManager();
+	protected void dispatchTakePictureIntent(int fileName) {
+		// Ensuring that there's a camera activity to handle the intent
+		PackageManager packageManager = getActivity().getPackageManager();
 		if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA) == false) {
 			Log.e(tag, "This device does not have a camera.");
 			Toast.makeText(getActivity(),
@@ -133,12 +84,22 @@ public class BeforeImages extends Fragment {
 		}
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-		takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-				getCapturedImageURI());
-		int requestCode = Integer.parseInt(String
-				.valueOf(REQUEST_IMAGE_CAPTURE) + String.valueOf(filename));
-		Log.d(tag, "request code" + requestCode);
-		startActivityForResult(takePictureIntent, requestCode);
+		// Creating the File where the photo should go
+		File photoFile = null;
+		try {
+			photoFile = mtaskForm.createImageFile(fileName);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		// Continue only if the File was successfully created
+		if (photoFile != null) {
+			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+					Uri.fromFile(photoFile));
+			int requestCode = Integer.parseInt(String
+					.valueOf(REQUEST_IMAGE_CAPTURE) + String.valueOf(fileName));
+			Log.d(tag, "requestCode " + requestCode);
+			startActivityForResult(takePictureIntent, requestCode);
+		}
 
 	}
 
@@ -150,28 +111,42 @@ public class BeforeImages extends Fragment {
 		Log.d(tag, req + "");
 		if (req == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
 			// SAVE photo TO Local directory
-
-			Bundle extras = data.getExtras();
-			Bitmap imageBitmap = (Bitmap) extras.get("data");
-			firstImage.setImageBitmap(imageBitmap);
 			try {
-				mtaskForm.saveImageTOoLocalStorage(mContext,
-						String.valueOf(requestCode).substring(2), imageBitmap);
-			} catch (IOException e) {
-				Log.d(tag, "Please Try Again");
+				String imageName = String.valueOf(requestCode).substring(2);
+				mtaskForm.saveImageTOoLocalStorage(mContext, imageName,
+						Uri.parse(TaskForm.mCurrentPhotoPath));
+				mtaskForm.updateImagePath(imageName);
+
+			} catch (Exception e) {
+				Log.e(tag, "Please Try Again");
 				e.printStackTrace();
 			}
+		} else {
+			currentImage = "default";
+		}
+	}
+
+	void clearTaskPayload() {
+		if (!currentImage.equals("default")) {
+			if (TaskForm.taskPayload.has(currentImage))
+				TaskForm.taskPayload.remove(currentImage);
 
 		}
-		this.onResume();
 	}
 
-	public Uri getCapturedImageURI() {
-		return mCapturedImageURI;
-	}
+	class CameraClickListener implements OnClickListener {
+		String key;
 
-	public void setCapturedImageURI(Uri mCapturedImageURI) {
-		this.mCapturedImageURI = mCapturedImageURI;
+		public CameraClickListener(String key) {
+			this.key = key;
+		}
+
+		@Override
+		public void onClick(View v) {
+			currentImage = key;
+			dispatchTakePictureIntent(v.getId() % TaskForm.ID_DIVIDER);
+		}
+
 	}
 
 }
