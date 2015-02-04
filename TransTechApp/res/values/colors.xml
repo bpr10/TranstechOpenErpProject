@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources >
+    <color name="task_list_backgorung_gray">#DFE5E9</color>
+	<color name="task_list_backgorung_white">#F9F9F9</color> 
+	<color name="actionbar_backgroun_color">#037DA6</color> 
+</resources>

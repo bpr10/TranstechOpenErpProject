@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import openerp.OEVersionException;
 import openerp.OpenERP;
@@ -13,15 +15,17 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -30,10 +34,12 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageView;
 import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
 
 import com.openerp.orm.OEFieldsHelper;
+import com.squareup.picasso.Picasso;
 
 public class TaskForm extends ActionBarActivity {
 	ViewPager mViewPager;
@@ -44,14 +50,31 @@ public class TaskForm extends ActionBarActivity {
 	static int taskId;
 	public static JSONObject taskPayload;
 	private JSONObject taskObj;
+	protected static String mCurrentPhotoPath;
 	public static final int ID_DIVIDER = 1000;
 	public static JSONObject remarksResponse;
+	protected static final int REQUEST_IMAGE_CAPTURE = 11;
+	protected static Map<String, String> imageUris;
+	private static Map<String, Uri> thumbnailUris;
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		mCurrentPhotoPath = savedInstanceState.getString("mCurrentPhotoPath");
+		super.onRestoreInstanceState(savedInstanceState);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.servicingfrom);
 		deleteTaskDirectory();
+		if (savedInstanceState != null) {
+			mCurrentPhotoPath = savedInstanceState
+					.getString("mCurrentPhotoPath");
+		}
+		imageUris = new HashMap<String, String>();
+		thumbnailUris = new HashMap<String, Uri>();
+		imageUris.put("demo", "test");
 		firstDot = (ImageView) findViewById(R.id.first_dot);
 		secondDot = (ImageView) findViewById(R.id.second_dot);
 		thirdDot = (ImageView) findViewById(R.id.third_dot);
@@ -186,15 +209,19 @@ public class TaskForm extends ActionBarActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode,
 			Intent intent) {
-		Log.d(tag, "onActivityResult requestCode: " + requestCode
-				+ " resultCode : " + resultCode);
 		super.onActivityResult(requestCode, resultCode, intent);
 	}
 
-	public void saveImageTOoLocalStorage(Context context, String imageID,
-			Bitmap image) throws IOException {
+	@SuppressLint("NewApi")
+	protected void saveImageTOoLocalStorage(Context context, String imageID,
+			Uri imageUri) throws IOException {
 		String imageDirName = "images_" + taskId;
 		String imageFileName = "IMG_" + imageID;
+
+		Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(
+				context.getContentResolver(), imageUri);
+		Bitmap thumbnailImage = Bitmap.createScaledBitmap(imageBitmap, 192,
+				256, false);
 		ContextWrapper cw = new ContextWrapper(context);
 		File directory = cw.getDir(imageDirName, Context.MODE_PRIVATE);
 
@@ -211,34 +238,39 @@ public class TaskForm extends ActionBarActivity {
 		FileOutputStream fos = null;
 
 		fos = new FileOutputStream(imageFile);
-		if (image.compress(Bitmap.CompressFormat.JPEG, 70, fos)) {
-			Log.e(tag, "Stored in " + imageDirName + " bitmap image : "
+		if (thumbnailImage.compress(Bitmap.CompressFormat.PNG, 100, fos)) {
+			Log.i(tag, "Stored in " + imageDirName + " bitmap image : "
 					+ imageID);
-			Log.i(tag, "Image Uri : " + Uri.fromFile(imageFile));
+			Log.i(tag, "image size : " + imageBitmap.getAllocationByteCount()
+					/ 1000 + " kb");
+
+			Log.i(tag,
+					"thumbnail Image size : "
+							+ thumbnailImage.getAllocationByteCount() / 1000
+							+ " kb");
+
+			Log.i(tag, "stored image size : " + imageFile.length() / 1000
+					+ " kb");
 		} else {
 			imageFile.delete();
 			Log.i(tag, "Could not create image file. Compress format error");
 		}
+		thumbnailImage.recycle();
+		thumbnailUris.put(imageID, Uri.fromFile(imageFile));
 		fos.close();
 
 	}
 
-	public File getImageFromLocalStorage(Context context, int ImageId)
+	protected Uri getImageFromLocalStorage(int ImageId)
 			throws FileNotFoundException {
-		ContextWrapper cw = new ContextWrapper(context);
-		File imageFile = new File(cw.getApplicationInfo().dataDir + "/app_"
-				+ "images_" + taskId, "IMG_" + ImageId + ".jpeg");
-		if (imageFile.exists()) {
-			Log.i(tag, "file found " + Uri.fromFile(imageFile));
-			return imageFile;
-		} else {
-			Log.i(tag, "file does not exist " + Uri.fromFile(imageFile));
+		if (thumbnailUris.containsKey(String.valueOf(ImageId)))
+			return thumbnailUris.get(String.valueOf(ImageId));
+		else
 			throw new FileNotFoundException();
-		}
 
 	}
 
-	void deleteTaskDirectory() {
+	protected void deleteTaskDirectory() {
 		Context cw = new ContextWrapper(getApplicationContext());
 		File directory = cw.getDir("images_" + taskId, Context.MODE_PRIVATE);
 		deleteRecursive(directory);
@@ -251,7 +283,7 @@ public class TaskForm extends ActionBarActivity {
 		super.onDestroy();
 	}
 
-	void deleteRecursive(File dir) {
+	protected void deleteRecursive(File dir) {
 		if (dir.isDirectory()) {
 			String[] children = dir.list();
 			for (int i = 0; i < children.length; i++) {
@@ -262,23 +294,40 @@ public class TaskForm extends ActionBarActivity {
 		dir.delete();
 	}
 
-	String encodeImage(File imageFile) {
-		Bitmap bm = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		bm.compress(Bitmap.CompressFormat.JPEG, 60, stream);
-		byte[] byteArray = stream.toByteArray();
-		String encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
-		Log.d(tag, "file :" + imageFile.getName() + " encodedImage :"
-				+ encodedImage);
-		return encodedImage;
+	@SuppressLint("NewApi")
+	protected String encodeImage(Context context, Uri imageUri) {
+		try {
+			String tag = "encoding iamge";
+			String encodedImage = "";
+			Bitmap bitmap;
+
+			bitmap = MediaStore.Images.Media.getBitmap(
+					context.getContentResolver(), imageUri);
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+			byte[] byteArray = stream.toByteArray();
+			encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
+			Log.d(tag,
+					"file :" + imageUri.toString()
+							+ " encodedImage size in kb :"
+							+ bitmap.getAllocationByteCount() / 1000);
+			bitmap.recycle();
+			return encodedImage;
+		} catch (FileNotFoundException e) {
+			Log.e(tag, "Image not found " + imageUri);
+		} catch (IOException e) {
+			Log.e(tag, "I/O Exception " + imageUri);
+			e.printStackTrace();
+		}
+		return null;
 	}
 
-	JSONObject getTaskObject() {
+	protected JSONObject getTaskObject() {
 		Log.d(tag, taskObj.toString());
 		return taskObj;
 	}
 
-	void getRemarkCatrgories() {
+	protected void getRemarkCatrgories() {
 		new AsyncTaskCallback(this, new AsyncTaskCallbackInterface() {
 
 			@Override
@@ -312,4 +361,67 @@ public class TaskForm extends ActionBarActivity {
 
 		}).execute();
 	}
+
+	// ///////////////////////////////
+
+	protected File createImageFile(int imageFileName) throws IOException {
+		// Create an image file name
+		File storageDir = Environment
+				.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+		File image = File.createTempFile(imageFileName + "", /* prefix */
+				".jpg", /* suffix */
+				storageDir /* directory */
+		);
+		// Save a file: path for use with ACTION_VIEW intents
+		mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+		return image;
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+
+		savedInstanceState.putString("mCurrentPhotoPath", mCurrentPhotoPath);
+		super.onSaveInstanceState(savedInstanceState);
+	}
+
+	protected void updateImagePath(String key) {
+		imageUris.put(key, TaskForm.mCurrentPhotoPath);
+
+	}
+
+	protected void checkforImage(Context context, Button cameraButton,
+			String key, ImageView imageView) {
+		String tag = "chackForImage";
+		if (TaskForm.imageUris.containsKey(String.valueOf(cameraButton.getId()
+				% TaskForm.ID_DIVIDER))) {
+			try {
+				if (!TaskForm.taskPayload.has(key)) {
+					Uri image1Uri = Uri
+							.parse(TaskForm.imageUris.get(String
+									.valueOf(cameraButton.getId()
+											% TaskForm.ID_DIVIDER)));
+					TaskForm.taskPayload.putOpt(key,
+							encodeImage(context, image1Uri));
+
+				}
+
+				Picasso.with(context)
+						.load(getImageFromLocalStorage(cameraButton.getId()
+								% TaskForm.ID_DIVIDER)).skipMemoryCache()
+						.into(imageView);
+				// Log.d(tag,
+				// "Loaded Image " + key + " size : " + imageFile.length()
+				// / 1000 + "kb");
+
+			} catch (JSONException e) {
+				e.printStackTrace();
+			} catch (FileNotFoundException e) {
+				Log.d(tag, key + " image not taken ");
+			}
+		} else {
+			Log.d(tag, "image not available " + key);
+		}
+
+	}
+
 }
