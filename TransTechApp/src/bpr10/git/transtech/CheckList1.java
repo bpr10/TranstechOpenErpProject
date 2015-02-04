@@ -1,11 +1,15 @@
 package bpr10.git.transtech;
 
+import org.json.JSONException;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class CheckList1 extends Fragment {
 	CheckBox noComments, transactionalStickersFaded, collectCash,
@@ -29,8 +33,32 @@ public class CheckList1 extends Fragment {
 				.findViewById(R.id.instruction_sticker);
 		vaultBranding = (CheckBox) rootView.findViewById(R.id.vault_branding);
 		atmId = (CheckBox) rootView.findViewById(R.id.atm_id);
-		noComments.setOnCheckedChangeListener(new CustomCheckBoxClickListener(
-				"check_list1"));
+		noComments.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				
+				if(noComments.isChecked())
+				{
+				transactionalStickersFaded.setVisibility(View.INVISIBLE);
+				collectCash.setVisibility(View.INVISIBLE);
+				collectReceipt.setVisibility(View.INVISIBLE);
+				insertcard.setVisibility(View.INVISIBLE);
+				insertCash.setVisibility(View.INVISIBLE);
+				networkSticker.setVisibility(View.INVISIBLE);
+				instructionSticker.setVisibility(View.INVISIBLE);
+				vaultBranding.setVisibility(View.INVISIBLE);
+				atmId.setVisibility(View.INVISIBLE);
+				}
+				try {
+					TaskForm.taskPayload.put("check_list_1", isChecked);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		
 		transactionalStickersFaded
 				.setOnCheckedChangeListener(new CustomCheckBoxClickListener(
 						"check_list2"));
@@ -54,6 +82,7 @@ public class CheckList1 extends Fragment {
 						"check_list9"));
 		atmId.setOnCheckedChangeListener(new CustomCheckBoxClickListener(
 				"check_list10"));
+		
 		return rootView;
 	}
 

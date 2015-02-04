@@ -70,6 +70,6 @@
         android:layout_below="@+id/due_date"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="31dp"
-        android:text="SurvoeyNow" />
+        android:text="SurveyNow" />
 
 </RelativeLayout>

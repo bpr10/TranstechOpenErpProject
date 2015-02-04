@@ -114,7 +114,10 @@ public class MainActivity extends ActionBarActivity {
 		int itemId=item.getItemId();
 		if(itemId==R.id.action_logout)
 		{
-			logOut();
+
+		    Toast.makeText(getApplicationContext(), "logout sucessfully", Toast.LENGTH_LONG).show();
+		    Intent i= new Intent(MainActivity.this,LoginActivity.class);
+		    startActivity(i);
 			return true;
 		}
 
@@ -124,16 +127,7 @@ public class MainActivity extends ActionBarActivity {
 
 		return super.onOptionsItemSelected(item);
 	}
-	private void logOut() {
-		if(!(PreferencesHelper.Uid=="UId"))
-		{
-			
-		    PreferencesHelper.Uid="UId";
-		    Toast.makeText(getApplicationContext(), "logout sucessfully", Toast.LENGTH_LONG).show();
-		    Intent i= new Intent(MainActivity.this,LoginActivity.class);
-		    startActivity(i);
-		}
-	}
+	
 	// to change up caret
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
