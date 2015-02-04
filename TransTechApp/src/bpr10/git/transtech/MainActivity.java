@@ -1,5 +1,7 @@
 package bpr10.git.transtech;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -19,7 +22,7 @@ public class MainActivity extends ActionBarActivity {
 	private String[] mNavigationDrawerItemTitles;
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
-
+	private SharedPreferences sharedPreferences;
 	private ActionBarDrawerToggle mDrawerToggle;
 
 	// nav drawer title
@@ -43,16 +46,14 @@ public class MainActivity extends ActionBarActivity {
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
 		// list the drawer items
-		ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[4];
+		ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[3];
 
-		drawerItem[0] = new ObjectDrawerItem(R.drawable.ic_action_copy, "Tasks");
-		drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_action_refresh,
+		drawerItem[0] = new ObjectDrawerItem(R.drawable.ic_task, "Tasks");
+		drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_alerts,
 				"Alert");
-		drawerItem[2] = new ObjectDrawerItem(R.drawable.ic_action_share,
+		drawerItem[2] = new ObjectDrawerItem(R.drawable.ic_history,
 				"History");
-		drawerItem[3] = new ObjectDrawerItem(R.drawable.ic_action_share,
-				"LogOut");
-
+		
 		// Pass the folderData to our ListView adapter
 		DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this,
 				R.layout.listview_item_row, drawerItem);
@@ -109,13 +110,30 @@ public class MainActivity extends ActionBarActivity {
 
 		// The action bar home/up action should open or close the drawer.
 		// ActionBarDrawerToggle will take care of this.
+		
+		int itemId=item.getItemId();
+		if(itemId==R.id.action_logout)
+		{
+			logOut();
+			return true;
+		}
+
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
 
 		return super.onOptionsItemSelected(item);
 	}
-
+	private void logOut() {
+		if(!(PreferencesHelper.Uid=="UId"))
+		{
+			
+		    PreferencesHelper.Uid="UId";
+		    Toast.makeText(getApplicationContext(), "logout sucessfully", Toast.LENGTH_LONG).show();
+		    Intent i= new Intent(MainActivity.this,LoginActivity.class);
+		    startActivity(i);
+		}
+	}
 	// to change up caret
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
@@ -152,9 +170,7 @@ public class MainActivity extends ActionBarActivity {
 		case 2:
 			fragment = new TaskHistory();
 			break;
-		case 3:
-			fragment = new LogoutFragment();
-			break;
+		
 		default:
 			break;
 		}
