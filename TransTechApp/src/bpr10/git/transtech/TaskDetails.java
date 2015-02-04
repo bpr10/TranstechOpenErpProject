@@ -131,7 +131,7 @@ public class TaskDetails extends Activity implements LocationListener {
 										.distanceTo(l) / 1000) * 100.0) / 100.0;
 								distance.setText(distanceVal + "");
 							} else {
-								distance.setVisibility(View.INVISIBLE);
+								distance.setVisibility(View.GONE);
 							}
 							dateUtility = new DateUtility();
 							customer.setText(customerText);

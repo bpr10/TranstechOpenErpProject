@@ -1,45 +1,56 @@
 package bpr10.git.transtech;
 
 import java.io.IOException;
-import java.text.ParseException;
 
 import openerp.OEDomain;
 import openerp.OEVersionException;
 import openerp.OpenERP;
 
 import org.apache.http.client.ClientProtocolException;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.openerp.orm.OEFieldsHelper;
-
-import android.location.Location;
+import android.R.integer;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
 
+import com.openerp.orm.OEFieldsHelper;
+
 public class CreateAlerts extends Fragment {
 
-	Spinner customerSpinner, stateSpinner, atmSpinner, catugorySpinner,
-			prioritySpinner, responcecodeSpinner;
-	EditText summerText, descriptionText;
+	Spinner customerSpinner, stateSpinner, atmSpinner, categorySpinner,assignToSpinner,
+			prioritySpinner, reasoncodeSpinner;
+	EditText summeryText, descriptionText;
 	Button submit;
 	ArrayAdapter<String> banks;
 	ArrayAdapter<String> states;
-	JSONObject customerResponce, stateResponce;
+	ArrayAdapter<String> atmDetails;
+	ArrayAdapter<String> category;
+	ArrayAdapter<String> priority;
+	ArrayAdapter<String> reasonCode;
+	ArrayAdapter<String> assignTo;
+     JSONObject alertPayload;
+	JSONObject customerResponce, stateResponce,atmResponce,reasonResponce,assignToResponce;
 	OpenERP mOpenERP;
+	String stateId,summeryValue,descriptionValue;
+	   String[] categoryArray=new String[]{"complaint","issue"};
+	   String[] priorityArray=new String[]{"low","medium","high","critical"};
+	   
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,29 +62,284 @@ public class CreateAlerts extends Fragment {
 				.findViewById(R.id.customer_spinner);
 		stateSpinner = (Spinner) rootView.findViewById(R.id.state_spinner);
 		atmSpinner = (Spinner) rootView.findViewById(R.id.atm_spinner);
-		catugorySpinner = (Spinner) rootView
+		categorySpinner = (Spinner) rootView
 				.findViewById(R.id.category_spinner);
 		prioritySpinner = (Spinner) rootView
 				.findViewById(R.id.priority_spinner);
-		responcecodeSpinner = (Spinner) rootView
+		reasoncodeSpinner = (Spinner) rootView
 				.findViewById(R.id.reasonscode_pinner);
-		summerText = (EditText) rootView.findViewById(R.id.summery_text);
+		summeryText = (EditText) rootView.findViewById(R.id.summery_text);
 		descriptionText = (EditText) rootView
 				.findViewById(R.id.description_text);
+		assignToSpinner=(Spinner) rootView
+				.findViewById(R.id.assigto_spinner);
 		submit = (Button) rootView.findViewById(R.id.alert_submit);
 		banks = new ArrayAdapter<String>(getActivity(),
 				android.R.layout.simple_dropdown_item_1line);
 		getCustomer();
+		alertPayload = new JSONObject();
+		customerSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				try {
+					alertPayload.put("customer",Integer.parseInt(customerResponce.getJSONArray("records")
+							.getJSONObject(position).getString("id")));
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		states = new ArrayAdapter<String>(getActivity(),
 				android.R.layout.simple_dropdown_item_1line);
-		getCustomer();
+		assignTo = new ArrayAdapter<String>(getActivity(),
+				android.R.layout.simple_dropdown_item_1line);
+		atmDetails=new ArrayAdapter<String>(getActivity(),
+				android.R.layout.simple_dropdown_item_1line);
+		atmSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				try {
+					alertPayload.put("atm_id",Integer.parseInt(atmResponce.getJSONArray("records")
+							.getJSONObject(position).getString("id")));
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		reasonCode=new ArrayAdapter<String>(getActivity(),
+				android.R.layout.simple_dropdown_item_1line);
+		
+		reasoncodeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				
+				try {
+					alertPayload.put("reason_id",Integer.parseInt(reasonResponce.getJSONArray("records")
+							.getJSONObject(position).getString("id")));
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		assignToSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				
+				try {
+					alertPayload.put("assign_to",Integer.parseInt(assignToResponce.getJSONArray("records")
+							.getJSONObject(position).getString("id")));
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		stateSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				stateId=parent.getItemAtPosition(position).toString();
+				try {
+					alertPayload.put("state_id",Integer.parseInt(stateResponce.getJSONArray("records")
+							.getJSONObject(position).getString("id")));
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Log.d("sateeeeee", stateId);
+				getAtmDetails();
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		category=new ArrayAdapter<String>(getActivity(),android.R.layout.simple_dropdown_item_1line,categoryArray);
+		category.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+		categorySpinner.setAdapter(category);
+		categorySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				
+				try {
+					alertPayload.put("category",categoryArray[position]);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		priority=new ArrayAdapter<String>(getActivity(),android.R.layout.simple_dropdown_item_1line,priorityArray);
+		priority.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+		prioritySpinner.setAdapter(priority);
+		prioritySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+			try {
+				alertPayload.put("priority",priorityArray[position]);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		
+		submit.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				summeryValue=summeryText.getText().toString();
+
+				descriptionValue=descriptionText.getText().toString();
+				try {
+					System.out.println(summeryValue);
+					System.out.println(descriptionValue);
+					alertPayload.put("summary",summeryValue);
+					alertPayload.put("description",descriptionValue);
+					PreferencesHelper pref = new PreferencesHelper(
+							CreateAlerts.this.getActivity());
+					alertPayload.put("user",  Integer.parseInt(pref
+							.GetPreferences(PreferencesHelper.Uid)));
+					alertPayload.put("status", "assigned");
+					
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+					new AsyncTaskCallback(getActivity(),
+						new AsyncTaskCallbackInterface() {
+							@Override
+							public String backGroundCallback() {
+								OpenERP mOpenERP;
+								try {
+									
+									mOpenERP = ApplicationClass.getInstance()
+											.getOpenERPCon();
+									Log.d("alertpaylod",alertPayload.toString()
+											);
+									JSONObject response = mOpenERP
+											.createNew("internal.alerts",
+													alertPayload);
+									Log.d("cretealert request",response.toString());
+									return response.toString();
+								}catch(Exception e)
+								{
+									e.printStackTrace();
+								}
+								return null;
+							}
+
+							@Override
+							public void foregroundCallback(String result) {
+								Log.d("forgeground called", result);
+								AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+										getActivity());
+								alertDialogBuilder.setTitle("Success");
+								alertDialogBuilder.setCancelable(false);
+								alertDialogBuilder
+										.setMessage("alert created")
+										.setCancelable(false)
+										.setPositiveButton(
+												"Okay",
+												new DialogInterface.OnClickListener() {
+													public void onClick(
+															DialogInterface dialog,
+															int id) {
+
+														Intent i = new Intent(
+																getActivity(),
+																MainActivity.class);
+														i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+														i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+														startActivity(i);
+														getActivity().finish();
+													}
+												});
+
+								AlertDialog alertDialog = alertDialogBuilder
+										.create();
+								alertDialog.show();
+							}
+
+						}).execute();
+
+							
+				
+			}
+		});
+	
 		return rootView;
 	}
 
-	
-
 	void getCustomer() {
-		new AsyncTaskCallback(new AsyncTaskCallbackInterface() {
+		new AsyncTaskCallback(getActivity(), new AsyncTaskCallbackInterface() {
 
 			@Override
 			public String backGroundCallback() {
@@ -87,18 +353,32 @@ public class CreateAlerts extends Fragment {
 					Log.d("domainvalues", domain.getArray().toString());
 					OEFieldsHelper fields = new OEFieldsHelper(new String[] {
 							"name", "id" });
-					OEFieldsHelper statefields = new OEFieldsHelper(new String[] {
-							"name", "state_id" });
-					Log.d("fields", fields.get().toString());
+					OEFieldsHelper statefields = new OEFieldsHelper(
+							new String[] { "name", "state_id" });
+					OEFieldsHelper reasonfilelds = new OEFieldsHelper(
+							new String[] { "reason_id","name"});
+					Log.d("reasonfilelds", reasonfilelds.get().toString());
+					OEFieldsHelper assigntofields = new OEFieldsHelper(
+							new String[] { "user_id","name"});
 					mOpenERP = ApplicationClass.getInstance().getOpenERPCon();
-				 customerResponce = mOpenERP.search_read(
-							"customer.info", fields.get(), domain.get());
-				
+					customerResponce = mOpenERP.search_read("customer.info",
+							fields.get(), domain.get());
+
 					Log.d("customer", customerResponce.toString());
-					 stateResponce = mOpenERP.search_read(
-								"res.country.state", statefields.get(), domain.get());
+					stateResponce = mOpenERP.search_read("res.country.state",
+							statefields.get(), domain.get());
+					Log.d("state", stateResponce.toString());
+					reasonResponce=mOpenERP.search_read("reason.code",
+							reasonfilelds.get(), domain.get());
+
+					Log.d("reasonResponce", reasonResponce.toString());
+					OEDomain domain1 = new OEDomain();
+					domain1.add("role" , "=" , "Surveyor");
 					
-						Log.d("state", stateResponce.toString());
+				assignToResponce=mOpenERP.search_read("res.users",
+							assigntofields.get(), domain1.get());
+
+					Log.d("assignToResponce", assignToResponce.toString());
 					return customerResponce.toString();
 				} catch (ClientProtocolException e) {
 					e.printStackTrace();
@@ -118,86 +398,127 @@ public class CreateAlerts extends Fragment {
 
 			@Override
 			public void foregroundCallback(String result) {
-				 try {
-					   for (int i = 0; i < customerResponce
-					     .getJSONArray("records").length(); i++)
-					    banks.add(customerResponce.getJSONArray("records").getJSONObject(i).getString("name"));
-					      
-					  } catch (JSONException e) {
-					   e.printStackTrace();
-					  } catch (NullPointerException e) {
-					   getCustomer();
-					  }
+				try {
+					banks.clear();
+					for (int i = 0; i < customerResponce
+							.getJSONArray("records").length(); i++){
+						banks.add(customerResponce.getJSONArray("records")
+								.getJSONObject(i).getString("name"));
+					}
+						
+				} catch (JSONException e) {
+					e.printStackTrace();
+				} catch (NullPointerException e) {
+					getCustomer();
+				}
 
-				 customerSpinner.setAdapter(banks);
-				 try {
-					   for (int i = 0; i < stateResponce
-					     .getJSONArray("records").length(); i++)
-					    states.add(stateResponce.getJSONArray("records").getJSONObject(i).getString("name"));
-					      
-					  } catch (JSONException e) {
-					   e.printStackTrace();
-					  } catch (NullPointerException e) {
-					   getCustomer();
-					  }
+				customerSpinner.setAdapter(banks);
+				try {
+					states.clear();
+					for (int i = 0; i < stateResponce.getJSONArray("records")
+							.length(); i++)
+						states.add(stateResponce.getJSONArray("records")
+								.getJSONObject(i).getString("name"));
 
-				 stateSpinner.setAdapter(states);
-			
+				} catch (JSONException e) {
+					e.printStackTrace();
+				} catch (NullPointerException e) {
+					getCustomer();
+				}
+
+				stateSpinner.setAdapter(states);
+				try {
+					reasonCode.clear();
+					for (int i = 0; i < reasonResponce.getJSONArray("records")
+							.length(); i++)
+						reasonCode.add(stateResponce.getJSONArray("records")
+								.getJSONObject(i).getString("name"));
+
+				} catch (JSONException e) {
+					e.printStackTrace();
+				} catch (NullPointerException e) {
+					getCustomer();
+				}
+
+				reasoncodeSpinner.setAdapter(reasonCode);
+				try {
+					assignTo.clear();
+					for (int i = 0; i < assignToResponce.getJSONArray("records")
+							.length(); i++)
+						assignTo.add(assignToResponce.getJSONArray("records")
+								.getJSONObject(i).getString("name"));
+
+				} catch (JSONException e) {
+					e.printStackTrace();
+				} catch (NullPointerException e) {
+					getCustomer();
+				}
+
+				assignToSpinner.setAdapter(assignTo);
+
+
+
 			}
 		}).execute();
-		
+
 	}
-//	void getState() {
-//		new AsyncTaskCallback(new AsyncTaskCallbackInterface() {
-//
-//			@Override
-//			public String backGroundCallback() {
-//				try {
-//
-//					// Connecting to openERP
-//
-//					OEDomain domain = new OEDomain();
-//					Log.d("domainvalues", domain.getArray().toString());
-//					OEFieldsHelper fields = new OEFieldsHelper(new String[] {
-//							"name", "state_id" });
-//					Log.d("fields", fields.get().toString());
-//					mOpenERP = ApplicationClass.getInstance().getOpenERPCon();
-//				    stateResponce = mOpenERP.search_read(
-//							"res.country.state", fields.get(), domain.get());
-//				
-//					Log.d("state", stateResponce.toString());
-//					return stateResponce.toString();
-//				} catch (ClientProtocolException e) {
-//					e.printStackTrace();
-//					return null;
-//				} catch (JSONException e) {
-//					e.printStackTrace();
-//					return null;
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//					return null;
-//				} catch (OEVersionException e) {
-//					e.printStackTrace();
-//					return null;
-//				}
-//
-//			}
-//
-//			@Override
-//			public void foregroundCallback(String result) {
-//				 try {
-//					   for (int i = 0; i < stateResponce
-//					     .getJSONArray("records").length(); i++)
-//					    states.add(stateResponce.getJSONArray("records").getJSONObject(i).getString("name"));
-//					      
-//					  } catch (JSONException e) {
-//					   e.printStackTrace();
-//					  } catch (NullPointerException e) {
-//					   getCustomer();
-//					  }
-//
-//				 stateSpinner.setAdapter(states);
-//			}
-//		}).execute();
-//	}	
+	 void getAtmDetails()
+	{
+		 new AsyncTaskCallback(getActivity(), new AsyncTaskCallbackInterface() {
+
+				@Override
+				public String backGroundCallback() {
+					try {
+
+						// Connecting to openERP
+
+						OEDomain domain = new OEDomain();
+						domain.add("state_id" , "=" , stateId);
+						Log.d("domainvalues", domain.getArray().toString());
+						OEFieldsHelper fields = new OEFieldsHelper(new String[] {
+								"name", "id" });
+						
+						Log.d("fields", fields.get().toString());
+						mOpenERP = ApplicationClass.getInstance().getOpenERPCon();
+					 atmResponce = mOpenERP.search_read("atm.info",
+								fields.get(), domain.get());
+
+						Log.d("atmVlaues", atmResponce.toString());
+						return atmResponce.toString();
+					} catch (ClientProtocolException e) {
+						e.printStackTrace();
+						return null;
+					} catch (JSONException e) {
+						e.printStackTrace();
+						return null;
+					} catch (IOException e) {
+						e.printStackTrace();
+						return null;
+					} catch (OEVersionException e) {
+						e.printStackTrace();
+						return null;
+					}
+
+				}
+
+				@Override
+				public void foregroundCallback(String result) {
+					try {
+						atmDetails.clear();
+						for (int i = 0; i < atmResponce
+								.getJSONArray("records").length(); i++)
+							atmDetails.add(atmResponce.getJSONArray("records")
+									.getJSONObject(i).getString("name"));
+
+					} catch (JSONException e) {
+						e.printStackTrace();
+					} catch (NullPointerException e) {
+						getAtmDetails();
+					}
+
+					atmSpinner.setAdapter(atmDetails);
+				}
+				}).execute();
+	}	 
+		 
 }

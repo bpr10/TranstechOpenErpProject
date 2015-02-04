@@ -87,9 +87,6 @@ public class TaskHistory extends Fragment {
 			@Override
 			public void foregroundCallback(String result) {
 				try {
-					if (pDialog.isShowing()) {
-						pDialog.dismiss();
-					}
 					JSONArray results = new JSONArray(result);
 					adapter = new TaskAdapter(results);
 					taskList.setAdapter(adapter);
@@ -182,14 +179,4 @@ public class TaskHistory extends Fragment {
 
 	}
 
-	class TaskList {
-		String taskId, customer, atm, date;
-
-		TaskList(String taskId, String customer, String atm, String date) {
-			this.taskId = taskId;
-			this.customer = customer;
-			this.atm = atm;
-			this.date = date;
-		}
-	}
 }
