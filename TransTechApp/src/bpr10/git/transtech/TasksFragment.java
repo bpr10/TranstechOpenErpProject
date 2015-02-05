@@ -36,16 +36,16 @@ import com.openerp.orm.OEFieldsHelper;
 
 public class TasksFragment extends Fragment implements LocationListener {
 
-	ListView taskList;
-	TextView taskId, customer, atm, date;
-	OpenERP mOpenERP;
-	String atmlat,atmlong;
+	private ListView taskList;
+	private TextView taskId, customer, atm, date;
+	private OpenERP mOpenERP;
 	private String tag;
 	private TaskAdapter mTaskAdapter;
-	JSONObject searchResposne;
-	LocationManager locationManager;
-	String provider;
-	Location location,atmLocation;
+	private JSONObject searchResposne;
+	private LocationManager locationManager;
+	private String provider;
+	private Location location, atmLocation;
+	private JSONArray tasksArray;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,7 +53,8 @@ public class TasksFragment extends Fragment implements LocationListener {
 
 		View rootView = inflater.inflate(R.layout.tasks, container, false);
 		taskList = (ListView) rootView.findViewById(R.id.task_list);
-		locationManager=(LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+		locationManager = (LocationManager) getActivity().getSystemService(
+				Context.LOCATION_SERVICE);
 		new AsyncTaskCallback(getActivity(), new AsyncTaskCallbackInterface() {
 
 			@Override
@@ -81,33 +82,35 @@ public class TasksFragment extends Fragment implements LocationListener {
 					Log.d(tag, "domain JOSNOBJ" + domain.get());
 					Log.d(tag, "fields " + fields);
 					mOpenERP = ApplicationClass.getInstance().getOpenERPCon();
-				    searchResposne = mOpenERP.search_read(
+					searchResposne = mOpenERP.search_read(
 							"atm.surverys.management", fields.get(),
 							domain.get());
-				    JSONArray tasksArray = searchResposne.getJSONArray("records");
-				    for (int i = 0 ; i<tasksArray.length();i++)
-				    {
-				    	String atmDetails []= tasksArray.getJSONObject(i).getJSONArray("atm").getString(1).split(",");
-				    	
-				    	if(atmDetails.length>2)
-				    	{
-				    		String latVal=atmDetails[2];
-					    	String langVal=atmDetails[3];
-				    	double lat = Double.parseDouble(latVal);
-				    	double lon = Double.parseDouble(langVal);
-				    	atmLocation = new Location("atmLocation");
-				    	atmLocation.setLatitude(lat);
-				    	atmLocation.setLongitude(lon);
-				    	}
-				    	if(location!=null)
-				    	{
-				    	double distance = Math.round((atmLocation
-								.distanceTo(location) / 1000) * 100.0) / 100.0;
-				    	tasksArray.getJSONObject(i).put("distance", distance);
-				    	}
-				    	
-				    }
-					return tasksArray.toString();
+					tasksArray = searchResposne.getJSONArray("records");
+					for (int i = 0; i < tasksArray.length(); i++) {
+						String atmDetails[] = tasksArray.getJSONObject(i)
+								.getJSONArray("atm").getString(1).split(",");
+
+						if (atmDetails.length > 2) {
+							String latVal = atmDetails[2];
+							String langVal = atmDetails[3];
+							double lat = Double.parseDouble(latVal);
+							double lon = Double.parseDouble(langVal);
+							atmLocation = new Location("atmLocation");
+							atmLocation.setLatitude(lat);
+							atmLocation.setLongitude(lon);
+						}
+						if (location != null) {
+							double distance = Math.round((atmLocation
+									.distanceTo(location) / 1000) * 100.0) / 100.0;
+							tasksArray.getJSONObject(i).put("distance",
+									distance);
+						}
+
+					}
+					Log.d("response", tasksArray.toString());
+					JSONArray sorted = new JSONUtilities().sortJSONArray(
+							tasksArray, "visit_time", (Double) 2.3);
+					return sorted.toString();
 				} catch (ClientProtocolException e) {
 					e.printStackTrace();
 					return null;
@@ -131,10 +134,9 @@ public class TasksFragment extends Fragment implements LocationListener {
 					JSONArray tasksArray = new JSONArray(result);
 					Log.d("distance", tasksArray.toString());
 					mTaskAdapter = new TaskAdapter(tasksArray);
-					
+
 					taskList.setAdapter(mTaskAdapter);
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -202,7 +204,6 @@ public class TasksFragment extends Fragment implements LocationListener {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			// TODO Auto-generated method stub
 			if (convertView == null) {
 				convertView = LayoutInflater.from(getActivity()).inflate(
 						R.layout.tast_list, null);
@@ -224,17 +225,18 @@ public class TasksFragment extends Fragment implements LocationListener {
 				}
 
 				try {
-					taskId.setText(taskData.getJSONObject(position)
-							.getInt("id") + "");
+					taskId.setText(taskData.getJSONObject(position).get(
+							"distance")
+							+ "");
 					customer.setText(taskData.getJSONObject(position)
 							.getJSONArray("customer").getString(1)
 							+ "");
-					String[] atmarr=taskData.getJSONObject(position)
+					String[] atmarr = taskData.getJSONObject(position)
 							.getJSONArray("atm").getString(1).split(",");
-					String atm1=atmarr[0];
-					String atm2=atmarr[1];
-					
-					atm.setText(atm1+atm2);
+					String atm1 = atmarr[0];
+					String atm2 = atmarr[1];
+
+					atm.setText(atm1 + atm2);
 					try {
 						date.setText(dateUtility
 								.getFriendlyDateString(dateUtility
@@ -244,7 +246,7 @@ public class TasksFragment extends Fragment implements LocationListener {
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
-					
+
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -257,25 +259,19 @@ public class TasksFragment extends Fragment implements LocationListener {
 
 	@Override
 	public void onLocationChanged(Location location) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onProviderDisabled(String provider) {
-		// TODO Auto-generated method stub
-		
 	}
 }

@@ -1,12 +1,9 @@
 package bpr10.git.transtech;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.Menu;
@@ -14,15 +11,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends BaseActivity {
 
 	// declare properties
 	private String[] mNavigationDrawerItemTitles;
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
-	private SharedPreferences sharedPreferences;
 	private ActionBarDrawerToggle mDrawerToggle;
 
 	// nav drawer title
@@ -49,11 +44,9 @@ public class MainActivity extends ActionBarActivity {
 		ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[3];
 
 		drawerItem[0] = new ObjectDrawerItem(R.drawable.ic_task, "Tasks");
-		drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_alerts,
-				"Alert");
-		drawerItem[2] = new ObjectDrawerItem(R.drawable.ic_history,
-				"History");
-		
+		drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_alerts, "Alert");
+		drawerItem[2] = new ObjectDrawerItem(R.drawable.ic_history, "History");
+
 		// Pass the folderData to our ListView adapter
 		DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this,
 				R.layout.listview_item_row, drawerItem);
@@ -100,43 +93,24 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+		getMenuInflater().inflate(R.menu.task_menu, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-
-		// The action bar home/up action should open or close the drawer.
-		// ActionBarDrawerToggle will take care of this.
-		
-		int itemId=item.getItemId();
-		if(itemId==R.id.action_logout)
-		{
-
-		    Toast.makeText(getApplicationContext(), "logout sucessfully", Toast.LENGTH_LONG).show();
-		    Intent i= new Intent(MainActivity.this,LoginActivity.class);
-		    startActivity(i);
-			return true;
-		}
-
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
-
 		return super.onOptionsItemSelected(item);
 	}
-	
-	// to change up caret
+
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		// Sync the toggle state after onRestoreInstanceState has occurred.
 		mDrawerToggle.syncState();
 	}
 
-	// navigation drawer click listener
 	private class DrawerItemClickListener implements
 			ListView.OnItemClickListener {
 
@@ -150,8 +124,6 @@ public class MainActivity extends ActionBarActivity {
 
 	private void selectItem(int position) {
 
-		// update the main content by replacing fragments
-
 		Fragment fragment = null;
 
 		switch (position) {
@@ -164,7 +136,7 @@ public class MainActivity extends ActionBarActivity {
 		case 2:
 			fragment = new TaskHistory();
 			break;
-		
+
 		default:
 			break;
 		}
@@ -174,14 +146,12 @@ public class MainActivity extends ActionBarActivity {
 			fragmentManager.beginTransaction()
 					.replace(R.id.content_frame, fragment).commit();
 
-			// update selected item and title, then close the drawer
 			mDrawerList.setItemChecked(position, true);
 			mDrawerList.setSelection(position);
 			setTitle(mNavigationDrawerItemTitles[position]);
 			mDrawerLayout.closeDrawer(mDrawerList);
 
 		} else {
-			// error in creating fragment
 			Log.e("MainActivity", "Error in creating fragment");
 		}
 	}

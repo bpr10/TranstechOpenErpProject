@@ -18,7 +18,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,7 +28,7 @@ import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
 
 import com.openerp.orm.OEFieldsHelper;
 
-public class TaskDetails extends ActionBarActivity implements LocationListener {
+public class TaskDetails extends BaseActivity implements LocationListener {
 	TextView customer, ATMDtails, locationText, distance, dueDate;
 	Button surveyNow;
 	LocationManager locationManager;

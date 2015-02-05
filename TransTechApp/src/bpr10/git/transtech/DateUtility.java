@@ -17,6 +17,23 @@ public class DateUtility {
 
 	}
 
+	public Calendar makeDate(String serverDate) {
+		SimpleDateFormat sourceFormat = new SimpleDateFormat(
+				"yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+		try {
+			Date parsedDate = (Date) sourceFormat.parse(serverDate);
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(parsedDate);
+			return cal;
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		} catch (java.text.ParseException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
 	public Date convertSerevrDatetoLocalDate(String serverDate)
 			throws java.text.ParseException {
 
@@ -128,112 +145,4 @@ public class DateUtility {
 
 	}
 
-	public String notificationDate(Date date) {
-		Calendar todayDate = Calendar.getInstance();
-		Calendar dateToChange = Calendar.getInstance();
-		dateToChange.setTime(date);
-		String am_pm;
-		if (dateToChange.get(Calendar.AM_PM) == 0)
-			am_pm = "AM";
-		else
-			am_pm = "PM";
-		String min;
-		if (dateToChange.get(Calendar.MINUTE) < 10) {
-			min = "0" + dateToChange.get(Calendar.MINUTE);
-		} else {
-			min = "" + dateToChange.get(Calendar.MINUTE);
-		}
-
-		if ((todayDate.get(Calendar.YEAR)) == (dateToChange.get(Calendar.YEAR))) {
-			if ((todayDate.get(Calendar.MONTH)) == (dateToChange
-					.get(Calendar.MONTH))) {
-				int diff = (todayDate.get(Calendar.DAY_OF_MONTH))
-						- (dateToChange.get(Calendar.DAY_OF_MONTH));
-				Log.d("Notification time", "" + diff);
-				switch (diff) {
-
-				case 0:
-					return "" + String.valueOf(dateToChange.get(Calendar.HOUR))
-							+ ":" + min + " " + am_pm;
-
-				case 1:
-					return "Yesterday";
-
-				default:
-					return ""
-							+ dateToChange.get(Calendar.DAY_OF_MONTH)
-							+ " "
-							+ dateToChange.getDisplayName(Calendar.MONTH,
-									Calendar.SHORT, Locale.US);
-
-				}
-
-			} else {
-				return ""
-						+ dateToChange.get(Calendar.DAY_OF_MONTH)
-						+ " "
-						+ dateToChange.getDisplayName(Calendar.MONTH,
-								Calendar.SHORT, Locale.US) + " ";
-			}
-
-		} else {
-			return ""
-					+ dateToChange.get(Calendar.DAY_OF_MONTH)
-					+ " "
-					+ dateToChange.getDisplayName(Calendar.MONTH,
-							Calendar.SHORT, Locale.US) + " "
-					+ dateToChange.get(Calendar.YEAR);
-		}
-
-	}
-
-	public String makeExpiryDate(Date date) {
-		Calendar todayDate = Calendar.getInstance();
-		Calendar dateToChange = Calendar.getInstance();
-		dateToChange.setTime(date);
-		if ((todayDate.get(Calendar.YEAR)) == (dateToChange.get(Calendar.YEAR))) {
-			if ((todayDate.get(Calendar.MONTH)) == (dateToChange
-					.get(Calendar.MONTH))) {
-				int diff = (todayDate.get(Calendar.DAY_OF_MONTH))
-						- (dateToChange.get(Calendar.DAY_OF_MONTH));
-				switch (diff) {
-
-				case 0:
-					return "Expires Today";
-
-				case 1:
-					return "Expired Yesterday";
-
-				case -1:
-					return "Expires Tomorrow";
-				default:
-					Log.d(tag, "Default vaile " + diff);
-					if (diff < 0) {
-						return "Expires in " + Math.abs(diff) + "days";
-					} else {
-						return "Expired on "
-								+ dateToChange.get(Calendar.DAY_OF_MONTH)
-								+ " "
-								+ dateToChange.getDisplayName(Calendar.MONTH,
-										Calendar.SHORT, Locale.US);
-					}
-				}
-
-			} else {
-				return ""
-						+ dateToChange.get(Calendar.DAY_OF_MONTH)
-						+ " "
-						+ dateToChange.getDisplayName(Calendar.MONTH,
-								Calendar.SHORT, Locale.US) + " ";
-			}
-
-		} else {
-			return ""
-					+ dateToChange.get(Calendar.DAY_OF_MONTH)
-					+ " "
-					+ dateToChange.getDisplayName(Calendar.MONTH,
-							Calendar.SHORT, Locale.US) + " "
-					+ dateToChange.get(Calendar.YEAR);
-		}
-	}
 }

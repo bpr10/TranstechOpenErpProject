@@ -31,7 +31,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.Button;
@@ -41,7 +40,7 @@ import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
 import com.openerp.orm.OEFieldsHelper;
 import com.squareup.picasso.Picasso;
 
-public class TaskForm extends ActionBarActivity {
+public class TaskForm extends BaseActivity {
 	ViewPager mViewPager;
 	ImageView firstDot, secondDot, thirdDot, forthDot;
 	private FragmentPageAdapter mFragmentPageAdapter;
