@@ -40,16 +40,26 @@ public class CheckList1 extends Fragment {
 				
 				if(noComments.isChecked())
 				{
-				transactionalStickersFaded.setVisibility(View.INVISIBLE);
-				collectCash.setVisibility(View.INVISIBLE);
-				collectReceipt.setVisibility(View.INVISIBLE);
-				insertcard.setVisibility(View.INVISIBLE);
-				insertCash.setVisibility(View.INVISIBLE);
-				networkSticker.setVisibility(View.INVISIBLE);
-				instructionSticker.setVisibility(View.INVISIBLE);
-				vaultBranding.setVisibility(View.INVISIBLE);
-				atmId.setVisibility(View.INVISIBLE);
+					TaskForm.taskFlag=1;
+				
 				}else 
+				{
+					TaskForm.taskFlag=0;
+					
+				}
+				if(TaskForm.taskFlag==1)
+				{
+					
+					transactionalStickersFaded.setVisibility(View.INVISIBLE);
+					collectCash.setVisibility(View.INVISIBLE);
+					collectReceipt.setVisibility(View.INVISIBLE);
+					insertcard.setVisibility(View.INVISIBLE);
+					insertCash.setVisibility(View.INVISIBLE);
+					networkSticker.setVisibility(View.INVISIBLE);
+					instructionSticker.setVisibility(View.INVISIBLE);
+					vaultBranding.setVisibility(View.INVISIBLE);
+					atmId.setVisibility(View.INVISIBLE);
+				}else
 				{
 					transactionalStickersFaded.setVisibility(View.VISIBLE);
 					collectCash.setVisibility(View.VISIBLE);

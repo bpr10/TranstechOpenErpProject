@@ -56,6 +56,7 @@ public class TaskForm extends ActionBarActivity {
 	protected static final int REQUEST_IMAGE_CAPTURE = 11;
 	protected static Map<String, String> imageUris;
 	private static Map<String, Uri> thumbnailUris;
+	public static int taskFlag;
 
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -364,8 +365,6 @@ public class TaskForm extends ActionBarActivity {
 
 		}).execute();
 	}
-
-	// ///////////////////////////////
 
 	protected File createImageFile(int imageFileName) throws IOException {
 		// Create an image file name

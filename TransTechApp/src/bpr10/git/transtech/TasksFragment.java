@@ -45,7 +45,7 @@ public class TasksFragment extends Fragment implements LocationListener {
 	JSONObject searchResposne;
 	LocationManager locationManager;
 	String provider;
-	Location location;
+	Location location,atmLocation;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,12 +87,18 @@ public class TasksFragment extends Fragment implements LocationListener {
 				    JSONArray tasksArray = searchResposne.getJSONArray("records");
 				    for (int i = 0 ; i<tasksArray.length();i++)
 				    {
-				    	String atmDetails = tasksArray.getJSONObject(i).getJSONArray("atm").getString(1);
-				    	double lat = Double.parseDouble(atmDetails.split(",")[2]);
-				    	double lon = Double.parseDouble(atmDetails.split(",")[3]);
-				    	Location atmLocation = new Location("atmLocation");
+				    	String atmDetails []= tasksArray.getJSONObject(i).getJSONArray("atm").getString(1).split(",");
+				    	
+				    	if(atmDetails.length>2)
+				    	{
+				    		String latVal=atmDetails[2];
+					    	String langVal=atmDetails[3];
+				    	double lat = Double.parseDouble(latVal);
+				    	double lon = Double.parseDouble(langVal);
+				    	atmLocation = new Location("atmLocation");
 				    	atmLocation.setLatitude(lat);
 				    	atmLocation.setLongitude(lon);
+				    	}
 				    	if(location!=null)
 				    	{
 				    	double distance = Math.round((atmLocation

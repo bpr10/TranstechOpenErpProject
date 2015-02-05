@@ -431,7 +431,7 @@ public class CreateAlerts extends Fragment {
 					reasonCode.clear();
 					for (int i = 0; i < reasonResponce.getJSONArray("records")
 							.length(); i++)
-						reasonCode.add(stateResponce.getJSONArray("records")
+						reasonCode.add(reasonResponce.getJSONArray("records")
 								.getJSONObject(i).getString("name"));
 
 				} catch (JSONException e) {

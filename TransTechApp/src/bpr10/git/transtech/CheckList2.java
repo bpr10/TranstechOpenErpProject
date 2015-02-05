@@ -2,6 +2,7 @@ package bpr10.git.transtech;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,32 @@ public class CheckList2 extends Fragment{
 		spotLightIsOff.setOnCheckedChangeListener(new CustomCheckBoxClickListener("check_list22"));
 		mainBoardLightsAreOff.setOnCheckedChangeListener(new CustomCheckBoxClickListener("check_list23"));
 		securityCameraIsOutOfFocus.setOnCheckedChangeListener(new CustomCheckBoxClickListener("check_list24"));
+		Log.d("task flag", TaskForm.taskFlag+"");
+		if(TaskForm.taskFlag==1)
+		{
+			keyPadDisplaced.setVisibility(View.INVISIBLE);
+			spotLightsOff.setVisibility(View.INVISIBLE);
+			decals.setVisibility(View.INVISIBLE);
+			ATMTowerBranding.setVisibility(View.INVISIBLE);
+			canopyBranding.setVisibility(View.INVISIBLE);
+			surroundLockIsDamage.setVisibility(View.INVISIBLE);
+			spotLightIsOff.setVisibility(View.INVISIBLE);
+			mainBoardLightsAreOff.setVisibility(View.INVISIBLE);
+			securityCameraIsOutOfFocus.setVisibility(View.INVISIBLE);
+		}
+		else
+		{
+			keyPadDisplaced.setVisibility(View.VISIBLE);
+			spotLightsOff.setVisibility(View.VISIBLE);
+			decals.setVisibility(View.VISIBLE);
+			ATMTowerBranding.setVisibility(View.VISIBLE);
+			canopyBranding.setVisibility(View.VISIBLE);
+			surroundLockIsDamage.setVisibility(View.VISIBLE);
+			spotLightIsOff.setVisibility(View.VISIBLE);
+			mainBoardLightsAreOff.setVisibility(View.VISIBLE);
+			securityCameraIsOutOfFocus.setVisibility(View.VISIBLE);
+			
+		}
 		return rootView;
 	}
 
