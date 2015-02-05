@@ -13,7 +13,8 @@ TransTechApp/bin/
 TransTechApp/gen/
 openerp-mobile-crm/openerp-mobile-crm_lead/bin/
 openerp-mobile-crm/openerp-mobile-crm_lead/gen/
-
+TranstechOpenErpProject/cardview/bin
+TranstechOpenErpProject/cardview/gen
 # Gradle files
 TransTechApp/.gradle/
 TransTechApp/build/
