@@ -34,9 +34,11 @@
         </activity>
         <activity android:name="bpr10.git.transtech.MainActivity" >
         </activity>
-        <activity android:name="bpr10.git.transtech.TaskForm" >
+        <activity android:name="bpr10.git.transtech.TaskForm" 
+            android:label="Survey">
         </activity>
-        <activity android:name="bpr10.git.transtech.TaskDetails" >
+        <activity android:name="bpr10.git.transtech.TaskDetails"
+            android:label="@string/task_details" >
         </activity>
     </application>
 
