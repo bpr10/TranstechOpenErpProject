@@ -55,7 +55,7 @@ public class TaskForm extends BaseActivity {
 	protected static final int REQUEST_IMAGE_CAPTURE = 11;
 	protected static Map<String, String> imageUris;
 	private static Map<String, Uri> thumbnailUris;
-	public static int taskFlag;
+	public static int taskFlag = 0;
 
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {

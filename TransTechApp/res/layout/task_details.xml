@@ -2,24 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/task_details"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+    android:orientation="vertical" 
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/customer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView1"
-        android:layout_marginLeft="5dp"
+       
         android:layout_marginTop="20dp"
         android:text="customer"
         android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -29,7 +20,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="5dp"
         android:layout_below="@+id/customer"
         android:layout_marginTop="20dp"
         android:text="atmdetails"
@@ -41,7 +31,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/details_atm"
-        android:layout_marginLeft="5dp"
         android:layout_marginTop="20dp"
         android:text="location"
         android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -52,7 +41,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/location"
-        android:layout_marginLeft="5dp"
         android:layout_marginTop="20dp"
         android:text="distance"
         android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -64,7 +52,6 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/distance"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="5dp"
         android:text="dueDate"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -76,6 +63,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:textColor="#ffffff"
+        android:padding="10dp"
         android:background="@color/button_background_color"
         android:text="@string/survey_now" />
 

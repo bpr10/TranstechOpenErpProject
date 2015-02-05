@@ -48,5 +48,6 @@
     <string name="task_details">TaskDetails</string>
     <string name="login_page_company_info_label">Made with some friends at</string>
     <string name="title_activity_base">BaseActivity</string>
+    <string name="task_list_kms">Kms</string>
 
 </resources>
