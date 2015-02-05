@@ -12,22 +12,30 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
@@ -55,6 +63,7 @@ public class TasksFragment extends Fragment implements LocationListener {
 		taskList = (ListView) rootView.findViewById(R.id.task_list);
 		locationManager = (LocationManager) getActivity().getSystemService(
 				Context.LOCATION_SERVICE);
+		setHasOptionsMenu(true);
 		new AsyncTaskCallback(getActivity(), new AsyncTaskCallbackInterface() {
 
 			@Override
@@ -71,10 +80,6 @@ public class TasksFragment extends Fragment implements LocationListener {
 							.GetPreferences(PreferencesHelper.Uid)));
 					domain.add("status", "not in",
 							new JSONArray().put("waitnig_approve").put("done"));
-					// domain.add("status", "=", "pending");
-					// domain.add("status", "=", "progress");
-					// domain.add("status", "=", "assigned");
-
 					OEFieldsHelper fields = new OEFieldsHelper(new String[] {
 							"name", "customer", "atm", "country", "task_month",
 							"visit_time" });
@@ -108,9 +113,8 @@ public class TasksFragment extends Fragment implements LocationListener {
 
 					}
 					Log.d("response", tasksArray.toString());
-					JSONArray sorted = new JSONUtilities().sortJSONArray(
-							tasksArray, "visit_time", (Double) 2.3);
-					return sorted.toString();
+
+					return tasksArray.toString();
 				} catch (ClientProtocolException e) {
 					e.printStackTrace();
 					return null;
@@ -172,13 +176,37 @@ public class TasksFragment extends Fragment implements LocationListener {
 		return rootView;
 	}
 
-	class TaskAdapter extends BaseAdapter {
+	class TaskAdapter extends ArrayAdapter<JSONObject> {
 		private JSONArray taskData;
 		private DateUtility dateUtility;
+		private String tag = getClass().getSimpleName();
+		private TaskAdapter thisInstance;
 
 		public TaskAdapter(JSONArray taskData) {
+			super(getActivity(), R.layout.listview_item_row);
 			this.taskData = taskData;
+			thisInstance = this;
 			dateUtility = new DateUtility();
+
+		}
+
+		public void refresh(JSONArray taskArray) {
+			this.clear();
+			for (int i = 0; i < taskArray.length(); i++) {
+				try {
+					this.add(taskArray.getJSONObject(i));
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
+			new Handler(Looper.getMainLooper()).post(new Runnable() {
+				@Override
+				public void run() {
+					Log.d(tag, "UI thread");
+					thisInstance.notifyDataSetChanged();
+				}
+			});
+
 		}
 
 		@Override
@@ -187,7 +215,7 @@ public class TasksFragment extends Fragment implements LocationListener {
 		}
 
 		@Override
-		public Object getItem(int position) {
+		public JSONObject getItem(int position) {
 			try {
 				return taskData.getJSONObject(position);
 			} catch (JSONException e) {
@@ -221,7 +249,7 @@ public class TasksFragment extends Fragment implements LocationListener {
 					convertView.findViewById(R.id.tasklist_layout)
 							.setBackgroundColor(
 									getResources().getColor(
-											R.color.task_list_backgorung_gray));
+											R.color.task_list_backgorung_grey));
 				}
 
 				try {
@@ -274,4 +302,68 @@ public class TasksFragment extends Fragment implements LocationListener {
 	@Override
 	public void onProviderDisabled(String provider) {
 	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.task_menu, menu);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int itemId = item.getItemId();
+
+		if (itemId == R.id.action_sort) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			LayoutInflater inflater = getActivity().getLayoutInflater();
+			final View alertView = inflater.inflate(R.layout.sort_alert, null);
+			builder.setView(alertView)
+					.setPositiveButton(R.string.sort_dialog_confirm_label,
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int id) {
+									RadioGroup sortOptions = (RadioGroup) alertView
+											.findViewById(R.id.sort_options);
+									switch (sortOptions
+											.getCheckedRadioButtonId()) {
+									case R.id.sort_by_distance:
+										Log.d(tag, "Sorting by Distance");
+										sortTasks("distance");
+										break;
+									case R.id.sort_by_visit_date:
+										Log.d(tag, "Sorting by Visit Date");
+										sortTasks("visit_time");
+										break;
+									default:
+										break;
+									}
+								}
+							})
+					.setNegativeButton(R.string.cancel,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+
+								}
+							});
+			AlertDialog d = builder.create();
+			d.show();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	void sortTasks(String key) {
+		Log.d(tag + " Sort by ", key);
+		if (mTaskAdapter != null) {
+			mTaskAdapter.clear();
+			mTaskAdapter = new TaskAdapter(new JSONUtilities().sortJSONArray(
+					tasksArray, key, (Double) 2.3));
+			taskList.invalidate();
+			taskList.setAdapter(mTaskAdapter);
+		}
+
+	}
+
 }

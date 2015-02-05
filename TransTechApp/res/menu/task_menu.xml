@@ -4,8 +4,7 @@
 	
     <item
         android:id="@+id/action_sort"
-        android:icon="@drawable/file_attachment"
-        android:orderInCategory="100"
+        android:icon="@drawable/ic_action_sort_by_size"
         app:showAsAction="always"
         android:title="@string/action_settings"/>
 

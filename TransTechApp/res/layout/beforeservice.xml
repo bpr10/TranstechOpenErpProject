@@ -12,7 +12,7 @@
         android:layout_below="@+id/before_service1"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
-        android:background="@color/button_background_color"
+        android:background="@color/primary_color_dark"
         android:src="@drawable/ic_launcher" />
 
     <Button
@@ -23,7 +23,7 @@
         android:layout_alignBottom="@+id/before_service2"
         android:layout_alignRight="@+id/before_service_camera_button1"
         android:layout_marginBottom="23dp"
-        android:background="@color/button_background_color"
+        android:background="@color/primary_color_dark"
         android:textColor="#ffffff"
         android:text="Camera" />
 
@@ -36,7 +36,7 @@
         android:layout_marginLeft="40dp"
         android:padding="5dp"
         android:layout_toRightOf="@+id/before_service1"
-        android:background="@color/button_background_color"
+        android:background="@color/primary_color_dark"
         android:textColor="#ffffff"
         android:text="Camera" />
 
@@ -48,7 +48,7 @@
         android:layout_marginTop="20dp"
         android:layout_toLeftOf="@+id/before_service_camera_button1"
         android:src="@drawable/ic_launcher" 
-        android:background="@color/button_background_color"/>
+        android:background="@color/primary_color_dark"/>
 
     <ImageView
         android:id="@+id/before_service1"
@@ -57,7 +57,7 @@
         android:layout_alignLeft="@+id/before_service2"
         android:layout_alignParentTop="true"
         android:layout_marginTop="26dp"
-        android:background="@color/button_background_color"
+        android:background="@color/primary_color_dark"
         android:src="@drawable/ic_launcher" />
 
     <Button
@@ -67,7 +67,7 @@
         android:layout_alignLeft="@+id/before_service_camera_button2"
         android:layout_alignTop="@+id/before_service3"
         android:layout_marginTop="24dp"
-        android:background="@color/button_background_color"
+        android:background="@color/primary_color_dark"
         android:padding="5dp"
         android:text="Camera"
         android:textColor="#ffffff" />
