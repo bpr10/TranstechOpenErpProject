@@ -4,5 +4,5 @@
 	<color name="task_list_backgorung_white">#F9F9F9</color> 
 	<color name="actionbar_backgroun_color">#39B57B</color> 
 	<color name="button_background_color">#18635A</color>
-	<color name="edit_text_background_color">#39B57B</color>
+	<color name="primary_color">#39B57B</color>
 </resources>

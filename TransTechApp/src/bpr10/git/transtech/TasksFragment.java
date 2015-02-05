@@ -100,8 +100,8 @@ public class TasksFragment extends Fragment implements LocationListener {
 							atmLocation.setLongitude(lon);
 						}
 						if (location != null) {
-							double distance = Math.round((atmLocation
-									.distanceTo(location) / 1000) * 100.0) / 100.0;
+							int distance = (int) (Math.round((atmLocation
+									.distanceTo(location) / 1000) * 100.0) / 100.0);
 							tasksArray.getJSONObject(i).put("distance",
 									distance);
 						}
@@ -211,19 +211,6 @@ public class TasksFragment extends Fragment implements LocationListener {
 				customer = (TextView) convertView.findViewById(R.id.customer);
 				atm = (TextView) convertView.findViewById(R.id.atm);
 				date = (TextView) convertView.findViewById(R.id.taskdate);
-				if (position % 2 == 0) {
-					convertView
-							.findViewById(R.id.tasklist_layout)
-							.setBackgroundColor(
-									getResources().getColor(
-											R.color.task_list_backgorung_white));
-				} else {
-					convertView.findViewById(R.id.tasklist_layout)
-							.setBackgroundColor(
-									getResources().getColor(
-											R.color.task_list_backgorung_gray));
-				}
-
 				try {
 					taskId.setText(taskData.getJSONObject(position).get(
 							"distance")
