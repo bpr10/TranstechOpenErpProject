@@ -33,7 +33,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
 
@@ -43,6 +46,7 @@ import com.squareup.picasso.Picasso;
 public class TaskForm extends BaseActivity {
 	ViewPager mViewPager;
 	ImageView firstDot, secondDot, thirdDot, forthDot;
+	ImageView nextItem,previousItem;
 	private FragmentPageAdapter mFragmentPageAdapter;
 	Bundle bundle;
 	private String tag = getClass().getSimpleName();
@@ -56,6 +60,7 @@ public class TaskForm extends BaseActivity {
 	protected static Map<String, String> imageUris;
 	private static Map<String, Uri> thumbnailUris;
 	public static int taskFlag = 0;
+	int currentPosition;
 
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -79,10 +84,13 @@ public class TaskForm extends BaseActivity {
 		secondDot = (ImageView) findViewById(R.id.second_dot);
 		thirdDot = (ImageView) findViewById(R.id.third_dot);
 		forthDot = (ImageView) findViewById(R.id.forth_dot);
+		nextItem=(ImageButton) findViewById(R.id.next_item);
+		previousItem=(ImageButton) findViewById(R.id.previous_item);
 		firstDot.setImageResource(R.drawable.dot_active);
 		secondDot.setImageResource(R.drawable.dot_inactive);
 		thirdDot.setImageResource(R.drawable.dot_inactive);
 		forthDot.setImageResource(R.drawable.dot_inactive);
+		
 		mFragmentPageAdapter = new FragmentPageAdapter(
 				getSupportFragmentManager());
 
@@ -129,6 +137,27 @@ public class TaskForm extends BaseActivity {
 
 			@Override
 			public void onPageScrolled(int arg0, float arg1, int arg2) {
+			}
+		});
+		currentPosition=mViewPager.getCurrentItem();
+		Log.d("current position", currentPosition+"");
+		
+		nextItem.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Log.d("current position", currentPosition+"");
+				if(currentPosition < 4)
+				mViewPager.setCurrentItem(currentPosition+1, true);
+			}
+		});
+		previousItem.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Log.d("current position", currentPosition+"");
+				if(currentPosition > 0)
+					mViewPager.setCurrentItem(currentPosition-1, true);
 			}
 		});
 		try {

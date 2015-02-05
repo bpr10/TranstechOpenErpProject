@@ -43,7 +43,7 @@ public class AsyncTaskCallback extends AsyncTask<Void, Integer, String> {
 	@Override
 	protected void onPostExecute(String result) {
 		if (pd.isShowing()) {
-			pd.hide();
+			pd.dismiss();
 		}
 		if (result != null) {
 			mAsyncTaskCallbackInterface.foregroundCallback(result);

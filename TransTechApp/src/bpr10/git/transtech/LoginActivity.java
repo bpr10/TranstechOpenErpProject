@@ -123,7 +123,7 @@ public class LoginActivity extends ActionBarActivity {
 									startActivity(i);
 									Toast.makeText(
 											getApplicationContext(),
-											"sucess", Toast.LENGTH_LONG)
+											"success", Toast.LENGTH_LONG)
 											.show();
 								} else {
 									Toast.makeText(
