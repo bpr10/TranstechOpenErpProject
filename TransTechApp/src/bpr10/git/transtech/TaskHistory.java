@@ -1,7 +1,6 @@
 package bpr10.git.transtech;
 
 import java.io.IOException;
-import java.text.ParseException;
 
 import openerp.OEDomain;
 import openerp.OEVersionException;
@@ -149,22 +148,15 @@ public class TaskHistory extends Fragment {
 					customer.setText(taskData.getJSONObject(position)
 							.getJSONArray("customer").getString(1)
 							+ "");
-					String atmarr[]=(taskData.getJSONObject(position)
+					String atmarr[] = (taskData.getJSONObject(position)
 							.getJSONArray("atm").getString(1).split(","));
-					String a1=atmarr[1];
-					String a2=atmarr[2];
-					
-					atm.setText(a1+a2
-							+ "");
-					try {
-						date.setText(dateUtility
-								.getFriendlyDateString(dateUtility
-										.convertSerevrDatetoLocalDate(taskData
-												.getJSONObject(position)
-												.getString("visit_time"))));
-					} catch (ParseException e) {
-						e.printStackTrace();
-					}
+					String a1 = atmarr[1];
+					String a2 = atmarr[2];
+
+					atm.setText(a1 + a2 + "");
+					date.setText(dateUtility.getFriendlyDateString(dateUtility
+							.makeDate(taskData.getJSONObject(position)
+									.getString("visit_time"))));
 					Bundle bundle = new Bundle();
 					bundle.putInt("TaskId", taskData.getJSONObject(position)
 							.getInt("id"));

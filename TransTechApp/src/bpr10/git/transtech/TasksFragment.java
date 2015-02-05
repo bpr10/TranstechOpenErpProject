@@ -1,7 +1,6 @@
 package bpr10.git.transtech;
 
 import java.io.IOException;
-import java.text.ParseException;
 
 import openerp.OEDomain;
 import openerp.OEVersionException;
@@ -239,23 +238,9 @@ public class TasksFragment extends Fragment implements LocationListener {
 				customer = (TextView) convertView.findViewById(R.id.customer);
 				atm = (TextView) convertView.findViewById(R.id.atm);
 				date = (TextView) convertView.findViewById(R.id.taskdate);
-				if (position % 2 == 0) {
-					convertView
-							.findViewById(R.id.tasklist_layout)
-							.setBackgroundColor(
-									getResources().getColor(
-											R.color.task_list_backgorung_white));
-				} else {
-					convertView.findViewById(R.id.tasklist_layout)
-							.setBackgroundColor(
-									getResources().getColor(
-											R.color.task_list_backgorung_grey));
-				}
-
 				try {
-					taskId.setText(taskData.getJSONObject(position).get(
-							"distance")
-							+ "");
+					taskId.setText(((Double) taskData.getJSONObject(position)
+							.get("distance")).intValue() + "");
 					customer.setText(taskData.getJSONObject(position)
 							.getJSONArray("customer").getString(1)
 							+ "");
@@ -265,15 +250,9 @@ public class TasksFragment extends Fragment implements LocationListener {
 					String atm2 = atmarr[1];
 
 					atm.setText(atm1 + atm2);
-					try {
-						date.setText(dateUtility
-								.getFriendlyDateString(dateUtility
-										.convertSerevrDatetoLocalDate(taskData
-												.getJSONObject(position)
-												.getString("visit_time"))));
-					} catch (ParseException e) {
-						e.printStackTrace();
-					}
+					date.setText(dateUtility.getFriendlyDateString(dateUtility
+							.makeDate(taskData.getJSONObject(position)
+									.getString("visit_time"))));
 
 				} catch (JSONException e) {
 					e.printStackTrace();

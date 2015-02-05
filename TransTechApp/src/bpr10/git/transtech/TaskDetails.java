@@ -1,7 +1,5 @@
 package bpr10.git.transtech;
 
-import java.text.ParseException;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,14 +50,9 @@ public class TaskDetails extends BaseActivity{
 			atm2 = atmarr[1];
 			country = taskObj.getJSONArray("country").getString(1);
 			distanceVal = taskObj.get("distance").toString();
-
-			try {
-				dueDate.setText(dateUtility.getFriendlyDateString(dateUtility
-						.convertSerevrDatetoLocalDate(taskObj
-								.getString("visit_time"))));
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
+			dueDate.setText(dateUtility.getFriendlyDateString(dateUtility
+					.makeDate(taskObj
+							.getString("visit_time"))));
 
 		} catch (JSONException e1) {
 			// TODO Auto-generated catch block
