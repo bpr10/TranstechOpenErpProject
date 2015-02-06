@@ -34,9 +34,11 @@
         </activity>
         <activity android:name=".MainActivity" >
         </activity>
-        <activity android:name=".TaskForm" >
+        <activity android:name=".TaskForm"
+            android:label="Survey" >
         </activity>
-        <activity android:name=".TaskDetails" >
+        <activity android:name=".TaskDetails"
+            android:label="TaskDetails" >
         </activity>
         <activity
             android:name=".BaseActivity"

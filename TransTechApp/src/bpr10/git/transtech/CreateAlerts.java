@@ -10,7 +10,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.R.integer;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -348,8 +348,6 @@ public class CreateAlerts extends Fragment {
 					// Connecting to openERP
 
 					OEDomain domain = new OEDomain();
-					PreferencesHelper pref = new PreferencesHelper(
-							CreateAlerts.this.getActivity());
 					Log.d("domainvalues", domain.getArray().toString());
 					OEFieldsHelper fields = new OEFieldsHelper(new String[] {
 							"name", "id" });

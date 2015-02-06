@@ -231,7 +231,7 @@
                   
                   android:layout_below="@+id/textView8"
                   android:layout_marginTop="15dp"
-                  android:text="Summery"
+                  android:text="Summary"
                   android:textAppearance="?android:attr/textAppearanceMedium" />
 
               <EditText

@@ -7,12 +7,11 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
         android:layout_below="@+id/imageView1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="35dp"
-        android:background="@drawable/alert_text"
         android:padding="10dp"
         android:text="aaaaaa"
         android:textAlignment="center"
@@ -22,10 +21,37 @@
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="21dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="41dp"
         android:src="@drawable/logo" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="47dp" >
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/textView1"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/abc_action_bar_home_description"
+            android:src="@drawable/odpilogo" />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/login_page_company_info_label_margintop"
+            android:paddingBottom="@dimen/loginscreen_linear_layout_padding_left"
+            android:text="@string/login_page_company_info_label"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </RelativeLayout>
    
 </RelativeLayout>

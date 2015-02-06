@@ -46,6 +46,15 @@ public class CheckList2 extends Fragment{
 			spotLightIsOff.setVisibility(View.INVISIBLE);
 			mainBoardLightsAreOff.setVisibility(View.INVISIBLE);
 			securityCameraIsOutOfFocus.setVisibility(View.INVISIBLE);
+			keyPadDisplaced.setChecked(false);
+			spotLightsOff.setChecked(false);
+			decals.setChecked(false);
+			ATMTowerBranding.setChecked(false);
+			canopyBranding.setChecked(false);
+			surroundLockIsDamage.setChecked(false);
+			spotLightIsOff.setChecked(false);
+			mainBoardLightsAreOff.setChecked(false);
+			securityCameraIsOutOfFocus.setChecked(false);
 		}
 		else
 		{
@@ -58,6 +67,8 @@ public class CheckList2 extends Fragment{
 			spotLightIsOff.setVisibility(View.VISIBLE);
 			mainBoardLightsAreOff.setVisibility(View.VISIBLE);
 			securityCameraIsOutOfFocus.setVisibility(View.VISIBLE);
+			
+			
 			
 		}
 		return rootView;

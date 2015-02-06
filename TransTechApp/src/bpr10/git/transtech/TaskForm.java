@@ -16,9 +16,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
@@ -29,6 +31,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Base64;
@@ -46,8 +49,8 @@ import com.squareup.picasso.Picasso;
 public class TaskForm extends BaseActivity {
 	ViewPager mViewPager;
 	ImageView firstDot, secondDot, thirdDot, forthDot;
-	ImageView nextItem,previousItem;
-	private FragmentPageAdapter mFragmentPageAdapter;
+	ImageView nextItem, previousItem;
+	protected FragmentPageAdapter mFragmentPageAdapter;
 	Bundle bundle;
 	private String tag = getClass().getSimpleName();
 	static int taskId;
@@ -60,7 +63,19 @@ public class TaskForm extends BaseActivity {
 	protected static Map<String, String> imageUris;
 	private static Map<String, Uri> thumbnailUris;
 	public static int taskFlag = 0;
-	int currentPosition;
+	private int currentPosition;
+	static int updateCount = 0;
+	private NoCommentCheckListener mNoCommentCheckListener;
+
+	@Override
+	protected void onResume() {
+		mNoCommentCheckListener = new NoCommentCheckListener();
+		IntentFilter filter = new IntentFilter();
+		filter.addAction("bpr10.git.transtech.no_comments_checked");
+		LocalBroadcastManager.getInstance(getApplicationContext())
+				.registerReceiver(mNoCommentCheckListener, filter);
+		super.onResume();
+	}
 
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -84,13 +99,13 @@ public class TaskForm extends BaseActivity {
 		secondDot = (ImageView) findViewById(R.id.second_dot);
 		thirdDot = (ImageView) findViewById(R.id.third_dot);
 		forthDot = (ImageView) findViewById(R.id.forth_dot);
-		nextItem=(ImageButton) findViewById(R.id.next_item);
-		previousItem=(ImageButton) findViewById(R.id.previous_item);
+		nextItem = (ImageButton) findViewById(R.id.next_item);
+		previousItem = (ImageButton) findViewById(R.id.previous_item);
 		firstDot.setImageResource(R.drawable.dot_active);
 		secondDot.setImageResource(R.drawable.dot_inactive);
 		thirdDot.setImageResource(R.drawable.dot_inactive);
 		forthDot.setImageResource(R.drawable.dot_inactive);
-		
+
 		mFragmentPageAdapter = new FragmentPageAdapter(
 				getSupportFragmentManager());
 
@@ -100,6 +115,7 @@ public class TaskForm extends BaseActivity {
 
 			@Override
 			public void onPageSelected(int arg0) {
+				currentPosition = arg0;
 				switch (arg0) {
 				case 0:
 					firstDot.setImageResource(R.drawable.dot_active);
@@ -139,25 +155,25 @@ public class TaskForm extends BaseActivity {
 			public void onPageScrolled(int arg0, float arg1, int arg2) {
 			}
 		});
-		currentPosition=mViewPager.getCurrentItem();
-		Log.d("current position", currentPosition+"");
-		
+		Log.d("current position", currentPosition + "");
+
 		nextItem.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				Log.d("current position", currentPosition+"");
-				if(currentPosition < 4)
-				mViewPager.setCurrentItem(currentPosition+1, true);
+				Log.d("current position", currentPosition + "");
+				if (currentPosition < 4)
+					mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1,
+							true);
 			}
 		});
 		previousItem.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				Log.d("current position", currentPosition+"");
-				if(currentPosition > 0)
-					mViewPager.setCurrentItem(currentPosition-1, true);
+				Log.d("current position", currentPosition + "");
+
+				mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1, true);
 			}
 		});
 		try {
@@ -227,6 +243,10 @@ public class TaskForm extends BaseActivity {
 			return null;
 
 		}
+
+		// public void refresh() {
+		// mFragmentPageAdapter.startUpdate(mViewPager);
+		// }
 
 		@Override
 		public int getCount() {
@@ -454,4 +474,56 @@ public class TaskForm extends BaseActivity {
 
 	}
 
+	@Override
+	public void onPause() {
+		LocalBroadcastManager.getInstance(getApplicationContext())
+				.unregisterReceiver(mNoCommentCheckListener);
+		super.onPause();
+	}
+	
+	 protected static void noComments()
+		{
+			JSONObject nocommentobj=new JSONObject();
+			taskPayload.remove("check_list_2");
+			taskPayload.remove("check_list_3");
+			taskPayload.remove("check_list_4");
+			taskPayload.remove("check_list_5");
+			taskPayload.remove("check_list_6");
+			taskPayload.remove("check_list_7");
+			taskPayload.remove("check_list_8");
+			taskPayload.remove("check_list_9");
+			taskPayload.remove("check_list_10");
+			taskPayload.remove("check_list_11");
+			taskPayload.remove("check_list_12");
+			taskPayload.remove("check_list_13");
+			taskPayload.remove("check_list_14");
+			taskPayload.remove("check_list_15");
+			taskPayload.remove("check_list_16");
+			taskPayload.remove("check_list_17");
+			taskPayload.remove("check_list_18");
+			taskPayload.remove("check_list_19");
+			taskPayload.remove("check_list_20");
+			taskPayload.remove("check_list_21");
+			taskPayload.remove("check_list_22");
+			taskPayload.remove("check_list_23");
+			Log.d("nocoments click", nocommentobj.toString());
+			
+		}
+
+	class NoCommentCheckListener extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (updateCount == 0) {
+				Log.d("No Comments Checked", "broadcastRecieverWorking");
+				mFragmentPageAdapter.notifyDataSetChanged();
+				mViewPager.setAdapter(mFragmentPageAdapter);
+				mViewPager.setCurrentItem(currentPosition);
+				updateCount++;
+			} else {
+				Log.d(tag, "adapter didn't update. Count " + updateCount);
+			}
+
+		}
+	}
 }

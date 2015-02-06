@@ -3,8 +3,8 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:orientation="vertical"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp" >
+    android:paddingLeft="@dimen/loginscreen_linear_layout_padding_left"
+    android:paddingRight="@dimen/loginscreen_linear_layout_padding_right" >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
         <ImageView
             android:id="@+id/imageView1"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="@dimen/login_page_logo_height"
             android:layout_centerInParent="true"
             android:src="@drawable/logo" />
     </RelativeLayout>
@@ -30,11 +30,8 @@
              android:layout_height="@dimen/login_layout_edittext_height"
              android:layout_alignParentLeft="true"
              android:layout_alignParentTop="true"
-            
-             android:ems="10"
              android:hint="@string/username"
              android:inputType="textEmailAddress"
-             android:padding="@dimen/login_layout_edittext_padding"
              />
 
          <EditText
@@ -44,25 +41,22 @@
              android:layout_alignParentLeft="true"
              android:layout_below="@+id/user_name"
              android:layout_marginTop="@dimen/login_layout_margin_top"
-             android:ems="10"
              android:hint="@string/password"
-             android:inputType="textPassword"
-             android:padding="@dimen/login_layout_edittext_padding" >
-
+             android:inputType="textPassword">
              <requestFocus />
          </EditText>
 
          <Button
              android:id="@+id/sign_in"
-             android:layout_width="150dp"
+             android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:layout_below="@+id/password"
              android:layout_centerHorizontal="true"
              android:layout_marginTop="@dimen/login_layout_margin_top"
-             android:background="#18635A"
-             android:padding="10dp"
+             
+             android:padding="@dimen/login_layout_edittext_padding"
              android:text="@string/login"
-             android:textColor="#FFFFFF"
+            
              android:textSize="22sp"
             />
 
@@ -75,8 +69,8 @@
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/hdpilogo_image_width"
+            android:layout_height="@dimen/hdpilogo_image_height"
             android:layout_below="@+id/textView1"
             android:layout_centerHorizontal="true"
             android:contentDescription="@string/abc_action_bar_home_description"
@@ -88,8 +82,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="13dp"
-            android:paddingBottom="10dp"
+            android:layout_marginTop="@dimen/login_page_company_info_label_margintop"
+            android:paddingBottom="@dimen/loginscreen_linear_layout_padding_left"
             android:text="@string/login_page_company_info_label"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 

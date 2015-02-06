@@ -11,8 +11,8 @@
         android:layout_alignBottom="@+id/after_service2"
         android:layout_alignRight="@+id/after_service_camera_button1"
         android:layout_marginBottom="23dp"
-        android:background="@color/primary_color_dark"
-        android:text="Click Image" />
+       android:padding="10dp"
+        android:text="@string/click_image" />
 
     <Button
         android:id="@+id/after_service_camera_button1"
@@ -22,8 +22,8 @@
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="46dp"
         android:layout_toRightOf="@+id/after_service1"
-        android:background="@color/primary_color_dark"
-        android:text="Click Image" />
+        android:padding="10dp"
+        android:text="@string/click_image" />
 
     <Button
         android:id="@+id/after_service_camera_button3"
@@ -32,8 +32,8 @@
         android:layout_alignRight="@+id/after_service_camera_button2"
         android:layout_alignTop="@+id/after_service3"
         android:layout_marginTop="26dp"
-        android:background="@color/primary_color_dark"
-        android:text="Click Image" />
+       android:padding="10dp"
+        android:text="@string/click_image" />
 
     <ImageView
         android:id="@+id/after_service1"
@@ -74,8 +74,8 @@
         android:layout_below="@+id/remark_category"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
-        android:background="@color/primary_color_dark"
-        android:text="Submit" />
+        android:padding="10dp"
+        android:text="@string/submit_but" />
 
     <TextView
         android:id="@+id/textView1"

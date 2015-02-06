@@ -10,8 +10,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -32,7 +30,7 @@ public class TaskHistory extends Fragment {
 	private OpenERP mOpenERP;
 	private String tag;
 	private TaskAdapter adapter;
-	private ProgressDialog pDialog;
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

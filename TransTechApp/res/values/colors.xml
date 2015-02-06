@@ -9,5 +9,6 @@
     <color name="small_text_color">#787878</color>
     <color name="primary_color">#39B57B</color>
     <color name="primary_color_dark">#18635A</color>
+    <color name="white_color">#FFFFFF</color>
 
 </resources>

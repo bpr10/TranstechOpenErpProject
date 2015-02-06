@@ -51,5 +51,12 @@
     <string name="task_list_kms">Kms</string>
     <string name="sort_dialog_confirm_label">Sort</string>
     <string name="cancel">Cancel</string>
+    <string name="country">Country</string>
+    <string name="distance">Distance</string>
+    <string name="duedate">Due date</string>
+    <string name="click_image">Click Image</string>
+    <string name="submit_but">Submit</string>
+    <string name="sort_by_distance">Sort by Distance</string>
+    <string name="sort_by_visit_time">Sort by visit time</string>
 
 </resources>
