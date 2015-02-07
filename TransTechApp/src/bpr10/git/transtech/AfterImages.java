@@ -123,6 +123,7 @@ public class AfterImages extends Fragment {
 
 			@Override
 			public void onClick(View v) {
+				Log.d("taskpalod values",TaskForm.taskPayload+"");
 				new AsyncTaskCallback(getActivity(),
 						new AsyncTaskCallbackInterface() {
 							@Override

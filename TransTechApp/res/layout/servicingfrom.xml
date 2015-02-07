@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
         android:layout_height="wrap_content"
             >
-            <ImageButton
+            <ImageView
             android:id="@+id/previous_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -100,12 +100,14 @@
             android:layout_below="@+id/next_item"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/next_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
+            android:contentDescription="next"
+          
             android:src="@drawable/ic_action_next_item" />
 
       </RelativeLayout>

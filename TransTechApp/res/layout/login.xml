@@ -53,10 +53,8 @@
              android:layout_below="@+id/password"
              android:layout_centerHorizontal="true"
              android:layout_marginTop="@dimen/login_layout_margin_top"
-             
              android:padding="@dimen/login_layout_edittext_padding"
              android:text="@string/login"
-            
              android:textSize="22sp"
             />
 

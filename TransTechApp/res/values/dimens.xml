@@ -17,6 +17,8 @@
      <dimen name="task_list_customer_text_margintop">7dp</dimen>
      <dimen name="task_list_linear_layot_width">30dp</dimen>
      <dimen name="task_list_linear_layot_height">30dp</dimen>
+     <dimen name="createalert_page_spinner_height">30dp</dimen>
+     <dimen name="createalert_page_textView_height">40dp</dimen>
      
      
 

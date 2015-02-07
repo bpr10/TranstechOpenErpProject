@@ -16,7 +16,7 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
-    <string name="login">LOGIN</string>
+    <string name="login">Login</string>
     <string name="customer">Customer</string>
     <string name="atm_detaisl">Atm Details</string>
     <string name="submit">Submit</string>

@@ -41,6 +41,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
 
 import com.openerp.orm.OEFieldsHelper;
@@ -50,6 +51,7 @@ public class TaskForm extends BaseActivity {
 	ViewPager mViewPager;
 	ImageView firstDot, secondDot, thirdDot, forthDot;
 	ImageView nextItem, previousItem;
+	RelativeLayout previousItmLayout,nextItemLayout;
 	protected FragmentPageAdapter mFragmentPageAdapter;
 	Bundle bundle;
 	private String tag = getClass().getSimpleName();
@@ -99,8 +101,11 @@ public class TaskForm extends BaseActivity {
 		secondDot = (ImageView) findViewById(R.id.second_dot);
 		thirdDot = (ImageView) findViewById(R.id.third_dot);
 		forthDot = (ImageView) findViewById(R.id.forth_dot);
-		nextItem = (ImageButton) findViewById(R.id.next_item);
-		previousItem = (ImageButton) findViewById(R.id.previous_item);
+		nextItem = (ImageView) findViewById(R.id.next_item);
+		previousItem = (ImageView) findViewById(R.id.previous_item);
+		previousItmLayout=(RelativeLayout) findViewById(R.id.previous_item_layout);
+		nextItemLayout=(RelativeLayout) findViewById(R.id.next_item_layout);
+		previousItmLayout.setVisibility(View.INVISIBLE);
 		firstDot.setImageResource(R.drawable.dot_active);
 		secondDot.setImageResource(R.drawable.dot_inactive);
 		thirdDot.setImageResource(R.drawable.dot_inactive);
@@ -122,12 +127,16 @@ public class TaskForm extends BaseActivity {
 					secondDot.setImageResource(R.drawable.dot_inactive);
 					thirdDot.setImageResource(R.drawable.dot_inactive);
 					forthDot.setImageResource(R.drawable.dot_inactive);
+					nextItemLayout.setVisibility(View.VISIBLE);
+					previousItmLayout.setVisibility(View.INVISIBLE);
 					break;
 				case 1:
 					firstDot.setImageResource(R.drawable.dot_inactive);
 					secondDot.setImageResource(R.drawable.dot_active);
 					thirdDot.setImageResource(R.drawable.dot_inactive);
 					forthDot.setImageResource(R.drawable.dot_inactive);
+					nextItemLayout.setVisibility(View.VISIBLE);
+					previousItmLayout.setVisibility(View.VISIBLE);
 					break;
 
 				case 2:
@@ -135,12 +144,16 @@ public class TaskForm extends BaseActivity {
 					secondDot.setImageResource(R.drawable.dot_inactive);
 					thirdDot.setImageResource(R.drawable.dot_active);
 					forthDot.setImageResource(R.drawable.dot_inactive);
+					nextItemLayout.setVisibility(View.VISIBLE);
+					previousItmLayout.setVisibility(View.VISIBLE);
 					break;
 				case 3:
 					firstDot.setImageResource(R.drawable.dot_inactive);
 					secondDot.setImageResource(R.drawable.dot_inactive);
 					thirdDot.setImageResource(R.drawable.dot_inactive);
 					forthDot.setImageResource(R.drawable.dot_active);
+					nextItemLayout.setVisibility(View.INVISIBLE);
+					previousItmLayout.setVisibility(View.VISIBLE);
 					break;
 				default:
 					break;
@@ -155,26 +168,25 @@ public class TaskForm extends BaseActivity {
 			public void onPageScrolled(int arg0, float arg1, int arg2) {
 			}
 		});
-		Log.d("current position", currentPosition + "");
-
-		nextItem.setOnClickListener(new OnClickListener() {
+		
+			nextItem.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				Log.d("current position", currentPosition + "");
-				if (currentPosition < 4)
+					
 					mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1,
-							true);
+								true);
+			
 			}
 		});
 		previousItem.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				Log.d("current position", currentPosition + "");
-
+				
 				mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1, true);
-			}
+				}
+			
 		});
 		try {
 			taskObj = new JSONObject(getIntent().getStringExtra(
@@ -483,7 +495,7 @@ public class TaskForm extends BaseActivity {
 	
 	 protected static void noComments()
 		{
-			JSONObject nocommentobj=new JSONObject();
+			
 			taskPayload.remove("check_list_2");
 			taskPayload.remove("check_list_3");
 			taskPayload.remove("check_list_4");
@@ -506,7 +518,7 @@ public class TaskForm extends BaseActivity {
 			taskPayload.remove("check_list_21");
 			taskPayload.remove("check_list_22");
 			taskPayload.remove("check_list_23");
-			Log.d("nocoments click", nocommentobj.toString());
+			Log.d("nocoments click", taskPayload.toString());
 			
 		}
 

@@ -9,6 +9,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -21,7 +22,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
 
-public class LoginActivity extends ActionBarActivity {
+public class LoginActivity extends Activity {
 	private EditText username, password;
 	private Button signIn;
 	private String userName, userPassword;
@@ -36,7 +37,7 @@ public class LoginActivity extends ActionBarActivity {
 		username = (EditText) findViewById(R.id.user_name);
 		password = (EditText) findViewById(R.id.password);
 		signIn = (Button) findViewById(R.id.sign_in);
-		getSupportActionBar().hide();
+		
 		signIn.setOnClickListener(new OnClickListener() {
 
 			@Override
