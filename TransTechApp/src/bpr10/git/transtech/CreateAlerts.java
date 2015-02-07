@@ -369,8 +369,11 @@ public class CreateAlerts extends Fragment {
 							fields.get(), domain.get());
 
 					Log.d("customer", customerResponce.toString());
+					OEDomain statedomain = new OEDomain();
+					statedomain.add("country_id", "=", "AE");
+
 					stateResponce = mOpenERP.search_read("res.country.state",
-							statefields.get(), domain.get());
+							statefields.get(), statedomain.get());
 					Log.d("state", stateResponce.toString());
 					reasonResponce = mOpenERP.search_read("reason.code",
 							reasonfilelds.get(), domain.get());
