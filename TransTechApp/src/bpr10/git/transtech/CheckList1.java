@@ -1,12 +1,8 @@
 package bpr10.git.transtech;
 
 import org.json.JSONException;
-import org.json.JSONObject;
-
-import bpr10.git.transtech.TaskForm.NoCommentCheckListener;
 
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;

@@ -19,11 +19,13 @@ public class BaseActivity extends ActionBarActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int itemId = item.getItemId();
 		if (itemId == R.id.action_logout) {
-			// logout action
-			Toast.makeText(getApplicationContext(), "logout sucessfully",
-					Toast.LENGTH_LONG).show();
 			Intent i = new Intent(this, LoginActivity.class);
+			i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(i);
+			finish();
+			Toast.makeText(getApplicationContext(), "Logged Out",
+					Toast.LENGTH_LONG).show();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

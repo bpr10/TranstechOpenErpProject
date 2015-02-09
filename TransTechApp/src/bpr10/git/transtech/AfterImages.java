@@ -11,9 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -33,6 +31,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
+import cn.pedant.SweetAlert.SweetAlertDialog;
+import cn.pedant.SweetAlert.SweetAlertDialog.OnSweetClickListener;
 
 public class AfterImages extends Fragment {
 	private ImageView afterImage1, afterImage2, afterImage3;
@@ -172,34 +172,36 @@ public class AfterImages extends Fragment {
 							@Override
 							public void foregroundCallback(String result) {
 								Log.d(tag, result);
-								AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-										getActivity());
-								alertDialogBuilder.setTitle("Success");
-								alertDialogBuilder.setCancelable(false);
-								alertDialogBuilder
-										.setMessage("Survey Request Recorded")
-										.setCancelable(false)
-										.setPositiveButton(
-												"Okay",
-												new DialogInterface.OnClickListener() {
+								SweetAlertDialog sDialog = new SweetAlertDialog(
+										getActivity(),
+										SweetAlertDialog.SUCCESS_TYPE)
+										.setTitleText("Done!")
+
+										.setContentText(
+												"Survey Request Recorded.")
+										.setConfirmText("Okay")
+										.setConfirmClickListener(
+												new OnSweetClickListener() {
+
+													@Override
 													public void onClick(
-															DialogInterface dialog,
-															int id) {
+															SweetAlertDialog sweetAlertDialog) {
 
 														Intent i = new Intent(
 																getActivity(),
 																MainActivity.class);
 														i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 														i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
+														sweetAlertDialog
+																.dismissWithAnimation();
 														startActivity(i);
 														getActivity().finish();
+
 													}
 												});
+								sDialog.setCancelable(false);
+								sDialog.show();
 
-								AlertDialog alertDialog = alertDialogBuilder
-										.create();
-								alertDialog.show();
 							}
 
 						}).execute();

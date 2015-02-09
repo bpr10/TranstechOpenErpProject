@@ -1,15 +1,15 @@
 package bpr10.git.transtech;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class AsyncTaskCallback extends AsyncTask<Void, Integer, String> {
 	public AsyncTaskCallbackInterface mAsyncTaskCallbackInterface;
 	private String tag = getClass().getSimpleName();
 	private Context context;
-	ProgressDialog pd;
+	private SweetAlertDialog pDialog;
 
 	public AsyncTaskCallback(Context context,
 			AsyncTaskCallbackInterface mAsyncTaskCallbackInterface) {
@@ -20,11 +20,11 @@ public class AsyncTaskCallback extends AsyncTask<Void, Integer, String> {
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		pd = new ProgressDialog(context);
-		pd.setMessage("Please Wait..");
-		pd.setCancelable(true);
-		pd.setMessage("Please Wait");
-		pd.show();
+		pDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+		pDialog.getProgressHelper().setBarColor(context.getResources().getColor(R.color.primary_color));
+		pDialog.setTitleText("Please Wait...");
+		pDialog.setCancelable(false);
+		pDialog.show();
 	}
 
 	@Override
@@ -32,8 +32,8 @@ public class AsyncTaskCallback extends AsyncTask<Void, Integer, String> {
 		try {
 
 		} catch (Exception e) {
-			if (pd.isShowing()) {
-				pd.hide();
+			if (pDialog.isShowing()) {
+				pDialog.dismiss();
 			}
 			e.printStackTrace();
 		}
@@ -42,8 +42,8 @@ public class AsyncTaskCallback extends AsyncTask<Void, Integer, String> {
 
 	@Override
 	protected void onPostExecute(String result) {
-		if (pd.isShowing()) {
-			pd.dismiss();
+		if (pDialog.isShowing()) {
+			pDialog.dismiss();
 		}
 		if (result != null) {
 			mAsyncTaskCallbackInterface.foregroundCallback(result);

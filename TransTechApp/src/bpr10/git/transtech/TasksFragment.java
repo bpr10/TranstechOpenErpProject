@@ -44,7 +44,7 @@ import com.openerp.orm.OEFieldsHelper;
 public class TasksFragment extends Fragment implements LocationListener {
 
 	private ListView taskList;
-	private TextView taskId, customer, atm, date;
+	private TextView distancelabel, customer, atm, date;
 	private OpenERP mOpenERP;
 	private String tag;
 	private TaskAdapter mTaskAdapter;
@@ -78,7 +78,8 @@ public class TasksFragment extends Fragment implements LocationListener {
 					domain.add("surveyor", "=", Integer.parseInt(pref
 							.GetPreferences(PreferencesHelper.Uid)));
 					domain.add("status", "not in",
-							new JSONArray().put("waitnig_approve").put("done"));
+							new JSONArray().put("waitnig_approve").put("done")
+									.put("cancel"));
 					OEFieldsHelper fields = new OEFieldsHelper(new String[] {
 							"name", "customer", "atm", "country", "task_month",
 							"visit_time" });
@@ -234,13 +235,12 @@ public class TasksFragment extends Fragment implements LocationListener {
 			if (convertView == null) {
 				convertView = LayoutInflater.from(getActivity()).inflate(
 						R.layout.tast_list, null);
-				taskId = (TextView) convertView.findViewById(R.id.task_id);
+				distancelabel = (TextView) convertView
+						.findViewById(R.id.task_id);
 				customer = (TextView) convertView.findViewById(R.id.customer);
 				atm = (TextView) convertView.findViewById(R.id.atm);
 				date = (TextView) convertView.findViewById(R.id.taskdate);
 				try {
-					taskId.setText(((Double) taskData.getJSONObject(position)
-							.get("distance")).intValue() + "");
 					customer.setText(taskData.getJSONObject(position)
 							.getJSONArray("customer").getString(1)
 							+ "");
@@ -253,6 +253,9 @@ public class TasksFragment extends Fragment implements LocationListener {
 					date.setText(dateUtility.getFriendlyDateString(dateUtility
 							.makeDate(taskData.getJSONObject(position)
 									.getString("visit_time"))));
+					distancelabel.setText(((Double) taskData.getJSONObject(
+							position).get("distance")).intValue()
+							+ "");
 
 				} catch (JSONException e) {
 					e.printStackTrace();

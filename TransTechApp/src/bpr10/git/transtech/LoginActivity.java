@@ -12,7 +12,6 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -37,7 +36,7 @@ public class LoginActivity extends Activity {
 		username = (EditText) findViewById(R.id.user_name);
 		password = (EditText) findViewById(R.id.password);
 		signIn = (Button) findViewById(R.id.sign_in);
-		
+
 		signIn.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -47,20 +46,19 @@ public class LoginActivity extends Activity {
 			}
 		});
 		password.setOnKeyListener(onSoftKeyboardDonePress);
-		
+
 	}
-	void Login()
-	{
+
+	void Login() {
 		userName = username.getText().toString();
 		userPassword = password.getText().toString();
 
 		if (userName.isEmpty()) {
-			Toast.makeText(getApplicationContext(),
-					"usename can't be empty", Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(), "usename can't be empty",
+					Toast.LENGTH_LONG).show();
 		} else if (userPassword.isEmpty()) {
-			Toast.makeText(getApplicationContext(),
-					"password can't be empty", Toast.LENGTH_LONG)
-					.show();
+			Toast.makeText(getApplicationContext(), "password can't be empty",
+					Toast.LENGTH_LONG).show();
 		} else {
 
 			new AsyncTaskCallback(LoginActivity.this,
@@ -72,12 +70,10 @@ public class LoginActivity extends Activity {
 
 								// Connecting to openERP
 
-								mOpenERP = ApplicationClass
-										.getInstance().getOpenERPCon();
-								JSONObject response = mOpenERP
-										.authenticate(userName,
-												userPassword,
-												"Transtech");
+								mOpenERP = ApplicationClass.getInstance()
+										.getOpenERPCon();
+								JSONObject response = mOpenERP.authenticate(
+										userName, userPassword, "Transtech");
 								String loginres = response.toString();
 
 								Log.d("Got Login Response ", loginres);
@@ -88,8 +84,8 @@ public class LoginActivity extends Activity {
 								if (!uId.equals("false")) {
 									PreferencesHelper pref = new PreferencesHelper(
 											getApplicationContext());
-									pref.SavePreferences(
-											PreferencesHelper.Uid, uId);
+									pref.SavePreferences(PreferencesHelper.Uid,
+											uId);
 									Log.d(tag,
 											pref.GetPreferences(PreferencesHelper.Uid));
 								}
@@ -118,36 +114,28 @@ public class LoginActivity extends Activity {
 								if (!uId.equals("false")) {
 									ApplicationClass.surveyor_Id = Integer
 											.parseInt(uId);
-									Intent i = new Intent(
-											LoginActivity.this,
+									Intent i = new Intent(LoginActivity.this,
 											MainActivity.class);
 									startActivity(i);
-									Toast.makeText(
-											getApplicationContext(),
-											"success", Toast.LENGTH_LONG)
-											.show();
+									finish();
 								} else {
-									Toast.makeText(
-											getApplicationContext(),
+									Toast.makeText(getApplicationContext(),
 											"enter valid credentials",
 											Toast.LENGTH_LONG).show();
 								}
 							}
 						}
 					}).execute();
-    }
+		}
 	}
-	
-	View.OnKeyListener onSoftKeyboardDonePress=new View.OnKeyListener()
-    {
-        public boolean onKey(View v, int keyCode, KeyEvent event)
-        {
-            if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)
-            {
-            	Login();
-            return false;
-        }
+
+	View.OnKeyListener onSoftKeyboardDonePress = new View.OnKeyListener() {
+		public boolean onKey(View v, int keyCode, KeyEvent event) {
+			if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+				Login();
+				return false;
+			}
 			return false;
-    };
-};
+		};
+	};
 }

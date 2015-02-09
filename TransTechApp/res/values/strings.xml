@@ -41,7 +41,7 @@
     <string name="spot_light_is_off">Spot Light is off</string>
     <string name="main_board_lights_are_off">Main board Lights are off</string>
     <string name="security_camera_is_out_of_focus">Security Camera is out of focus</string>
-    <string name="description_hint">Write your description about alert ...(minimum 3 words)</string>
+    <string name="description_hint">Write your description about alert #8230#8230#8230(minimum 3 words)</string>
     <string name="reason_code">Reason Code</string>
     <string name="remarks_category">Remarks Category</string>
     <string name="survey_now">SurveyNow</string>
