@@ -53,7 +53,7 @@ public class TasksFragment extends Fragment implements LocationListener {
 	private String provider;
 	private Location location, atmLocation;
 	private JSONArray tasksArray;
-	public static Double currentLat,currentLang;
+	public static Double currentLat, currentLang;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,8 +64,7 @@ public class TasksFragment extends Fragment implements LocationListener {
 		locationManager = (LocationManager) getActivity().getSystemService(
 				Context.LOCATION_SERVICE);
 		setHasOptionsMenu(true);
-		new AsyncTaskCallback(getActivity(), new AsyncTaskCallbackInterface()
-		{
+		new AsyncTaskCallback(getActivity(), new AsyncTaskCallbackInterface() {
 
 			@Override
 			public String backGroundCallback() throws JSONException {
@@ -96,12 +95,12 @@ public class TasksFragment extends Fragment implements LocationListener {
 					for (int i = 0; i < tasksArray.length(); i++) {
 						String atmDetails[] = tasksArray.getJSONObject(i)
 								.getJSONArray("atm").getString(1).split(",");
-Log.d("atm details",tasksArray.getJSONObject(i)
-		.getJSONArray("atm")+"");
-            int n=atmDetails.length;
+						Log.d("atm details", tasksArray.getJSONObject(i)
+								.getJSONArray("atm") + "");
+						int n = atmDetails.length;
 						if (atmDetails.length > 2) {
-							String latVal = atmDetails[n-2];
-							String langVal = atmDetails[n-1];
+							String latVal = atmDetails[n - 2];
+							String langVal = atmDetails[n - 1];
 							double lat = Double.parseDouble(latVal);
 							double lon = Double.parseDouble(langVal);
 							atmLocation = new Location("atmLocation");
@@ -122,7 +121,7 @@ Log.d("atm details",tasksArray.getJSONObject(i)
 				} catch (ClientProtocolException e) {
 					e.printStackTrace();
 					return null;
-				}  catch (IOException e) {
+				} catch (IOException e) {
 					e.printStackTrace();
 					return null;
 				} catch (OEVersionException e) {
@@ -146,21 +145,7 @@ Log.d("atm details",tasksArray.getJSONObject(i)
 				}
 			}
 		}).execute();
-		Criteria criteria = new Criteria();
-		provider = locationManager.getBestProvider(criteria, false);
-		if (provider != null && !provider.equals("")) {
-			location = locationManager.getLastKnownLocation(provider);
-			locationManager.requestLocationUpdates(provider, 20000, 1, this);
-			if (location != null)
-				onLocationChanged(location);
-			else
-				Toast.makeText(getActivity(), "Location can't be retrieved",
-						Toast.LENGTH_SHORT).show();
 
-		} else {
-			Toast.makeText(getActivity(), "No Provider Found",
-					Toast.LENGTH_SHORT).show();
-		}
 		taskList.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -247,12 +232,11 @@ Log.d("atm details",tasksArray.getJSONObject(i)
 							+ "");
 					String[] atmarr = taskData.getJSONObject(position)
 							.getJSONArray("atm").getString(1).split(",");
-					if(atmarr.length>1)
-					{
-					String atm1 = atmarr[0];
-					String atm2 = atmarr[1];
+					if (atmarr.length > 1) {
+						String atm1 = atmarr[0];
+						String atm2 = atmarr[1];
 
-					atm.setText(atm1 + atm2);
+						atm.setText(atm1 + atm2);
 					}
 					date.setText(dateUtility.getFriendlyDateString(dateUtility
 							.makeDate(taskData.getJSONObject(position)
@@ -273,7 +257,7 @@ Log.d("atm details",tasksArray.getJSONObject(i)
 
 	@Override
 	public void onLocationChanged(Location location) {
-
+		this.location = location;
 	}
 
 	@Override
@@ -283,10 +267,27 @@ Log.d("atm details",tasksArray.getJSONObject(i)
 
 	@Override
 	public void onProviderEnabled(String provider) {
+		Criteria criteria = new Criteria();
+		provider = locationManager.getBestProvider(criteria, false);
+		if (provider != null && !provider.equals("")) {
+			location = locationManager.getLastKnownLocation(provider);
+			locationManager.requestLocationUpdates(provider, 20000, 1, this);
+			if (location != null)
+				onLocationChanged(location);
+			else
+				Toast.makeText(getActivity(), "Location can't be retrieved",
+						Toast.LENGTH_SHORT).show();
+
+		} else {
+			Toast.makeText(getActivity(), "No Provider Found",
+					Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	@Override
 	public void onProviderDisabled(String provider) {
+		Toast.makeText(getActivity(), "Please Enable Location Services",
+				Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
