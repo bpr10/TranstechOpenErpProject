@@ -40,14 +40,14 @@
             android:textSize="12sp" />
 
         <LinearLayout
-            android:id="@+id/linearLayout1"
+            android:id="@+id/distance_linear_layout"
             android:layout_width="@dimen/task_list_linear_layot_width"
             android:layout_height="@dimen/task_list_linear_layot_height"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/circleshape" >
 
             <TextView
-                android:id="@+id/task_id"
+                android:id="@+id/distance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal"

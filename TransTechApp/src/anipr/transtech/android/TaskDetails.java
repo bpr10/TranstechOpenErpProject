@@ -35,7 +35,7 @@ public class TaskDetails extends BaseActivity {
 		surveyNow = (Button) findViewById(R.id.survoeynow_but);
 		textViewDis = (TextView) findViewById(R.id.textView_distance);
 		dateUtility = new DateUtility();
-
+		distance.setVisibility(View.VISIBLE);
 		try {
 			taskObj = new JSONObject(getIntent().getStringExtra("taskDetais"));
 			Log.d(tag, taskObj.toString());

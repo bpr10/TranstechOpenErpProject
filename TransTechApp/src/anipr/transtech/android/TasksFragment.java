@@ -15,13 +15,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,15 +29,20 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import anipr.transtech.android.AsyncTaskCallback.AsyncTaskCallbackInterface;
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 import com.openerp.orm.OEFieldsHelper;
 
 public class TasksFragment extends Fragment implements LocationListener {
@@ -52,7 +57,7 @@ public class TasksFragment extends Fragment implements LocationListener {
 	private String provider;
 	private Location location, atmLocation;
 	private JSONArray tasksArray;
-	public static Double currentLat,currentLang;
+	public static Double currentLat, currentLang;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,105 +68,125 @@ public class TasksFragment extends Fragment implements LocationListener {
 		locationManager = (LocationManager) getActivity().getSystemService(
 				Context.LOCATION_SERVICE);
 		setHasOptionsMenu(true);
-		new AsyncTaskCallback(getActivity(), new AsyncTaskCallbackInterface()
-		{
+		if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+			new AsyncTaskCallback(getActivity(),
+					new AsyncTaskCallbackInterface() {
 
-			@Override
-			public String backGroundCallback() {
-				try {
+						@Override
+						public String backGroundCallback() {
+							try {
 
-					// Connecting to openERP
+								// Connecting to openERP
 
-					OEDomain domain = new OEDomain();
-					PreferencesHelper pref = new PreferencesHelper(
-							TasksFragment.this.getActivity());
-					Log.d(tag, pref.GetPreferences(PreferencesHelper.Uid));
-					domain.add("surveyor", "=", Integer.parseInt(pref
-							.GetPreferences(PreferencesHelper.Uid)));
-					domain.add("status", "not in",
-							new JSONArray().put("waitnig_approve").put("done")
-									.put("cancel"));
-					OEFieldsHelper fields = new OEFieldsHelper(new String[] {
-							"name", "customer", "atm", "country", "task_month",
-							"visit_time" });
-					Log.d(tag, "domain " + domain);
-					Log.d(tag, "domain JOSNOBJ" + domain.get());
-					Log.d(tag, "fields " + fields);
-					mOpenERP = ApplicationClass.getInstance().getOpenERPCon();
-					searchResposne = mOpenERP.search_read(
-							"atm.surverys.management", fields.get(),
-							domain.get());
-					tasksArray = searchResposne.getJSONArray("records");
-					for (int i = 0; i < tasksArray.length(); i++) {
-						String atmDetails[] = tasksArray.getJSONObject(i)
-								.getJSONArray("atm").getString(1).split(",");
-                        Log.d("atm details",tasksArray.getJSONObject(i)
-		                .getJSONArray("atm")+"");
-                            int n=atmDetails.length;
-						if (atmDetails.length > 2) {
-							String latVal = atmDetails[n-2];
-							String langVal = atmDetails[n-1];
-							double lat = Double.parseDouble(latVal);
-							double lon = Double.parseDouble(langVal);
-							atmLocation = new Location("atmLocation");
-							atmLocation.setLatitude(lat);
-							atmLocation.setLongitude(lon);
+								OEDomain domain = new OEDomain();
+								PreferencesHelper pref = new PreferencesHelper(
+										TasksFragment.this.getActivity());
+								Log.d(tag, pref
+										.GetPreferences(PreferencesHelper.Uid));
+								domain.add(
+										"surveyor",
+										"=",
+										Integer.parseInt(pref
+												.GetPreferences(PreferencesHelper.Uid)));
+								domain.add("status", "not in", new JSONArray()
+										.put("waitnig_approve").put("done")
+										.put("cancel"));
+								OEFieldsHelper fields = new OEFieldsHelper(
+										new String[] { "name", "customer",
+												"atm", "country", "task_month",
+												"visit_time" });
+								Log.d(tag, "domain " + domain);
+								Log.d(tag, "domain JOSNOBJ" + domain.get());
+								Log.d(tag, "fields " + fields);
+								mOpenERP = ApplicationClass.getInstance()
+										.getOpenERPCon();
+								searchResposne = mOpenERP.search_read(
+										"atm.surverys.management",
+										fields.get(), domain.get());
+								tasksArray = searchResposne
+										.getJSONArray("records");
+								for (int i = 0; i < tasksArray.length(); i++) {
+																		
+
+								}
+								Log.d("response", tasksArray.toString());
+
+								return tasksArray.toString();
+							} catch (ClientProtocolException e) {
+								e.printStackTrace();
+								return null;
+							} catch (JSONException e) {
+								e.printStackTrace();
+								return null;
+							} catch (IOException e) {
+								e.printStackTrace();
+								return null;
+							} catch (OEVersionException e) {
+								e.printStackTrace();
+								return null;
+							}
+
 						}
-						if (location != null) {
-							double distance = Math.round((atmLocation
-									.distanceTo(location) / 1000) * 100.0) / 100.0;
-							tasksArray.getJSONObject(i).put("distance",
-									distance);
+
+						@Override
+						public void foregroundCallback(String result) {
+							try {
+
+								JSONArray tasksArray = new JSONArray(result);
+								mTaskAdapter = new TaskAdapter(tasksArray);
+
+								taskList.setAdapter(mTaskAdapter);
+							} catch (JSONException e) {
+								e.printStackTrace();
+							}
 						}
-
-					}
-					Log.d("response", tasksArray.toString());
-
-					return tasksArray.toString();
-				} catch (ClientProtocolException e) {
-					e.printStackTrace();
-					return null;
-				} catch (JSONException e) {
-					e.printStackTrace();
-					return null;
-				} catch (IOException e) {
-					e.printStackTrace();
-					return null;
-				} catch (OEVersionException e) {
-					e.printStackTrace();
-					return null;
-				}
-
-			}
-
-			@Override
-			public void foregroundCallback(String result) {
-				try {
-
-					JSONArray tasksArray = new JSONArray(result);
-					Log.d("distance", tasksArray.toString());
-					mTaskAdapter = new TaskAdapter(tasksArray);
-
-					taskList.setAdapter(mTaskAdapter);
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-			}
-		}).execute();
-		Criteria criteria = new Criteria();
-		provider = locationManager.getBestProvider(criteria, false);
-		if (provider != null && !provider.equals("")) {
-			location = locationManager.getLastKnownLocation(provider);
-			locationManager.requestLocationUpdates(provider, 20000, 1, this);
-			if (location != null)
-				onLocationChanged(location);
-			else
-				Toast.makeText(getActivity(), "Location can't be retrieved",
-						Toast.LENGTH_SHORT).show();
+					}).execute();
 
 		} else {
-			Toast.makeText(getActivity(), "No Provider Found",
-					Toast.LENGTH_SHORT).show();
+			RelativeLayout errorView = (RelativeLayout) rootView
+					.findViewById(R.id.near_by_coverframe);
+			errorView.setVisibility(View.VISIBLE);
+			TextView errorText = (TextView) rootView
+					.findViewById(R.id.tasks_error_msg);
+			errorText
+					.setText("Location disabled. \nPlease turn on your location services to continue.");
+			ImageButton refresh = (ImageButton) rootView
+					.findViewById(R.id.tasks_refresh_frame_button);
+			refresh.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					new SweetAlertDialog(getActivity(),
+							SweetAlertDialog.WARNING_TYPE)
+							.setTitleText("GPS Disabled!")
+							.setContentText(
+									"Do you want us to open settings to turn on Location Services")
+							.setConfirmText("Yes,take me there!")
+							.setConfirmClickListener(
+									new SweetAlertDialog.OnSweetClickListener() {
+										@Override
+										public void onClick(
+												SweetAlertDialog sDialog) {
+											sDialog.dismissWithAnimation();
+											Intent i = new Intent(
+													new Intent(
+															Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+											getActivity().startActivity(i);
+										}
+									})
+							.showCancelButton(true)
+							.setCancelClickListener(
+									new SweetAlertDialog.OnSweetClickListener() {
+										@Override
+										public void onClick(
+												SweetAlertDialog sDialog) {
+											sDialog.cancel();
+										}
+									}).show();
+
+				}
+			});
+
 		}
 		taskList.setOnItemClickListener(new OnItemClickListener() {
 
@@ -238,8 +263,19 @@ public class TasksFragment extends Fragment implements LocationListener {
 			if (convertView == null) {
 				convertView = LayoutInflater.from(getActivity()).inflate(
 						R.layout.tast_list, null);
+				LinearLayout distanceLayout = (LinearLayout) convertView
+						.findViewById(R.id.distance_linear_layout);
+				TextView kmstext = (TextView) convertView
+						.findViewById(R.id.kms);
+				
+				
+				
+
+				distanceLayout.setVisibility(View.VISIBLE);
+				kmstext.setVisibility(View.VISIBLE);
+
 				distancelabel = (TextView) convertView
-						.findViewById(R.id.task_id);
+						.findViewById(R.id.distance);
 				customer = (TextView) convertView.findViewById(R.id.customer);
 				atm = (TextView) convertView.findViewById(R.id.atm);
 				date = (TextView) convertView.findViewById(R.id.taskdate);
@@ -247,24 +283,58 @@ public class TasksFragment extends Fragment implements LocationListener {
 					customer.setText(taskData.getJSONObject(position)
 							.getJSONArray("customer").getString(1)
 							+ "");
+					Log.d(tag,
+							"atmarr : "
+									+ taskData.getJSONObject(position)
+											.getJSONArray("atm"));
 					String[] atmarr = taskData.getJSONObject(position)
 							.getJSONArray("atm").getString(1).split(",");
-					if(atmarr.length>0)
-					{
-					String atm1 = atmarr[0];
-					
+					if (atmarr.length > 0) {
+						String atm1 = atmarr[0];
 
-					atm.setText(atm1 +"");
+						atm.setText(atm1 + "");
 					}
 					date.setText(dateUtility.getFriendlyDateString(dateUtility
 							.makeDate(taskData.getJSONObject(position)
 									.getString("visit_time"))));
+					String atmDetails[] = tasksArray
+							.getJSONObject(position)
+							.getJSONArray("atm").getString(1)
+							.split(",");
+					Log.d("atm details",
+							tasksArray.getJSONObject(position)
+									.getJSONArray("atm") + "");
+					int n = atmDetails.length;
+					if (atmDetails.length > 2) {
+						String latVal = atmDetails[n - 2];
+						String langVal = atmDetails[n - 1];
+						double lat = Double.parseDouble(latVal);
+						double lon = Double
+								.parseDouble(langVal);
+						atmLocation = new Location(
+								"atmLocation");
+						atmLocation.setLatitude(lat);
+						atmLocation.setLongitude(lon);
+						GetLocation getLocation = new GetLocation(
+								getActivity());
+						location = getLocation.getCurrentLocation();
+						if (location != null) {
+							double distance = Math.round((atmLocation
+									.distanceTo(location) / 1000) * 100.0) / 100.0;
+							taskData.getJSONObject(position).put(
+									"distance", distance);
+						}else{
+							Log.e(tag,"Location Null" );
+						}
+					}
 					distancelabel.setText(((Double) taskData.getJSONObject(
 							position).get("distance")).intValue()
 							+ "");
 
 				} catch (JSONException e) {
-					e.printStackTrace();
+					distanceLayout.setVisibility(View.GONE);
+					kmstext.setVisibility(View.GONE);
+					Log.d(tag, "JOSN EXCEPTION" + e.getMessage());
 				}
 
 			}

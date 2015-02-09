@@ -6,7 +6,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.IntentCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -68,9 +67,8 @@ public class AsyncTaskCallback extends AsyncTask<Void, Integer, String> {
 			mAsyncTaskCallbackInterface.foregroundCallback(result);
 		} else {
 			Log.d(tag, "foregroundCallback result" + result);
-
 		}
-		super.onPostExecute(result);
+		
 	}
 
 	public interface AsyncTaskCallbackInterface {

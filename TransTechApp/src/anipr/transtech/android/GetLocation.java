@@ -8,6 +8,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
+
 public class GetLocation implements LocationListener {
 
 	Activity activity;
@@ -16,8 +17,8 @@ public class GetLocation implements LocationListener {
 	int ENABLED = 1;
 	int DISABLED = 2;
 	int status;
+	Location location = null;
 	public LocationManager locationManager;
-	Location mLocation;
 
 	public GetLocation(Activity mContext) {
 		this.activity = mContext;
@@ -28,24 +29,24 @@ public class GetLocation implements LocationListener {
 	}
 
 	public Location getCurrentLocation() {
-		try {
-			String provider = LocationManager.GPS_PROVIDER;
-			// String networkProvider = LocationManager.NETWORK_PROVIDER;
-			locationManager.requestLocationUpdates(
-					LocationManager.NETWORK_PROVIDER, 0, 2000, this);
-			mLocation = locationManager.getLastKnownLocation(provider);
-		} catch (Exception e) {
-			Log.e("GetLocaion Class", "Error while fetching location");
-			e.printStackTrace();
-		}
-		return mLocation;
+		
+				  	try {
+						String provider = LocationManager.GPS_PROVIDER;
+						String networkProvider = LocationManager.NETWORK_PROVIDER;
+						locationManager.requestLocationUpdates(
+								LocationManager.NETWORK_PROVIDER, 0, 2000, GetLocation.this);
+						location = locationManager.getLastKnownLocation(networkProvider);
+					} catch (Exception e) {
+						Log.e("GetLocaion Class", "Error while fetching location");
+						e.printStackTrace();
+					}
+		return  location;
 	}
 
 	@Override
 	public void onLocationChanged(Location location) {
 		lat = location.getLatitude();
 		lng = location.getLongitude();
-		mLocation = location;
 	}
 
 	@Override
