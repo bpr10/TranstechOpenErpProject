@@ -120,86 +120,95 @@ public class AfterImages extends Fragment {
 			@Override
 			public void onClick(View v) {
 				Log.d("taskpalod values", TaskForm.taskPayload + "");
-				new AsyncTaskCallback(getActivity(),
-						new AsyncTaskCallbackInterface() {
-							@Override
-							public String backGroundCallback()
-									throws JSONException {
-								OpenERP mOpenERP;
-								try {
-									if (TaskForm.taskFlag == 1) {
-										TaskForm.noComments();
-									}
-									mOpenERP = ApplicationClass.getInstance()
-											.getOpenERPCon();
-									JSONObject response = mOpenERP
-											.createNew("survey.info",
-													TaskForm.taskPayload);
+				if (TaskForm.imageUris.size() > 1) {
+					new AsyncTaskCallback(getActivity(),
+							new AsyncTaskCallbackInterface() {
+								@Override
+								public String backGroundCallback()
+										throws JSONException {
+									OpenERP mOpenERP;
+
 									try {
-										if (response.get("result") != null) {
-											boolean updateResponse = mOpenERP
-													.updateValues(
-															"atm.surverys.management",
-															new JSONObject()
-																	.put("status",
-																			"waitnig_approve"),
-															TaskForm.taskId);
-											Log.d(tag, "updateResponse "
-													+ updateResponse);
-											return response.toString();
+										if (TaskForm.taskFlag == 1) {
+											TaskForm.noComments();
 										}
-										Log.d(tag, response.toString());
+										mOpenERP = ApplicationClass
+												.getInstance().getOpenERPCon();
+										JSONObject response = mOpenERP
+												.createNew("survey.info",
+														TaskForm.taskPayload);
+										try {
+											if (response.get("result") != null) {
+												boolean updateResponse = mOpenERP
+														.updateValues(
+																"atm.surverys.management",
+																new JSONObject()
+																		.put("status",
+																				"waitnig_approve"),
+																TaskForm.taskId);
+												Log.d(tag, "updateResponse "
+														+ updateResponse);
+												return response.toString();
+											}
+											Log.d(tag, response.toString());
 
-									} catch (Exception e) {
+										} catch (Exception e) {
 
+										}
+
+									} catch (ClientProtocolException e) {
+										e.printStackTrace();
+									} catch (IOException e) {
+										e.printStackTrace();
+									} catch (OEVersionException e) {
+										e.printStackTrace();
 									}
-
-								} catch (ClientProtocolException e) {
-									e.printStackTrace();
-								} catch (IOException e) {
-									e.printStackTrace();
-								} catch (OEVersionException e) {
-									e.printStackTrace();
+									return null;
 								}
-								return null;
-							}
 
-							@Override
-							public void foregroundCallback(String result) {
-								Log.d(tag, result);
-								SweetAlertDialog sDialog = new SweetAlertDialog(
-										getActivity(),
-										SweetAlertDialog.SUCCESS_TYPE)
-										.setTitleText("Done!")
+								@Override
+								public void foregroundCallback(String result) {
+									Log.d(tag, result);
+									SweetAlertDialog sDialog = new SweetAlertDialog(
+											getActivity(),
+											SweetAlertDialog.SUCCESS_TYPE)
+											.setTitleText("Done!")
 
-										.setContentText(
-												"Survey Request Recorded.")
-										.setConfirmText("Okay")
-										.setConfirmClickListener(
-												new OnSweetClickListener() {
+											.setContentText(
+													"Survey Request Recorded.")
+											.setConfirmText("Okay")
+											.setConfirmClickListener(
+													new OnSweetClickListener() {
 
-													@Override
-													public void onClick(
-															SweetAlertDialog sweetAlertDialog) {
+														@Override
+														public void onClick(
+																SweetAlertDialog sweetAlertDialog) {
 
-														Intent i = new Intent(
-																getActivity(),
-																MainActivity.class);
-														i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-														i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-														sweetAlertDialog
-																.dismissWithAnimation();
-														startActivity(i);
-														getActivity().finish();
+															Intent i = new Intent(
+																	getActivity(),
+																	MainActivity.class);
+															i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+															i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+															sweetAlertDialog
+																	.dismissWithAnimation();
+															startActivity(i);
+															getActivity()
+																	.finish();
 
-													}
-												});
-								sDialog.setCancelable(false);
-								sDialog.show();
+														}
+													});
+									sDialog.setCancelable(false);
+									sDialog.show();
 
-							}
+								}
 
-						}).execute();
+							}).execute();
+
+				} else {
+					Toast.makeText(getActivity(),
+							"Plase take atleast one image", Toast.LENGTH_LONG)
+							.show();
+				}
 
 			}
 		});

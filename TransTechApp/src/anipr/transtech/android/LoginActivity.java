@@ -13,7 +13,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -46,8 +45,7 @@ public class LoginActivity extends Activity {
 
 			}
 		});
-		password.setOnKeyListener(onSoftKeyboardDonePress);
-
+		
 	}
 
 	void Login() {
@@ -116,8 +114,6 @@ public class LoginActivity extends Activity {
 											MainActivity.class);
 									startActivity(i);
 									finish();
-
-									LoginActivity.this.finish();
 								} else {
 									Toast.makeText(getApplicationContext(),
 											"Please try again.",
@@ -129,14 +125,5 @@ public class LoginActivity extends Activity {
 		}
 	}
 
-	View.OnKeyListener onSoftKeyboardDonePress = new View.OnKeyListener() {
-		public boolean onKey(View v, int keyCode, KeyEvent event) {
-			if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-				Login();
-
-				return false;
-			}
-			return false;
-		};
-	};
+	
 }
