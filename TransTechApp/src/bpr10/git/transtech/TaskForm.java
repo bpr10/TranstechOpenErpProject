@@ -51,7 +51,7 @@ public class TaskForm extends BaseActivity {
 	ViewPager mViewPager;
 	ImageView firstDot, secondDot, thirdDot, forthDot;
 	ImageView nextItem, previousItem;
-	RelativeLayout previousItmLayout,nextItemLayout;
+	RelativeLayout previousItmLayout, nextItemLayout;
 	protected FragmentPageAdapter mFragmentPageAdapter;
 	Bundle bundle;
 	private String tag = getClass().getSimpleName();
@@ -103,8 +103,8 @@ public class TaskForm extends BaseActivity {
 		forthDot = (ImageView) findViewById(R.id.forth_dot);
 		nextItem = (ImageView) findViewById(R.id.next_item);
 		previousItem = (ImageView) findViewById(R.id.previous_item);
-		previousItmLayout=(RelativeLayout) findViewById(R.id.previous_item_layout);
-		nextItemLayout=(RelativeLayout) findViewById(R.id.next_item_layout);
+		previousItmLayout = (RelativeLayout) findViewById(R.id.previous_item_layout);
+		nextItemLayout = (RelativeLayout) findViewById(R.id.next_item_layout);
 		previousItmLayout.setVisibility(View.INVISIBLE);
 		firstDot.setImageResource(R.drawable.dot_active);
 		secondDot.setImageResource(R.drawable.dot_inactive);
@@ -168,25 +168,24 @@ public class TaskForm extends BaseActivity {
 			public void onPageScrolled(int arg0, float arg1, int arg2) {
 			}
 		});
-		
-			nextItem.setOnClickListener(new OnClickListener() {
+
+		nextItem.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-					
-					mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1,
-								true);
-			
+
+				mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1, true);
+
 			}
 		});
 		previousItem.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				
+
 				mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1, true);
-				}
-			
+			}
+
 		});
 		try {
 			taskObj = new JSONObject(getIntent().getStringExtra(
@@ -492,35 +491,35 @@ public class TaskForm extends BaseActivity {
 				.unregisterReceiver(mNoCommentCheckListener);
 		super.onPause();
 	}
-	
-	 protected static void noComments()
-		{
-			
-			taskPayload.remove("check_list_2");
-			taskPayload.remove("check_list_3");
-			taskPayload.remove("check_list_4");
-			taskPayload.remove("check_list_5");
-			taskPayload.remove("check_list_6");
-			taskPayload.remove("check_list_7");
-			taskPayload.remove("check_list_8");
-			taskPayload.remove("check_list_9");
-			taskPayload.remove("check_list_10");
-			taskPayload.remove("check_list_11");
-			taskPayload.remove("check_list_12");
-			taskPayload.remove("check_list_13");
-			taskPayload.remove("check_list_14");
-			taskPayload.remove("check_list_15");
-			taskPayload.remove("check_list_16");
-			taskPayload.remove("check_list_17");
-			taskPayload.remove("check_list_18");
-			taskPayload.remove("check_list_19");
-			taskPayload.remove("check_list_20");
-			taskPayload.remove("check_list_21");
-			taskPayload.remove("check_list_22");
-			taskPayload.remove("check_list_23");
-			Log.d("nocoments click", taskPayload.toString());
-			
-		}
+
+	protected static void noComments() {
+
+		taskPayload.remove("check_list2");
+		taskPayload.remove("check_list3");
+		taskPayload.remove("check_list4");
+		taskPayload.remove("check_list5");
+		taskPayload.remove("check_list6");
+		taskPayload.remove("check_list7");
+		taskPayload.remove("check_list8");
+		taskPayload.remove("check_list9");
+		taskPayload.remove("check_list10");
+		taskPayload.remove("check_list11");
+		taskPayload.remove("check_list12");
+		taskPayload.remove("check_list13");
+		taskPayload.remove("check_list14");
+		taskPayload.remove("check_list15");
+		taskPayload.remove("check_list16");
+		taskPayload.remove("check_list17");
+		taskPayload.remove("check_list18");
+		taskPayload.remove("check_list19");
+		taskPayload.remove("check_list20");
+		taskPayload.remove("check_list21");
+		taskPayload.remove("check_list22");
+		taskPayload.remove("check_list23");
+		taskPayload.remove("check_list24");
+		Log.d("nocoments click", taskPayload.toString());
+
+	}
 
 	class NoCommentCheckListener extends BroadcastReceiver {
 

@@ -22,7 +22,8 @@ public class CheckList1 extends Fragment {
 	CheckBox noComments, transactionalStickersFaded, collectCash,
 			collectReceipt, insertcard, insertCash, networkSticker,
 			instructionSticker, vaultBranding, atmId;
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
 		View rootView = inflater
@@ -39,14 +40,13 @@ public class CheckList1 extends Fragment {
 				.findViewById(R.id.instruction_sticker);
 		vaultBranding = (CheckBox) rootView.findViewById(R.id.vault_branding);
 		atmId = (CheckBox) rootView.findViewById(R.id.atm_id);
-	
+
 		noComments.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
 				if (noComments.isChecked()) {
-				TaskForm.noComments();
 					TaskForm.taskFlag = 1;
 
 				} else {
@@ -69,14 +69,14 @@ public class CheckList1 extends Fragment {
 					vaultBranding.setVisibility(View.INVISIBLE);
 					atmId.setVisibility(View.INVISIBLE);
 					transactionalStickersFaded.setChecked(false);
-					collectCash.setChecked(false);
-					collectReceipt.setChecked(false);
-					insertcard.setChecked(false);
-					insertCash.setChecked(false);
-					networkSticker.setChecked(false);
-					instructionSticker.setChecked(false);
-					vaultBranding.setChecked(false);
-					atmId.setChecked(false);
+//					collectCash.setChecked(false);
+//					collectReceipt.setChecked(false);
+//					insertcard.setChecked(false);
+//					insertCash.setChecked(false);
+//					networkSticker.setChecked(false);
+//					instructionSticker.setChecked(false);
+//					vaultBranding.setChecked(false);
+//					atmId.setChecked(false);
 
 				} else {
 					transactionalStickersFaded.setVisibility(View.VISIBLE);
@@ -91,7 +91,7 @@ public class CheckList1 extends Fragment {
 
 				}
 				try {
-					TaskForm.taskPayload.put("check_list_1", isChecked);
+					TaskForm.taskPayload.put("check_list1", isChecked);
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -125,6 +125,5 @@ public class CheckList1 extends Fragment {
 
 		return rootView;
 	}
-	
 
 }

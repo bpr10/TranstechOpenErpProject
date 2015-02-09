@@ -123,13 +123,16 @@ public class AfterImages extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				Log.d("taskpalod values",TaskForm.taskPayload+"");
+				Log.d("taskpalod values", TaskForm.taskPayload + "");
 				new AsyncTaskCallback(getActivity(),
 						new AsyncTaskCallbackInterface() {
 							@Override
 							public String backGroundCallback() {
 								OpenERP mOpenERP;
 								try {
+									if (TaskForm.taskFlag == 1) {
+										TaskForm.noComments();
+									}
 									mOpenERP = ApplicationClass.getInstance()
 											.getOpenERPCon();
 									JSONObject response = mOpenERP
