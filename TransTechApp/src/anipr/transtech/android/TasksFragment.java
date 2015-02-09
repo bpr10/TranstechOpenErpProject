@@ -1,4 +1,4 @@
-package bpr10.git.transtech;
+package anipr.transtech.android;
 
 import java.io.IOException;
 
@@ -37,8 +37,7 @@ import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
-
+import anipr.transtech.android.AsyncTaskCallback.AsyncTaskCallbackInterface;
 import com.openerp.orm.OEFieldsHelper;
 
 public class TasksFragment extends Fragment implements LocationListener {
@@ -53,7 +52,7 @@ public class TasksFragment extends Fragment implements LocationListener {
 	private String provider;
 	private Location location, atmLocation;
 	private JSONArray tasksArray;
-	public static Double currentLat, currentLang;
+	public static Double currentLat,currentLang;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,10 +63,11 @@ public class TasksFragment extends Fragment implements LocationListener {
 		locationManager = (LocationManager) getActivity().getSystemService(
 				Context.LOCATION_SERVICE);
 		setHasOptionsMenu(true);
-		new AsyncTaskCallback(getActivity(), new AsyncTaskCallbackInterface() {
+		new AsyncTaskCallback(getActivity(), new AsyncTaskCallbackInterface()
+		{
 
 			@Override
-			public String backGroundCallback() throws JSONException {
+			public String backGroundCallback() {
 				try {
 
 					// Connecting to openERP
@@ -95,11 +95,12 @@ public class TasksFragment extends Fragment implements LocationListener {
 					for (int i = 0; i < tasksArray.length(); i++) {
 						String atmDetails[] = tasksArray.getJSONObject(i)
 								.getJSONArray("atm").getString(1).split(",");
-						int n = atmDetails.length;
-                       
+                        Log.d("atm details",tasksArray.getJSONObject(i)
+		                .getJSONArray("atm")+"");
+                            int n=atmDetails.length;
 						if (atmDetails.length > 2) {
-							String latVal = atmDetails[n - 2];
-							String langVal = atmDetails[n - 1];
+							String latVal = atmDetails[n-2];
+							String langVal = atmDetails[n-1];
 							double lat = Double.parseDouble(latVal);
 							double lon = Double.parseDouble(langVal);
 							atmLocation = new Location("atmLocation");
@@ -118,6 +119,9 @@ public class TasksFragment extends Fragment implements LocationListener {
 
 					return tasksArray.toString();
 				} catch (ClientProtocolException e) {
+					e.printStackTrace();
+					return null;
+				} catch (JSONException e) {
 					e.printStackTrace();
 					return null;
 				} catch (IOException e) {
@@ -144,7 +148,21 @@ public class TasksFragment extends Fragment implements LocationListener {
 				}
 			}
 		}).execute();
+		Criteria criteria = new Criteria();
+		provider = locationManager.getBestProvider(criteria, false);
+		if (provider != null && !provider.equals("")) {
+			location = locationManager.getLastKnownLocation(provider);
+			locationManager.requestLocationUpdates(provider, 20000, 1, this);
+			if (location != null)
+				onLocationChanged(location);
+			else
+				Toast.makeText(getActivity(), "Location can't be retrieved",
+						Toast.LENGTH_SHORT).show();
 
+		} else {
+			Toast.makeText(getActivity(), "No Provider Found",
+					Toast.LENGTH_SHORT).show();
+		}
 		taskList.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -231,14 +249,12 @@ public class TasksFragment extends Fragment implements LocationListener {
 							+ "");
 					String[] atmarr = taskData.getJSONObject(position)
 							.getJSONArray("atm").getString(1).split(",");
-					
 					if(atmarr.length>0)
 					{
 					String atm1 = atmarr[0];
 					
 
 					atm.setText(atm1 +"");
-
 					}
 					date.setText(dateUtility.getFriendlyDateString(dateUtility
 							.makeDate(taskData.getJSONObject(position)
@@ -259,7 +275,7 @@ public class TasksFragment extends Fragment implements LocationListener {
 
 	@Override
 	public void onLocationChanged(Location location) {
-		this.location = location;
+
 	}
 
 	@Override
@@ -269,27 +285,10 @@ public class TasksFragment extends Fragment implements LocationListener {
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		Criteria criteria = new Criteria();
-		provider = locationManager.getBestProvider(criteria, false);
-		if (provider != null && !provider.equals("")) {
-			location = locationManager.getLastKnownLocation(provider);
-			locationManager.requestLocationUpdates(provider, 20000, 1, this);
-			if (location != null)
-				onLocationChanged(location);
-			else
-				Toast.makeText(getActivity(), "Location can't be retrieved",
-						Toast.LENGTH_SHORT).show();
-
-		} else {
-			Toast.makeText(getActivity(), "No Provider Found",
-					Toast.LENGTH_SHORT).show();
-		}
 	}
 
 	@Override
 	public void onProviderDisabled(String provider) {
-		Toast.makeText(getActivity(), "Please Enable Location Services",
-				Toast.LENGTH_SHORT).show();
 	}
 
 	@Override

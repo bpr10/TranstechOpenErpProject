@@ -52,14 +52,13 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:gravity="center"
-                android:text="5.3"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/white_color"
                 android:textStyle="bold" />
         </LinearLayout>
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/kms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"

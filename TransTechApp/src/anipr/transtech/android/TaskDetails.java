@@ -11,8 +11,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class TaskDetails extends BaseActivity{
-	TextView customer, ATMDtails, locationText, distance, dueDate,textViewDis;
+public class TaskDetails extends BaseActivity {
+	TextView customer, ATMDtails, locationText, distance, dueDate, textViewDis;
 	Button surveyNow;
 	private String tag = getClass().getSimpleName();
 	JSONObject taskObj = new JSONObject();
@@ -33,7 +33,7 @@ public class TaskDetails extends BaseActivity{
 		distance = (TextView) findViewById(R.id.distance);
 		dueDate = (TextView) findViewById(R.id.due_date);
 		surveyNow = (Button) findViewById(R.id.survoeynow_but);
-		textViewDis=(TextView) findViewById(R.id.textView_distance);
+		textViewDis = (TextView) findViewById(R.id.textView_distance);
 		dateUtility = new DateUtility();
 
 		try {
@@ -47,36 +47,30 @@ public class TaskDetails extends BaseActivity{
 			customerText = taskObj.getJSONArray("customer").getString(1);
 			String[] atmarr = taskObj.getJSONArray("atm").getString(1)
 					.split(",");
-			if(atmarr.length>0)
-			{
-			atm1 = atmarr[0];
-			
-			ATMDtails.setText(atm1);
+			if (atmarr.length > 0) {
+				atm1 = atmarr[0];
+
+				ATMDtails.setText(atm1);
 			}
 			country = taskObj.getJSONArray("country").getString(1);
+
+			dueDate.setText(dateUtility.getFriendlyDateString(dateUtility
+					.makeDate(taskObj.getString("visit_time"))));
 			distanceVal = taskObj.get("distance").toString();
-			if(distanceVal!=null)
-			{
+			if (distanceVal != null) {
 				distance.setText(distanceVal);
-			}
-			else
-			{
+			} else {
 				textViewDis.setVisibility(View.GONE);
 				distance.setVisibility(View.GONE);
 			}
-			
-			dueDate.setText(dateUtility.getFriendlyDateString(dateUtility
-					.makeDate(taskObj
-							.getString("visit_time"))));
-
 		} catch (JSONException e1) {
-			// TODO Auto-generated catch block
+			textViewDis.setVisibility(View.GONE);
+			distance.setVisibility(View.GONE);
 			e1.printStackTrace();
 		}
 		customer.setText(customerText);
-		
+
 		locationText.setText(country);
-		
 
 		surveyNow.setOnClickListener(new OnClickListener() {
 
