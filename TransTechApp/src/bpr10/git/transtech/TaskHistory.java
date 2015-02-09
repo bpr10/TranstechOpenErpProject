@@ -149,9 +149,7 @@ public class TaskHistory extends Fragment {
 					if(atmarr.length>1)
 					{
 					String a1 = atmarr[1];
-					String a2 = atmarr[2];
-
-					atm.setText(a1 + "");
+				     atm.setText(a1 + "");
 					}
 					date.setText(dateUtility.getFriendlyDateString(dateUtility
 							.makeDate(taskData.getJSONObject(position)
