@@ -380,6 +380,7 @@ public class CreateAlerts extends Fragment {
 					e.printStackTrace();
 					return null;
 				} catch (JSONException e) {
+					Log.d("session expired", "JSON ERROR");
 					e.printStackTrace();
 					return null;
 				} catch (IOException e) {
@@ -461,7 +462,7 @@ public class CreateAlerts extends Fragment {
 		new AsyncTaskCallback(getActivity(), new AsyncTaskCallbackInterface() {
 
 			@Override
-			public String backGroundCallback() {
+			public String backGroundCallback() throws JSONException {
 				try {
 
 					// Connecting to openERP
@@ -479,10 +480,7 @@ public class CreateAlerts extends Fragment {
 				} catch (ClientProtocolException e) {
 					e.printStackTrace();
 					return null;
-				} catch (JSONException e) {
-					e.printStackTrace();
-					return null;
-				} catch (IOException e) {
+				}  catch (IOException e) {
 					e.printStackTrace();
 					return null;
 				} catch (OEVersionException e) {

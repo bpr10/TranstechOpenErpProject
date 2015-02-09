@@ -380,7 +380,7 @@ public class TaskForm extends BaseActivity {
 		new AsyncTaskCallback(this, new AsyncTaskCallbackInterface() {
 
 			@Override
-			public String backGroundCallback() {
+			public String backGroundCallback() throws JSONException {
 				OpenERP mOpenERP;
 				try {
 					mOpenERP = ApplicationClass.getInstance().getOpenERPCon();
@@ -391,8 +391,6 @@ public class TaskForm extends BaseActivity {
 							fields.get());
 					return remarksResponse.toString();
 				} catch (ClientProtocolException e) {
-					e.printStackTrace();
-				} catch (JSONException e) {
 					e.printStackTrace();
 				} catch (IOException e) {
 					e.printStackTrace();

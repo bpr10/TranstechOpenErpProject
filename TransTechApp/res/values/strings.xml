@@ -63,6 +63,9 @@
     <string name="front_view">Front View</string>
     <string name="back_view">Back View</string>
     <string name="side_view">Side View</string>
-<!--     <string name="about_us_description">Trans Tech begain it's humble roots</string> -->
+    <!-- <string name="about_us_description">Trans Tech begain it\\'s humble roots</string> -->
+    <string name="about_us_text">TransTech started in Dubai in the year 2003 .
+We reached the impressive mile-stone of servicing 60% of ATMs in UAE with it\'s products and services in 2011-2013 from offices in Sharjah Airport Free Zone, Qatar, Oman and Saudi Arabia.
+\n                    With 10 years and multiple achievements, we continue to satisfy customers at cost-effective prices.</string>
 
 </resources>
