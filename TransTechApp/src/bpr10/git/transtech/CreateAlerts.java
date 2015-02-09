@@ -15,7 +15,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -192,7 +191,6 @@ public class CreateAlerts extends Fragment {
 		 // TODO Auto-generated catch block
 		 e.printStackTrace();
 		 }
-		 Log.d("sateeeeee", stateId);
 		 getAtmDetails();
 		 }
 		
@@ -287,12 +285,10 @@ public class CreateAlerts extends Fragment {
 		
 		 mOpenERP = ApplicationClass.getInstance()
 		 .getOpenERPCon();
-		 Log.d("alertpaylod",alertPayload.toString()
-		 );
+		 ;
 		 JSONObject response = mOpenERP
 		 .createNew("internal.alerts",
 		 alertPayload);
-		 Log.d("cretealert request",response.toString());
 		 return response.toString();
 		 }catch(Exception e)
 		 {
@@ -303,7 +299,6 @@ public class CreateAlerts extends Fragment {
 		
 		 @Override
 		 public void foregroundCallback(String result) {
-		 Log.d("forgeground called", result);
 		 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 		 getActivity());
 		 alertDialogBuilder.setTitle("Success");
@@ -354,44 +349,37 @@ public class CreateAlerts extends Fragment {
 					// Connecting to openERP
 
 					OEDomain domain = new OEDomain();
-					Log.d("domainvalues", domain.getArray().toString());
 					OEFieldsHelper fields = new OEFieldsHelper(new String[] {
 							"name", "id" });
 					OEFieldsHelper statefields = new OEFieldsHelper(
 							new String[] { "name", "state_id" });
 					OEFieldsHelper reasonfilelds = new OEFieldsHelper(
 							new String[] { "reason_id", "name" });
-					Log.d("reasonfilelds", reasonfilelds.get().toString());
 					OEFieldsHelper assigntofields = new OEFieldsHelper(
 							new String[] { "user_id", "name" });
 					mOpenERP = ApplicationClass.getInstance().getOpenERPCon();
 					customerResponce = mOpenERP.search_read("customer.info",
 							fields.get(), domain.get());
 
-					Log.d("customer", customerResponce.toString());
 					OEDomain statedomain = new OEDomain();
 					statedomain.add("country_id", "=", "AE");
 
 					stateResponce = mOpenERP.search_read("res.country.state",
 							statefields.get(), statedomain.get());
-					Log.d("state", stateResponce.toString());
 					reasonResponce = mOpenERP.search_read("reason.code",
 							reasonfilelds.get(), domain.get());
 
-					Log.d("reasonResponce", reasonResponce.toString());
 					OEDomain domain1 = new OEDomain();
 					domain1.add("role", "=", "Surveyor");
 
 					assignToResponce = mOpenERP.search_read("res.users",
 							assigntofields.get(), domain1.get());
 
-					Log.d("assignToResponce", assignToResponce.toString());
 					return customerResponce.toString();
 				} catch (ClientProtocolException e) {
 					e.printStackTrace();
 					return null;
 				} catch (JSONException e) {
-					Log.d("session expired", "JSON ERROR");
 					e.printStackTrace();
 					return null;
 				} catch (IOException e) {
@@ -480,16 +468,13 @@ public class CreateAlerts extends Fragment {
 
 					OEDomain domain = new OEDomain();
 					domain.add("state_id", "=", stateId);
-					Log.d("domainvalues", domain.getArray().toString());
 					OEFieldsHelper fields = new OEFieldsHelper(new String[] {
 							"name", "id" });
 
-					Log.d("fields", fields.get().toString());
 					mOpenERP = ApplicationClass.getInstance().getOpenERPCon();
 					atmResponce = mOpenERP.search_read("atm.info",
 							fields.get(), domain.get());
 
-					Log.d("atmVlaues", atmResponce.toString());
 					return atmResponce.toString();
 				} catch (ClientProtocolException e) {
 					e.printStackTrace();
