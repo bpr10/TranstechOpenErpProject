@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="bpr10.git.transtech"
+    package="anipr.transtech.android"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -18,7 +18,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	
     <application
-        android:name=".ApplicationClass"
+        android:name="anipr.transtech.android.ApplicationClass"
         android:allowBackup="true"
         android:icon="@drawable/ic_transtech"
         android:label="@string/app_name"
@@ -26,7 +26,7 @@
         android:logo="@drawable/ic_transtech"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".LoginActivity"
+            android:name="anipr.transtech.android.LoginActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,21 +34,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" >
+        <activity android:name="anipr.transtech.android.MainActivity" >
         </activity>
         <activity
-            android:name=".TaskForm"
+            android:name="anipr.transtech.android.TaskForm"
             android:label="Survey" >
         </activity>
         <activity
-            android:name=".TaskDetails"
+            android:name="anipr.transtech.android.TaskDetails"
             android:label="TaskDetails" >
         </activity>
         <activity
-            android:name=".BaseActivity"
+            android:name="anipr.transtech.android.BaseActivity"
             android:label="@string/title_activity_base" >
         </activity>
-        <activity android:name=".AboutUsActivity" >
+        <activity android:name="anipr.transtech.android.AboutUsActivity" >
         </activity>
     </application>
 

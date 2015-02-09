@@ -1,4 +1,4 @@
-package bpr10.git.transtech;
+package anipr.transtech.android;
 
 import java.io.IOException;
 
@@ -20,7 +20,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
+import anipr.transtech.android.AsyncTaskCallback.AsyncTaskCallbackInterface;
 
 import com.openerp.orm.OEFieldsHelper;
 

@@ -1,4 +1,4 @@
-package bpr10.git.transtech;
+package anipr.transtech.android;
 
 import java.io.IOException;
 
@@ -19,7 +19,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
+import anipr.transtech.android.AsyncTaskCallback.AsyncTaskCallbackInterface;
 
 public class LoginActivity extends Activity {
 	private EditText username, password;
@@ -120,7 +120,7 @@ public class LoginActivity extends Activity {
 									LoginActivity.this.finish();
 								} else {
 									Toast.makeText(getApplicationContext(),
-											"enter valid credentials",
+											"Please try again.",
 											Toast.LENGTH_LONG).show();
 								}
 							}

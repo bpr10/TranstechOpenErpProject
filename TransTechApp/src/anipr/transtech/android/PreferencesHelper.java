@@ -1,4 +1,4 @@
-package bpr10.git.transtech;
+package anipr.transtech.android;
 
 import android.content.Context;
 import android.content.SharedPreferences;

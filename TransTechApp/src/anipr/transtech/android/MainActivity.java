@@ -1,4 +1,4 @@
-package bpr10.git.transtech;
+package anipr.transtech.android;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

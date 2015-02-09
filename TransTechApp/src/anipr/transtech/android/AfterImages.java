@@ -1,4 +1,4 @@
-package bpr10.git.transtech;
+package anipr.transtech.android;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +26,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
+import anipr.transtech.android.AsyncTaskCallback.AsyncTaskCallbackInterface;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import cn.pedant.SweetAlert.SweetAlertDialog.OnSweetClickListener;
 
