@@ -74,7 +74,7 @@ public class LoginActivity extends Activity {
 								mOpenERP = ApplicationClass.getInstance()
 										.getOpenERPCon();
 								JSONObject response = mOpenERP.authenticate(
-										userName, userPassword, "Transtech");
+										userName, userPassword, "Test");
 								String loginres = response.toString();
 
 								Log.d("Got Login Response ", loginres);
