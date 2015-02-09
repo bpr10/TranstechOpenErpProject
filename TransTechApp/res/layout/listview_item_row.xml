@@ -23,6 +23,6 @@
         android:paddingRight="10dp"
         android:text="Folder name here."
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
-        android:textColor="#ffffff" />
+         />
 
 </RelativeLayout>

@@ -2,7 +2,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+ >
 
     <ImageView
         android:id="@+id/imageView1"
@@ -11,7 +12,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:scaleType="fitXY"
-        android:src="@drawable/loginscreen_backgroung" />
+        android:src="@drawable/loginpage_background_screen_without_logo" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -21,12 +22,10 @@
 
         <RelativeLayout
             android:id="@+id/relativeLayout1"
-           android:layout_below="@+id/fiel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_weight="0.02" >
+            android:layout_alignParentLeft="true">
 
             <ImageView
                 android:id="@+id/imageView2"
@@ -46,6 +45,8 @@
                 android:layout_alignParentTop="true"
                 android:padding="@dimen/login_layout_edittext_padding"
                 android:text="@string/login"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:textSize="22sp" />
 
             <TextView
@@ -65,12 +66,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/relativeLayout1"
-            android:layout_alignLeft="@+id/relativeLayout1" 
+            android:layout_alignRight="@+id/relativeLayout1"
+            android:alpha="0.77"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:background="#ffffff"
-            android:padding="10dp"
-              android:alpha="0.77"
-            
-            >
+            android:padding="10dp" >
 
              <EditText
              android:id="@+id/user_name"
@@ -98,7 +99,16 @@
 
         
         </RelativeLayout>
-        
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="60dp"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:src="@drawable/logo" />
         
     </RelativeLayout>
 

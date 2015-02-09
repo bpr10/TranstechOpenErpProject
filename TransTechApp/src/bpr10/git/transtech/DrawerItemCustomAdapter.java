@@ -52,12 +52,7 @@ public class DrawerItemCustomAdapter extends ArrayAdapter<ObjectDrawerItem> {
 		
 		ImageView imageViewIcon = (ImageView) listItem.findViewById(R.id.imageViewIcon);
 		TextView textViewName = (TextView) listItem.findViewById(R.id.textViewName);
-		 
 		
-		/*
-		 * Set the data for the list item. You can also set tags here if you
-		 * want.
-		 */
 		ObjectDrawerItem folder = data[position];
 
 		
@@ -66,5 +61,5 @@ public class DrawerItemCustomAdapter extends ArrayAdapter<ObjectDrawerItem> {
 		
 		return listItem;
 	}
-
+	
 }

@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.R.string;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -53,6 +54,7 @@ public class TasksFragment extends Fragment implements LocationListener {
 	private String provider;
 	private Location location, atmLocation;
 	private JSONArray tasksArray;
+	public static Double currentLat,currentLang;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,7 +65,8 @@ public class TasksFragment extends Fragment implements LocationListener {
 		locationManager = (LocationManager) getActivity().getSystemService(
 				Context.LOCATION_SERVICE);
 		setHasOptionsMenu(true);
-		new AsyncTaskCallback(getActivity(), new AsyncTaskCallbackInterface() {
+		new AsyncTaskCallback(getActivity(), new AsyncTaskCallbackInterface()
+		{
 
 			@Override
 			public String backGroundCallback() {

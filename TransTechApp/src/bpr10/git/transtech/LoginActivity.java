@@ -43,6 +43,7 @@ public class LoginActivity extends Activity {
 			public void onClick(View v) {
 
 				Login();
+
 			}
 		});
 		password.setOnKeyListener(onSoftKeyboardDonePress);
@@ -118,6 +119,8 @@ public class LoginActivity extends Activity {
 											MainActivity.class);
 									startActivity(i);
 									finish();
+
+									LoginActivity.this.finish();
 								} else {
 									Toast.makeText(getApplicationContext(),
 											"enter valid credentials",
@@ -133,6 +136,7 @@ public class LoginActivity extends Activity {
 		public boolean onKey(View v, int keyCode, KeyEvent event) {
 			if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
 				Login();
+
 				return false;
 			}
 			return false;

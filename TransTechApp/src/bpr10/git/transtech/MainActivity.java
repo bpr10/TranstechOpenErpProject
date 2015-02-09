@@ -1,5 +1,6 @@
 package bpr10.git.transtech;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,7 +10,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class MainActivity extends BaseActivity {
 
@@ -42,9 +45,9 @@ public class MainActivity extends BaseActivity {
 		// list the drawer items
 		ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[3];
 
-		drawerItem[0] = new ObjectDrawerItem(R.drawable.ic_task, "Tasks");
-		drawerItem[1] = new ObjectDrawerItem(R.drawable.ic_alerts, "Alert");
-		drawerItem[2] = new ObjectDrawerItem(R.drawable.ic_history, "History");
+		drawerItem[0] = new ObjectDrawerItem(R.drawable.task_gray, "Tasks");
+		drawerItem[1] = new ObjectDrawerItem(R.drawable.alert_gray, "Alert");
+		drawerItem[2] = new ObjectDrawerItem(R.drawable.history_gray, "History");
 
 		// Pass the folderData to our ListView adapter
 		DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this,
@@ -108,9 +111,17 @@ public class MainActivity extends BaseActivity {
 	private class DrawerItemClickListener implements
 			ListView.OnItemClickListener {
 
-		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position,
-				long id) {
+		public void onItemClick(AdapterView<?> adapterView, View view,
+				int position, long id) {
+			adapterView.getChildAt(position).setBackgroundColor(
+					getResources().getColor(android.R.color.holo_red_dark));
+			view.setBackgroundColor(getResources().getColor(
+					android.R.color.holo_red_dark));
+			// ImageView icon =
+			// (ImageView)view.findViewById(R.id.imageViewIcon);
+			// TextView text = (TextView)view.findViewById(R.id.textViewName);
+			// icon.setImageResource(R.id.);
+			// text.setTextColor(android.R.color.white);
 			selectItem(position);
 		}
 
