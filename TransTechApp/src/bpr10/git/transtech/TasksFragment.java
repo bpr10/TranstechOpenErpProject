@@ -11,7 +11,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.R.string;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -69,7 +68,7 @@ public class TasksFragment extends Fragment implements LocationListener {
 		{
 
 			@Override
-			public String backGroundCallback() {
+			public String backGroundCallback() throws JSONException {
 				try {
 
 					// Connecting to openERP
@@ -121,10 +120,7 @@ public class TasksFragment extends Fragment implements LocationListener {
 				} catch (ClientProtocolException e) {
 					e.printStackTrace();
 					return null;
-				} catch (JSONException e) {
-					e.printStackTrace();
-					return null;
-				} catch (IOException e) {
+				}  catch (IOException e) {
 					e.printStackTrace();
 					return null;
 				} catch (OEVersionException e) {

@@ -43,7 +43,7 @@ public class TaskHistory extends Fragment {
 		new AsyncTaskCallback(getActivity(), new AsyncTaskCallbackInterface() {
 
 			@Override
-			public String backGroundCallback() {
+			public String backGroundCallback() throws JSONException {
 				try {
 
 					// Connecting to openERP
@@ -67,9 +67,6 @@ public class TaskHistory extends Fragment {
 							.toString());
 					return serachResposne.getJSONArray("records").toString();
 				} catch (ClientProtocolException e) {
-					e.printStackTrace();
-					return null;
-				} catch (JSONException e) {
 					e.printStackTrace();
 					return null;
 				} catch (IOException e) {

@@ -29,8 +29,9 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/textView1"
             android:layout_marginTop="35dp"
-            android:text="aaaaaa"
-            android:textAlignment="center"
+            android:text="@string/about_us_text"
+           	android:gravity="fill"
+           	android:textAlignment="inherit"
             android:textSize="18sp" />
 
         <TextView
@@ -39,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:text="Our History"
+            android:text="About Us"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/primary_color_dark" />
     </RelativeLayout>

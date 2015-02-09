@@ -3,7 +3,7 @@ package bpr10.git.transtech;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
-public class AboutUsActivity  extends ActionBarActivity{
+public class AboutUsActivity  extends BaseActivity{
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

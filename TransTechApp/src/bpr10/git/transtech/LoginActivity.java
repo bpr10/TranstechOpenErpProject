@@ -66,7 +66,7 @@ public class LoginActivity extends Activity {
 					new AsyncTaskCallbackInterface() {
 
 						@Override
-						public String backGroundCallback() {
+						public String backGroundCallback() throws JSONException {
 							try {
 
 								// Connecting to openERP
@@ -92,9 +92,6 @@ public class LoginActivity extends Activity {
 								}
 								return uId;
 							} catch (ClientProtocolException e) {
-								e.printStackTrace();
-								return null;
-							} catch (JSONException e) {
 								e.printStackTrace();
 								return null;
 							} catch (IOException e) {

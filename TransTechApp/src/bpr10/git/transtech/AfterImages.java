@@ -23,12 +23,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.Toast;
 import bpr10.git.transtech.AsyncTaskCallback.AsyncTaskCallbackInterface;
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -42,7 +38,7 @@ public class AfterImages extends Fragment {
 	private Context mContext;
 	static final int REQUEST_IMAGE_CAPTURE = 11;
 	private Button submitButton;
-//	private Spinner remarkCategorySpinner;
+	// private Spinner remarkCategorySpinner;
 	private String currentImage = "default";
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,50 +58,50 @@ public class AfterImages extends Fragment {
 		camera3 = (Button) rootView
 				.findViewById(R.id.after_service_camera_button3);
 		submitButton = (Button) rootView.findViewById(R.id.submit_button);
-//		remarkCategorySpinner = (Spinner) rootView
-//				.findViewById(R.id.remark_category);
-//		populateCatrgories();
-//		remarkCategorySpinner
-//				.setOnItemSelectedListener(new OnItemSelectedListener() {
-//
-//					@Override
-//					public void onItemSelected(AdapterView<?> parent,
-//							View view, int position, long id) {
-//						try {
-//							TaskForm.taskPayload.put(
-//									"remarks_survey",
-//									TaskForm.remarksResponse
-//											.getJSONArray("records")
-//											.getJSONObject(position)
-//											.getString("description"));
-//						} catch (JSONException e) {
-//							e.printStackTrace();
-//						}
-//					}
-//
-//					@Override
-//					public void onNothingSelected(AdapterView<?> parent) {
-//
-//					}
-//				});
+		// remarkCategorySpinner = (Spinner) rootView
+		// .findViewById(R.id.remark_category);
+		// populateCatrgories();
+		// remarkCategorySpinner
+		// .setOnItemSelectedListener(new OnItemSelectedListener() {
+		//
+		// @Override
+		// public void onItemSelected(AdapterView<?> parent,
+		// View view, int position, long id) {
+		// try {
+		// TaskForm.taskPayload.put(
+		// "remarks_survey",
+		// TaskForm.remarksResponse
+		// .getJSONArray("records")
+		// .getJSONObject(position)
+		// .getString("description"));
+		// } catch (JSONException e) {
+		// e.printStackTrace();
+		// }
+		// }
+		//
+		// @Override
+		// public void onNothingSelected(AdapterView<?> parent) {
+		//
+		// }
+		// });
 		return rootView;
 	}
 
-//	void populateCatrgories() {
-//		ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
-//				getActivity(), android.R.layout.simple_spinner_item);
-//		try {
-//			for (int i = 0; i < TaskForm.remarksResponse
-//					.getJSONArray("records").length(); i++)
-//				adapter.add(TaskForm.remarksResponse.getJSONArray("records")
-//						.getJSONObject(i).getString("name"));
-//		} catch (JSONException e) {
-//			e.printStackTrace();
-//		} catch (NullPointerException e) {
-//			mtaskForm.getRemarkCatrgories();
-//		}
-//		remarkCategorySpinner.setAdapter(adapter);
-//	}
+	// void populateCatrgories() {
+	// ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
+	// getActivity(), android.R.layout.simple_spinner_item);
+	// try {
+	// for (int i = 0; i < TaskForm.remarksResponse
+	// .getJSONArray("records").length(); i++)
+	// adapter.add(TaskForm.remarksResponse.getJSONArray("records")
+	// .getJSONObject(i).getString("name"));
+	// } catch (JSONException e) {
+	// e.printStackTrace();
+	// } catch (NullPointerException e) {
+	// mtaskForm.getRemarkCatrgories();
+	// }
+	// remarkCategorySpinner.setAdapter(adapter);
+	// }
 
 	@Override
 	public void onResume() {
@@ -127,7 +123,8 @@ public class AfterImages extends Fragment {
 				new AsyncTaskCallback(getActivity(),
 						new AsyncTaskCallbackInterface() {
 							@Override
-							public String backGroundCallback() {
+							public String backGroundCallback()
+									throws JSONException {
 								OpenERP mOpenERP;
 								try {
 									if (TaskForm.taskFlag == 1) {
@@ -158,8 +155,6 @@ public class AfterImages extends Fragment {
 									}
 
 								} catch (ClientProtocolException e) {
-									e.printStackTrace();
-								} catch (JSONException e) {
 									e.printStackTrace();
 								} catch (IOException e) {
 									e.printStackTrace();
