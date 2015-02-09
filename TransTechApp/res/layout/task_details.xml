@@ -118,7 +118,7 @@
         android:layout_below="@+id/due_date"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:padding="20dp"
+        android:padding="10dp"
         android:text="@string/survey_now" />
 
 </RelativeLayout>

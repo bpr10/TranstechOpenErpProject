@@ -44,6 +44,7 @@ public class LoginActivity extends Activity {
 			public void onClick(View v) {
 
 				Login();
+				
 			}
 		});
 		password.setOnKeyListener(onSoftKeyboardDonePress);
@@ -126,6 +127,7 @@ public class LoginActivity extends Activity {
 											getApplicationContext(),
 											"success", Toast.LENGTH_LONG)
 											.show();
+									LoginActivity.this.finish();
 								} else {
 									Toast.makeText(
 											getApplicationContext(),
@@ -145,6 +147,7 @@ public class LoginActivity extends Activity {
             if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)
             {
             	Login();
+            	
             return false;
         }
 			return false;

@@ -1,16 +1,21 @@
 package bpr10.git.transtech;
 
+import org.json.JSONException;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.Spinner;
 
 public class CheckList2 extends Fragment{
 
-	
+	private Spinner remarkCategorySpinner;
+	private TaskForm mtaskForm;
 	CheckBox keyPadDisplaced,spotLightsOff,decals,ATMTowerBranding,canopyBranding,surroundLockIsDamage,
 	spotLightIsOff,mainBoardLightsAreOff,securityCameraIsOutOfFocus;
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,7 +76,26 @@ public class CheckList2 extends Fragment{
 			
 			
 		}
+		remarkCategorySpinner = (Spinner) rootView
+				.findViewById(R.id.remark_category);
+		populateCatrgories();
 		return rootView;
+	}
+
+	void populateCatrgories() {
+		ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
+				getActivity(), android.R.layout.simple_spinner_item);
+		try {
+			for (int i = 0; i < TaskForm.remarksResponse
+					.getJSONArray("records").length(); i++)
+				adapter.add(TaskForm.remarksResponse.getJSONArray("records")
+						.getJSONObject(i).getString("name"));
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (NullPointerException e) {
+			mtaskForm.getRemarkCatrgories();
+		}
+		remarkCategorySpinner.setAdapter(adapter);
 	}
 
 }

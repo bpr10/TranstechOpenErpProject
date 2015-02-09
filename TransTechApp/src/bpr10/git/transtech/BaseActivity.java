@@ -14,10 +14,19 @@ public class BaseActivity extends ActionBarActivity {
 		getMenuInflater().inflate(R.menu.base, menu);
 		return true;
 	}
+	
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int itemId = item.getItemId();
+		if(itemId==R.id.action_aboutus)
+		{
+			Intent i = new Intent(this, AboutUsActivity.class);
+			startActivity(i);
+			return true;
+			
+		}
+		
 		if (itemId == R.id.action_logout) {
 			// logout action
 			Toast.makeText(getApplicationContext(), "logout sucessfully",
