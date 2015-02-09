@@ -97,10 +97,12 @@ public class TasksFragment extends Fragment implements LocationListener {
 					for (int i = 0; i < tasksArray.length(); i++) {
 						String atmDetails[] = tasksArray.getJSONObject(i)
 								.getJSONArray("atm").getString(1).split(",");
-
+Log.d("atm details",tasksArray.getJSONObject(i)
+		.getJSONArray("atm")+"");
+            int n=atmDetails.length;
 						if (atmDetails.length > 2) {
-							String latVal = atmDetails[2];
-							String langVal = atmDetails[3];
+							String latVal = atmDetails[n-2];
+							String langVal = atmDetails[n-1];
 							double lat = Double.parseDouble(latVal);
 							double lon = Double.parseDouble(langVal);
 							atmLocation = new Location("atmLocation");
@@ -249,10 +251,13 @@ public class TasksFragment extends Fragment implements LocationListener {
 							+ "");
 					String[] atmarr = taskData.getJSONObject(position)
 							.getJSONArray("atm").getString(1).split(",");
+					if(atmarr.length>1)
+					{
 					String atm1 = atmarr[0];
 					String atm2 = atmarr[1];
 
 					atm.setText(atm1 + atm2);
+					}
 					date.setText(dateUtility.getFriendlyDateString(dateUtility
 							.makeDate(taskData.getJSONObject(position)
 									.getString("visit_time"))));

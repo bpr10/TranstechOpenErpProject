@@ -149,10 +149,13 @@ public class TaskHistory extends Fragment {
 							+ "");
 					String atmarr[] = (taskData.getJSONObject(position)
 							.getJSONArray("atm").getString(1).split(","));
+					if(atmarr.length>1)
+					{
 					String a1 = atmarr[1];
 					String a2 = atmarr[2];
 
 					atm.setText(a1 + a2 + "");
+					}
 					date.setText(dateUtility.getFriendlyDateString(dateUtility
 							.makeDate(taskData.getJSONObject(position)
 									.getString("visit_time"))));

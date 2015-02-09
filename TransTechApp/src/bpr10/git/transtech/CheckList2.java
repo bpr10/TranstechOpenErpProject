@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 public class CheckList2 extends Fragment {
 
@@ -105,6 +106,8 @@ public class CheckList2 extends Fragment {
 	void populateCatrgories() {
 		ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
 				getActivity(), android.R.layout.simple_spinner_item);
+		
+		
 		try {
 			for (int i = 0; i < TaskForm.remarksResponse
 					.getJSONArray("records").length(); i++)
