@@ -27,7 +27,7 @@ import com.openerp.orm.OEFieldsHelper;
 public class TaskHistory extends Fragment {
 
 	private ListView taskList;
-	private TextView taskId, customer, atm, date;
+	private TextView taskId, customer, atm, date,distenceView;
 	private OpenERP mOpenERP;
 	private String tag;
 	private TaskAdapter adapter;
@@ -154,7 +154,7 @@ public class TaskHistory extends Fragment {
 					String a1 = atmarr[1];
 					String a2 = atmarr[2];
 
-					atm.setText(a1 + a2 + "");
+					atm.setText(a1 + "");
 					}
 					date.setText(dateUtility.getFriendlyDateString(dateUtility
 							.makeDate(taskData.getJSONObject(position)

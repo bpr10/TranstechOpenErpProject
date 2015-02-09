@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class TaskDetails extends BaseActivity{
-	TextView customer, ATMDtails, locationText, distance, dueDate;
+	TextView customer, ATMDtails, locationText, distance, dueDate,textViewDis;
 	Button surveyNow;
 	private String tag = getClass().getSimpleName();
 	JSONObject taskObj = new JSONObject();
@@ -33,6 +33,7 @@ public class TaskDetails extends BaseActivity{
 		distance = (TextView) findViewById(R.id.distance);
 		dueDate = (TextView) findViewById(R.id.due_date);
 		surveyNow = (Button) findViewById(R.id.survoeynow_but);
+		textViewDis=(TextView) findViewById(R.id.textView_distance);
 		dateUtility = new DateUtility();
 
 		try {
@@ -46,10 +47,24 @@ public class TaskDetails extends BaseActivity{
 			customerText = taskObj.getJSONArray("customer").getString(1);
 			String[] atmarr = taskObj.getJSONArray("atm").getString(1)
 					.split(",");
+			if(atmarr.length>0)
+			{
 			atm1 = atmarr[0];
-			atm2 = atmarr[1];
+			
+			ATMDtails.setText(atm1);
+			}
 			country = taskObj.getJSONArray("country").getString(1);
 			distanceVal = taskObj.get("distance").toString();
+			if(distanceVal!=null)
+			{
+				distance.setText(distanceVal);
+			}
+			else
+			{
+				textViewDis.setVisibility(View.GONE);
+				distance.setVisibility(View.GONE);
+			}
+			
 			dueDate.setText(dateUtility.getFriendlyDateString(dateUtility
 					.makeDate(taskObj
 							.getString("visit_time"))));
@@ -59,9 +74,9 @@ public class TaskDetails extends BaseActivity{
 			e1.printStackTrace();
 		}
 		customer.setText(customerText);
-		ATMDtails.setText(atm1 + atm2);
+		
 		locationText.setText(country);
-		distance.setText(distanceVal);
+		
 
 		surveyNow.setOnClickListener(new OnClickListener() {
 

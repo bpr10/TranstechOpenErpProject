@@ -36,6 +36,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Base64;
 import android.util.Log;
+
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -189,9 +190,7 @@ public class TaskForm extends BaseActivity {
 		try {
 			taskObj = new JSONObject(getIntent().getStringExtra(
 					TaskDetails.taskDetais));
-			Log.d(tag, "taskObj " + taskObj.toString());
 			taskId = taskObj.getInt("id");
-			Log.d(tag, " taskId " + taskId);
 			if (checkForTaskId(taskId).equals("0")) {
 				// create task in shared prefs
 				creteTask(taskId);
@@ -208,7 +207,6 @@ public class TaskForm extends BaseActivity {
 					.get(0));
 			taskPayload.put("surv_task", taskId);
 			taskPayload.put("surveyor_surv", ApplicationClass.surveyor_Id);
-			Log.d(tag, "taskPayload " + taskPayload.toString());
 
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -291,10 +289,8 @@ public class TaskForm extends BaseActivity {
 		if (imageFile.exists()) {
 			imageFile.delete();
 			if (imageFile.createNewFile()) {
-				Log.d(tag, "Emptyfile created");
 			}
 		} else {
-			Log.d(tag, "File does not exist");
 
 		}
 		FileOutputStream fos = null;
@@ -341,7 +337,6 @@ public class TaskForm extends BaseActivity {
 	@Override
 	protected void onDestroy() {
 		deleteTaskDirectory();
-		Log.d(tag, taskPayload.toString());
 		super.onDestroy();
 	}
 
@@ -350,7 +345,6 @@ public class TaskForm extends BaseActivity {
 			String[] children = dir.list();
 			for (int i = 0; i < children.length; i++) {
 				new File(dir, children[i]).delete();
-				Log.d("deleting file", children[i]);
 			}
 		}
 		dir.delete();
@@ -369,23 +363,16 @@ public class TaskForm extends BaseActivity {
 			bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
 			byte[] byteArray = stream.toByteArray();
 			encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
-			Log.d(tag,
-					"file :" + imageUri.toString()
-							+ " encodedImage size in kb :"
-							+ bitmap.getAllocationByteCount() / 1000);
 			bitmap.recycle();
 			return encodedImage;
 		} catch (FileNotFoundException e) {
-			Log.e(tag, "Image not found " + imageUri);
 		} catch (IOException e) {
-			Log.e(tag, "I/O Exception " + imageUri);
 			e.printStackTrace();
 		}
 		return null;
 	}
 
 	protected JSONObject getTaskObject() {
-		Log.d(tag, taskObj.toString());
 		return taskObj;
 	}
 
@@ -402,7 +389,6 @@ public class TaskForm extends BaseActivity {
 
 					remarksResponse = mOpenERP.search_read("remarks.category",
 							fields.get());
-					Log.i(tag, remarksResponse.toString());
 					return remarksResponse.toString();
 				} catch (ClientProtocolException e) {
 					e.printStackTrace();
@@ -476,10 +462,8 @@ public class TaskForm extends BaseActivity {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			} catch (FileNotFoundException e) {
-				Log.d(tag, key + " image not taken ");
 			}
 		} else {
-			Log.d(tag, "image not available " + key);
 		}
 
 	}
@@ -516,7 +500,6 @@ public class TaskForm extends BaseActivity {
 		taskPayload.remove("check_list22");
 		taskPayload.remove("check_list23");
 		taskPayload.remove("check_list24");
-		Log.d("nocoments click", taskPayload.toString());
 
 	}
 
@@ -525,13 +508,11 @@ public class TaskForm extends BaseActivity {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (updateCount == 0) {
-				Log.d("No Comments Checked", "broadcastRecieverWorking");
 				mFragmentPageAdapter.notifyDataSetChanged();
 				mViewPager.setAdapter(mFragmentPageAdapter);
 				mViewPager.setCurrentItem(currentPosition);
 				updateCount++;
 			} else {
-				Log.d(tag, "adapter didn't update. Count " + updateCount);
 			}
 
 		}
