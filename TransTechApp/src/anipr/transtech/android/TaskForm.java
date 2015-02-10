@@ -24,6 +24,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -198,6 +199,13 @@ public class TaskForm extends BaseActivity {
 
 				taskPayload = new JSONObject(checkForTaskId(taskId));
 
+			}
+			GetLocation getLocation = new GetLocation(this);
+			Location  location = getLocation.getCurrentLocation();
+			if(location!=null)
+			{
+				taskPayload.put("cur_longitude", String.valueOf(location.getLongitude()));
+				taskPayload.put("cur_latitude", String.valueOf(location.getLatitude()));
 			}
 			taskPayload.put("surv_task", taskId);
 			taskPayload.put("atm_surv", taskObj.getJSONArray("atm").get(0));
