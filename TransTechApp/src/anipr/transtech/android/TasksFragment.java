@@ -244,10 +244,6 @@ public class TasksFragment extends Fragment implements LocationListener {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-
-				Log.d(tag, "position " + position + "item "
-						+ mTaskAdapter.getItem(position).toString());
-
 				 Intent i = new Intent(getActivity(), TaskDetails.class);
 				 i.putExtra("taskDetais", mTaskAdapter.getItem(position)
 				 .toString());
@@ -283,7 +279,6 @@ public class TasksFragment extends Fragment implements LocationListener {
 			new Handler(Looper.getMainLooper()).post(new Runnable() {
 				@Override
 				public void run() {
-					Log.d(tag, "UI thread");
 					thisInstance.notifyDataSetChanged();
 				}
 			});
@@ -298,16 +293,6 @@ public class TasksFragment extends Fragment implements LocationListener {
 		@Override
 		public JSONObject getItem(int position) {
 			try {
-				for (int i = 0; i < taskData.length(); i++) {
-					Log.d(tag, "position " + i + " "
-							+ taskData.getJSONObject(i)
-
-							.getInt("id") + " " + taskData.getJSONObject(i)
-
-							.getJSONArray("customer").getString(1) + "");
-
-				}
-
 				return taskData.getJSONObject(position);
 			} catch (JSONException e) {
 
@@ -351,13 +336,10 @@ public class TasksFragment extends Fragment implements LocationListener {
 			}
 			holder.distanceLayout.setVisibility(View.VISIBLE);
 			holder.kmstext.setVisibility(View.VISIBLE);
-			Log.d(tag, "position " + position);
 			try {
 				holder.customer.setText(taskData.getJSONObject(position)
 						.getJSONArray("customer").getString(1)
 						+ "");
-				Log.d(tag, "atmarr : "
-						+ taskData.getJSONObject(position).getJSONArray("atm"));
 				String[] atmarr = taskData.getJSONObject(position)
 						.getJSONArray("atm").getString(1).split("%%");
 				if (atmarr.length > 0) {
