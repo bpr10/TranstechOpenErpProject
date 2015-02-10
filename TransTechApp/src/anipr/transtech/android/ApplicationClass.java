@@ -10,8 +10,6 @@ import org.json.JSONException;
 
 import android.app.Application;
 
-import com.crittercism.app.Crittercism;
-
 public class ApplicationClass extends Application {
 	
 	private static ApplicationClass applicationInstance;
@@ -21,7 +19,7 @@ public class ApplicationClass extends Application {
 	public void onCreate() {
 		super.onCreate();
 		applicationInstance = new ApplicationClass();
-		Crittercism.initialize(getApplicationContext(), "54d8c0e651de5e9f042ed84c");
+//		Crittercism.initialize(getApplicationContext(), "54d8c0e651de5e9f042ed84c");
 	}
 
 	public static synchronized ApplicationClass getInstance() {

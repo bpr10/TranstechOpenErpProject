@@ -48,13 +48,11 @@ import com.openerp.orm.OEFieldsHelper;
 public class TasksFragment extends Fragment implements LocationListener {
 
 	private ListView taskList;
-	private TextView distancelabel, customer, atm, date;
 	private OpenERP mOpenERP;
 	private String tag;
 	private TaskAdapter mTaskAdapter;
 	private JSONObject searchResposne;
 	private LocationManager locationManager;
-	private String provider;
 	private Location location, atmLocation;
 	private JSONArray tasksArray;
 	public static Double currentLat, currentLang;
@@ -69,78 +67,131 @@ public class TasksFragment extends Fragment implements LocationListener {
 				Context.LOCATION_SERVICE);
 		setHasOptionsMenu(true);
 		if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-			new AsyncTaskCallback(getActivity(),
-					new AsyncTaskCallbackInterface() {
+			GetLocation getLocation = new GetLocation(getActivity());
+			location = getLocation.getCurrentLocation();
+			if (location != null) {
+				new AsyncTaskCallback(getActivity(),
+						new AsyncTaskCallbackInterface() {
 
-						@Override
-						public String backGroundCallback() {
-							try {
+							@Override
+							public String backGroundCallback() {
+								try {
 
-								// Connecting to openERP
+									// Connecting to openERP
 
-								OEDomain domain = new OEDomain();
-								PreferencesHelper pref = new PreferencesHelper(
-										TasksFragment.this.getActivity());
-								Log.d(tag, pref
-										.GetPreferences(PreferencesHelper.Uid));
-								domain.add(
-										"surveyor",
-										"=",
-										Integer.parseInt(pref
-												.GetPreferences(PreferencesHelper.Uid)));
-								domain.add("status", "not in", new JSONArray()
-										.put("waitnig_approve").put("done")
-										.put("cancel"));
-								OEFieldsHelper fields = new OEFieldsHelper(
-										new String[] { "name", "customer",
-												"atm", "country", "task_month",
-												"visit_time" });
-								Log.d(tag, "domain " + domain);
-								Log.d(tag, "domain JOSNOBJ" + domain.get());
-								Log.d(tag, "fields " + fields);
-								mOpenERP = ApplicationClass.getInstance()
-										.getOpenERPCon();
-								searchResposne = mOpenERP.search_read(
-										"atm.surverys.management",
-										fields.get(), domain.get());
-								tasksArray = searchResposne
-										.getJSONArray("records");
-								for (int i = 0; i < tasksArray.length(); i++) {
-																		
+									OEDomain domain = new OEDomain();
+									PreferencesHelper pref = new PreferencesHelper(
+											TasksFragment.this.getActivity());
+									Log.d(tag,
+											pref.GetPreferences(PreferencesHelper.Uid));
+									domain.add(
+											"surveyor",
+											"=",
+											Integer.parseInt(pref
+													.GetPreferences(PreferencesHelper.Uid)));
+									domain.add(
+											"status",
+											"not in",
+											new JSONArray()
+													.put("waitnig_approve")
+													.put("done").put("cancel"));
+									OEFieldsHelper fields = new OEFieldsHelper(
+											new String[] { "name", "customer",
+													"atm", "country",
+													"task_month", "visit_time" });
+									Log.d(tag, "domain " + domain);
+									Log.d(tag, "domain JOSNOBJ" + domain.get());
+									Log.d(tag, "fields " + fields);
+									mOpenERP = ApplicationClass.getInstance()
+											.getOpenERPCon();
+									searchResposne = mOpenERP.search_read(
+											"atm.surverys.management",
+											fields.get(), domain.get());
+									tasksArray = searchResposne
+											.getJSONArray("records");
+									for (int i = 0; i < tasksArray.length(); i++) {
+										String atmDetails[] = tasksArray
+												.getJSONObject(i)
+												.getJSONArray("atm")
+												.getString(1).split("%%");
+										Log.d("atm details",
+												tasksArray.getJSONObject(i)
+														.getJSONArray("atm")
+														.getString(1)
+														+ "");
+										for (int j = 0; j < atmDetails.length; j++) {
+											Log.d(tag, "atmDetails "
+													+ atmDetails[j]);
+										}
+										int n = atmDetails.length;
+										if (atmDetails.length > 2) {
+											String latVal = atmDetails[n - 2];
+											String langVal = atmDetails[n - 1];
+											double lat = Double
+													.parseDouble(latVal);
+											double lon = Double
+													.parseDouble(langVal);
+											atmLocation = new Location(
+													"atmLocation");
+											atmLocation.setLatitude(lat);
+											atmLocation.setLongitude(lon);
+											if (location != null) {
+												double distance = Math.round((atmLocation
+														.distanceTo(location) / 1000) * 100.0) / 100.0;
+												tasksArray.getJSONObject(i)
+														.put("distance",
+																distance);
+											} else {
+												Log.e(tag, "Location Null");
+											}
+										}
+									}
+									Log.d("response", tasksArray.toString());
 
+									return tasksArray.toString();
+								} catch (ClientProtocolException e) {
+									e.printStackTrace();
+									return null;
+								} catch (JSONException e) {
+									e.printStackTrace();
+									return null;
+								} catch (IOException e) {
+									e.printStackTrace();
+									return null;
+								} catch (OEVersionException e) {
+									e.printStackTrace();
+									return null;
 								}
-								Log.d("response", tasksArray.toString());
 
-								return tasksArray.toString();
-							} catch (ClientProtocolException e) {
-								e.printStackTrace();
-								return null;
-							} catch (JSONException e) {
-								e.printStackTrace();
-								return null;
-							} catch (IOException e) {
-								e.printStackTrace();
-								return null;
-							} catch (OEVersionException e) {
-								e.printStackTrace();
-								return null;
 							}
 
-						}
+							@Override
+							public void foregroundCallback(String result) {
+								try {
 
-						@Override
-						public void foregroundCallback(String result) {
-							try {
+									JSONArray tasksArray = new JSONArray(result);
+									mTaskAdapter = new TaskAdapter(tasksArray);
 
-								JSONArray tasksArray = new JSONArray(result);
-								mTaskAdapter = new TaskAdapter(tasksArray);
-
-								taskList.setAdapter(mTaskAdapter);
-							} catch (JSONException e) {
-								e.printStackTrace();
+									taskList.setAdapter(mTaskAdapter);
+								} catch (JSONException e) {
+									e.printStackTrace();
+								}
 							}
-						}
-					}).execute();
+						}).execute();
+
+			} else {
+				RelativeLayout errorView = (RelativeLayout) rootView
+						.findViewById(R.id.near_by_coverframe);
+				errorView.setVisibility(View.VISIBLE);
+				TextView errorText = (TextView) rootView
+						.findViewById(R.id.tasks_error_msg);
+				errorText.setText("We still cant locate you.\n"
+						+ "Please try again.");
+				ImageButton refresh = (ImageButton) rootView
+						.findViewById(R.id.tasks_refresh_frame_button);
+				refresh.setVisibility(View.INVISIBLE);
+
+			}
 
 		} else {
 			RelativeLayout errorView = (RelativeLayout) rootView
@@ -193,11 +244,14 @@ public class TasksFragment extends Fragment implements LocationListener {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				Log.d(tag, mTaskAdapter.getItem(position).toString());
-				Intent i = new Intent(getActivity(), TaskDetails.class);
-				i.putExtra("taskDetais", mTaskAdapter.getItem(position)
-						.toString());
-				startActivity(i);
+
+				Log.d(tag, "position " + position + "item "
+						+ mTaskAdapter.getItem(position).toString());
+
+				// Intent i = new Intent(getActivity(), TaskDetails.class);
+				// i.putExtra("taskDetais", mTaskAdapter.getItem(position)
+				// .toString());
+				// startActivity(i);
 			}
 		});
 
@@ -219,7 +273,6 @@ public class TasksFragment extends Fragment implements LocationListener {
 		}
 
 		public void refresh(JSONArray taskArray) {
-			this.clear();
 			for (int i = 0; i < taskArray.length(); i++) {
 				try {
 					this.add(taskArray.getJSONObject(i));
@@ -245,6 +298,16 @@ public class TasksFragment extends Fragment implements LocationListener {
 		@Override
 		public JSONObject getItem(int position) {
 			try {
+				for (int i = 0; i < taskData.length(); i++) {
+					Log.d(tag, "position " + i + " "
+							+ taskData.getJSONObject(i)
+
+							.getInt("id") + " " + taskData.getJSONObject(i)
+
+							.getJSONArray("customer").getString(1) + "");
+
+				}
+
 				return taskData.getJSONObject(position);
 			} catch (JSONException e) {
 
@@ -258,85 +321,63 @@ public class TasksFragment extends Fragment implements LocationListener {
 			return position;
 		}
 
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = LayoutInflater.from(getActivity()).inflate(
-						R.layout.tast_list, null);
-				LinearLayout distanceLayout = (LinearLayout) convertView
+		class ViewHolder {
+			LinearLayout distanceLayout;
+			TextView distancelabel, customer, atm, date, kmstext;
+
+			public ViewHolder(View convertView) {
+				distanceLayout = (LinearLayout) convertView
 						.findViewById(R.id.distance_linear_layout);
-				TextView kmstext = (TextView) convertView
-						.findViewById(R.id.kms);
-				
-				
-				
-
-				distanceLayout.setVisibility(View.VISIBLE);
-				kmstext.setVisibility(View.VISIBLE);
-
+				kmstext = (TextView) convertView.findViewById(R.id.kms);
 				distancelabel = (TextView) convertView
 						.findViewById(R.id.distance);
 				customer = (TextView) convertView.findViewById(R.id.customer);
 				atm = (TextView) convertView.findViewById(R.id.atm);
 				date = (TextView) convertView.findViewById(R.id.taskdate);
-				try {
-					customer.setText(taskData.getJSONObject(position)
-							.getJSONArray("customer").getString(1)
-							+ "");
-					Log.d(tag,
-							"atmarr : "
-									+ taskData.getJSONObject(position)
-											.getJSONArray("atm"));
-					String[] atmarr = taskData.getJSONObject(position)
-							.getJSONArray("atm").getString(1).split(",");
-					if (atmarr.length > 0) {
-						String atm1 = atmarr[0];
 
-						atm.setText(atm1 + "");
-					}
-					date.setText(dateUtility.getFriendlyDateString(dateUtility
-							.makeDate(taskData.getJSONObject(position)
-									.getString("visit_time"))));
-					String atmDetails[] = tasksArray
-							.getJSONObject(position)
-							.getJSONArray("atm").getString(1)
-							.split(",");
-					Log.d("atm details",
-							tasksArray.getJSONObject(position)
-									.getJSONArray("atm") + "");
-					int n = atmDetails.length;
-					if (atmDetails.length > 2) {
-						String latVal = atmDetails[n - 2];
-						String langVal = atmDetails[n - 1];
-						double lat = Double.parseDouble(latVal);
-						double lon = Double
-								.parseDouble(langVal);
-						atmLocation = new Location(
-								"atmLocation");
-						atmLocation.setLatitude(lat);
-						atmLocation.setLongitude(lon);
-						GetLocation getLocation = new GetLocation(
-								getActivity());
-						location = getLocation.getCurrentLocation();
-						if (location != null) {
-							double distance = Math.round((atmLocation
-									.distanceTo(location) / 1000) * 100.0) / 100.0;
-							taskData.getJSONObject(position).put(
-									"distance", distance);
-						}else{
-							Log.e(tag,"Location Null" );
-						}
-					}
-					distancelabel.setText(((Double) taskData.getJSONObject(
-							position).get("distance")).intValue()
-							+ "");
+			}
+		}
 
-				} catch (JSONException e) {
-					distanceLayout.setVisibility(View.GONE);
-					kmstext.setVisibility(View.GONE);
-					Log.d(tag, "JOSN EXCEPTION" + e.getMessage());
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			ViewHolder holder;
+			if (convertView == null) {
+				convertView = LayoutInflater.from(getActivity()).inflate(
+						R.layout.tast_list, null);
+				holder = new ViewHolder(convertView);
+				convertView.setTag(holder);
+			} else {
+				holder = (ViewHolder) convertView.getTag();
+			}
+			holder.distanceLayout.setVisibility(View.VISIBLE);
+			holder.kmstext.setVisibility(View.VISIBLE);
+			Log.d(tag, "position " + position);
+			try {
+				holder.customer.setText(taskData.getJSONObject(position)
+						.getJSONArray("customer").getString(1)
+						+ " " + taskData.getJSONObject(position).getInt("id"));
+				Log.d(tag, "atmarr : "
+						+ taskData.getJSONObject(position).getJSONArray("atm"));
+				String[] atmarr = taskData.getJSONObject(position)
+						.getJSONArray("atm").getString(1).split("%%");
+				if (atmarr.length > 0) {
+					String atm1 = atmarr[0];
+
+					holder.atm.setText(atm1 + "");
 				}
+				holder.date.setText(dateUtility
+						.getFriendlyDateString(dateUtility.makeDate(taskData
+								.getJSONObject(position)
+								.getString("visit_time"))));
 
+				holder.distancelabel.setText(((Double) taskData.getJSONObject(
+						position).get("distance")).intValue()
+						+ "");
+
+			} catch (JSONException e) {
+				holder.distanceLayout.setVisibility(View.GONE);
+				holder.kmstext.setVisibility(View.GONE);
+				Log.d(tag, "JOSN EXCEPTION" + e.getMessage());
 			}
 
 			return convertView;
