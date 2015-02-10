@@ -8,6 +8,8 @@ import openerp.OpenERP;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 
+import com.crittercism.app.Crittercism;
+
 import android.app.Application;
 
 public class ApplicationClass extends Application {
@@ -19,7 +21,7 @@ public class ApplicationClass extends Application {
 	public void onCreate() {
 		super.onCreate();
 		applicationInstance = new ApplicationClass();
-//		Crittercism.initialize(getApplicationContext(), "54d8c0e651de5e9f042ed84c");
+		Crittercism.initialize(getApplicationContext(), "54d8c0e651de5e9f042ed84c");
 	}
 
 	public static synchronized ApplicationClass getInstance() {

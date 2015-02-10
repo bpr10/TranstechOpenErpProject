@@ -248,10 +248,10 @@ public class TasksFragment extends Fragment implements LocationListener {
 				Log.d(tag, "position " + position + "item "
 						+ mTaskAdapter.getItem(position).toString());
 
-				// Intent i = new Intent(getActivity(), TaskDetails.class);
-				// i.putExtra("taskDetais", mTaskAdapter.getItem(position)
-				// .toString());
-				// startActivity(i);
+				 Intent i = new Intent(getActivity(), TaskDetails.class);
+				 i.putExtra("taskDetais", mTaskAdapter.getItem(position)
+				 .toString());
+				 startActivity(i);
 			}
 		});
 
@@ -355,7 +355,7 @@ public class TasksFragment extends Fragment implements LocationListener {
 			try {
 				holder.customer.setText(taskData.getJSONObject(position)
 						.getJSONArray("customer").getString(1)
-						+ " " + taskData.getJSONObject(position).getInt("id"));
+						+ "");
 				Log.d(tag, "atmarr : "
 						+ taskData.getJSONObject(position).getJSONArray("atm"));
 				String[] atmarr = taskData.getJSONObject(position)
