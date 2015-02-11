@@ -49,6 +49,7 @@ public class TaskDetails extends BaseActivity {
 					.split("%%");
 			if (atmarr.length > 0) {
 				atm1 = atmarr[0];
+				
 
 				ATMDtails.setText(atm1);
 			}

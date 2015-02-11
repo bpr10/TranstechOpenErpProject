@@ -63,6 +63,5 @@
         android:layout_below="@+id/history_customer"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/subtitle_text_color"
-        android:textStyle="bold" />
-
+></TextView>
 </RelativeLayout>
