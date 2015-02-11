@@ -345,8 +345,13 @@ public class TasksFragment extends Fragment implements LocationListener {
 						.getJSONArray("atm").getString(1).split("%%");
 				if (atmarr.length > 0) {
 					String atm1 = atmarr[0];
+					if(atm1.length()>30)
+					{
+					holder.atm.setText(atm1.substring(0, 30) +"....");
+					}else{
 
 					holder.atm.setText(atm1 + "");
+					}
 				}
 				holder.date.setText(dateUtility
 						.getFriendlyDateString(dateUtility.makeDate(taskData

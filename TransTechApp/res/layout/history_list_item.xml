@@ -23,7 +23,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="11/01"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/small_text_color"
             android:textSize="12sp" />
@@ -41,7 +40,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:gravity="center"
-                android:text="5.3"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/white_color"
                 android:textStyle="bold" />
@@ -54,7 +52,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="Bank Name"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/title_text_color" />
 
@@ -64,7 +61,6 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/history_customer"
         android:layout_below="@+id/history_customer"
-        android:text="atm name with details "
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/subtitle_text_color"
         android:textStyle="bold" />
