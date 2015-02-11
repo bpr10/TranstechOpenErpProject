@@ -66,7 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/textView3"
         android:layout_alignLeft="@+id/customer"
-        android:text="atmdetails"
+        android:layout_alignBaseline="@+id/textView2"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/subtitle_text_color" />
 
@@ -77,7 +77,6 @@
         android:layout_alignBaseline="@+id/textView_distance"
         android:layout_alignBottom="@+id/textView_distance"
         android:layout_alignLeft="@+id/location"
-        android:text="distance"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/subtitle_text_color" />
 
@@ -88,7 +87,6 @@
         android:layout_alignBaseline="@+id/textView5"
         android:layout_alignBottom="@+id/textView5"
         android:layout_alignLeft="@+id/distance"
-        android:text="dueDate"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/subtitle_text_color" />
 
@@ -98,7 +96,6 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/textView2"
         android:layout_alignLeft="@+id/survoeynow_but"
-        android:text="customer"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/title_text_color" />
 
@@ -118,8 +115,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/textView5"
         android:layout_alignLeft="@+id/details_atm"
-        android:text="location"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/subtitle_text_color" />
+
 
 </RelativeLayout>

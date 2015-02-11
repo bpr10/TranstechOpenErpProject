@@ -46,7 +46,7 @@ public class TaskDetails extends BaseActivity {
 		try {
 			customerText = taskObj.getJSONArray("customer").getString(1);
 			String[] atmarr = taskObj.getJSONArray("atm").getString(1)
-					.split(",");
+					.split("%%");
 			if (atmarr.length > 0) {
 				atm1 = atmarr[0];
 
