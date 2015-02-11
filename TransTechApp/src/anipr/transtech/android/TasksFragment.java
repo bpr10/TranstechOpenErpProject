@@ -141,6 +141,7 @@ public class TasksFragment extends Fragment implements LocationListener {
 												tasksArray.getJSONObject(i)
 														.put("distance",
 																distance);
+
 											} else {
 												Log.e(tag, "Location Null");
 											}
@@ -244,10 +245,10 @@ public class TasksFragment extends Fragment implements LocationListener {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				 Intent i = new Intent(getActivity(), TaskDetails.class);
-				 i.putExtra("taskDetais", mTaskAdapter.getItem(position)
-				 .toString());
-				 startActivity(i);
+				Intent i = new Intent(getActivity(), TaskDetails.class);
+				i.putExtra("taskDetais", mTaskAdapter.getItem(position)
+						.toString());
+				startActivity(i);
 			}
 		});
 
@@ -352,9 +353,10 @@ public class TasksFragment extends Fragment implements LocationListener {
 								.getJSONObject(position)
 								.getString("visit_time"))));
 
-				holder.distancelabel.setText(((Double) taskData.getJSONObject(
-						position).get("distance")).intValue()
-						+ "");
+				holder.distancelabel.setText((int)(taskData.getJSONObject(position)
+						.getDouble("distance")) + "");
+				Log.d(tag,
+						""+(int)taskData.getJSONObject(position).getDouble("distance"));
 
 			} catch (JSONException e) {
 				holder.distanceLayout.setVisibility(View.GONE);

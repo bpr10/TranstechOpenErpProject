@@ -74,7 +74,6 @@
         android:layout_below="@+id/customer"
         android:text="atm name with details "
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/subtitle_text_color"
-        android:textStyle="bold" />
+        android:textColor="@color/subtitle_text_color" />
 
 </RelativeLayout>
