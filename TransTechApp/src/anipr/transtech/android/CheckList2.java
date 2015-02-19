@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.Spinner;
@@ -99,6 +101,29 @@ public class CheckList2 extends Fragment {
 		remarkCategorySpinner = (Spinner) rootView
 				.findViewById(R.id.remark_category);
 		populateCatrgories();
+		remarkCategorySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				try {
+					   TaskForm.taskPayload.put(
+					   "remarks_survey",
+					   TaskForm.remarksResponse
+					  .getJSONArray("records")
+					   .getJSONObject(position)
+					   .getString("description"));
+					   } catch (JSONException e) {
+					   e.printStackTrace();
+					   }
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				
+			}
+		});
 		return rootView;
 	}
 
